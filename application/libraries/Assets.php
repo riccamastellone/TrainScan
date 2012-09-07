@@ -56,7 +56,7 @@ class Assets
 		foreach($this->js_ext as $j)
 			$this->output .= "        <script src=\"$j\"></script>\n";
 		foreach($this->js as $j)
-			$this->output .= "        <script src=\"".$js_path.$j."\"></script>";
+			$this->output .= "        <script src=\"".$js_path.$j."\"></script>\n";
 		$this->output .= "\n";
 		return $this->output;
 	}

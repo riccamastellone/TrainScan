@@ -17,29 +17,33 @@
 <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
 <![endif]-->
     <div class="container">
-        <h2>TrainScanner</h2>
-            <form method="post">
-                <div class="span4">
+        <h1>TrainScanner</h1>
+            <form id="formPost" method="post">
+                <div class="span3">
                     <label>Stazione di partenza</label>
-                    <input type="text" placeholder="Milano P.G." name="stazionePartenza">
+                    <input type="text" class="stazioni" placeholder="Milano P.G." data-provide="typeahead" data-items="4" autocomplete="off" name="stazionePartenza" data-source='["<?php echo $stazioni; ?>"]'>
                     <span class="help-block">Inserisci qui la stazione da dove vuoi partire</span>
-                    <label>Data di partenza</label>
-                    <input type="text" placeholder="2012-10-12" name="dataPartenza">
-                    <span class="help-block">Inserisci la data (yyyy-mm-gg)</span>
                 </div>
-                <div class="span4">
+                <div class="span3">
                     <label>Stazione di arrivo</label>
-                    <input type="text" placeholder="Firenze SMN" name="stazioneArrivo">
+                    <input type="text" class="stazioni" placeholder="Firenze SMN" data-provide="typeahead" data-items="4" autocomplete="off" name="stazioneArrivo" data-source='["<?php echo $stazioni; ?>"]'>
                     <span class="help-block">Inserisci qui la stazione dove vuoi arrivare</span>
                 </div>
-                <div>
-                    <button type="submit" class="btn">Submit</button>
+                <div class="span3">
+                    <label>Data di partenza</label>
+                    <input type="text" class="datapicker" placeholder="2012-10-12" name="dataPartenza">
+                    <span class="help-block">Inserisci la data (yyyy-mm-gg)</span>
                 </div>
+                <div class="span9">
+                    <button type="button" id="submitBtn" onclick="javascript:getQuotazioni();" class="btn btn-large btn-block">Cerca</button>
+                </div>
+            
             </form>
+        <div class="clearfix"></div>
+        <div id="results"></div>
     </div>
-        <?php echo print_r($content); ?>
+    
 
-        <script src="js/main.js"></script>
 
         <!--<script>
             var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
