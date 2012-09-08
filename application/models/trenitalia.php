@@ -21,100 +21,68 @@ class Trenitalia extends Scanner {
        
         public function postParametri() {
             
+             $xml = $this->generateXml();
             
-            $xml = '<?xml version: "1.0"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:SGMOBILEServiceSvc="http://tempuri.org/" xmlns:ns1="http://tempuri.org/Imports" xmlns:tns1="http://schemas.datacontract.org/2004/07/TSF.TI.NSV.Common.WCF.ServiceContracts" xmlns:tns2="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns3="http://schemas.datacontract.org/2004/07/TSF.TI.NSV.Common.WCF.DataContracts" xmlns:tns4="http://schemas.datacontract.org/2004/07/TSF.TI.NSV.Common.WCF.MessageContracts" xsl:version="1.0"><soap:Header><SGMOBILEServiceSvc:pHeader><tns1:UnitOfWork>0</tns1:UnitOfWork><tns1:Language>EN</tns1:Language></SGMOBILEServiceSvc:pHeader></soap:Header><soap:Body><SGMOBILEServiceSvc:InputSolutionsMobile><SGMOBILEServiceSvc:pInput><tns1:BoardingRailwayCode>83</tns1:BoardingRailwayCode><tns1:BoardingStationCode>1650</tns1:BoardingStationCode><tns1:ArrivalRailwayCode>83</tns1:ArrivalRailwayCode><tns1:ArrivalStationCode>6998</tns1:ArrivalStationCode><tns1:DepartureDateTime>08/09/2012-12:45:00</tns1:DepartureDateTime></SGMOBILEServiceSvc:pInput></SGMOBILEServiceSvc:InputSolutionsMobile></soap:Body></soap:Envelope>';
             
             
-            $headers = array( "Host: stargate.iphone.trenitalia.com",                                                                                                                                               
-                                "User-Agent: wsdl2objc",                                                                                                                                                                     
-                                "Accept: */*",                                                                                                                                                                           
+            $headers = array(                                                                                                                                            
                                 "SOAPAction: http://tempuri.org/ISGMOBILEService/InfoSolutionsMobile",                                                                                                                       
-                                "Content-Type: text/xml; charset=utf-8",                                                                                                                                                       
-                                "Accept-Language: en-us",                                                                                                                                                                         
-                                "Accept-Encoding: gzip, deflate",                                                                                                                                                                 
-                                "Connection: keep-alive",                                                                                                                                                                    
-                                "Proxy-Connection: keep-alive",                                                                                                                                                                    
+                               "Content-Type: text/xml; charset=utf-8",                                                                                                                                                       
                                 "content-length: ".strlen($xml)
                 );var_dump($headers);
-            $this->curl->create($this->_trenitaliaUrl);
+            $this->curl->create("https://stargate.iphone.trenitalia.com:443/servicemobilesolution.svc");
             $this->curl->option(CURLOPT_SSL_VERIFYPEER, false);
             $this->curl->option(CURLOPT_RETURNTRANSFER, true);
-            //$this->curl->option(CURLOPT_USERAGENT, 'wsdl2objc');
             $this->curl->option(CURLOPT_HTTPHEADER, $headers);
-            $this->curl->option(CURLOPT_HEADER, true);
-            $this->curl->option(CURLOPT_VERBOSE, true); 
             $this->curl->option(CURLOPT_POST,true);
-            
-            $this->curl->option(CURLOPT_POSTFIELDS,urlencode($xml));
-            
-            //$this->curl->option(CURLOPT_TIMEOUT,1);
-            //echo ($this->curl->execute()); 
+            $this->curl->option(CURLOPT_POSTFIELDS,($xml));
+            print_r(utf8_decode($this->curl->execute())); 
              
-            /*$this->_wsdl = tempnam ("/tmp", "tempWSDLnew");
-            $url404 = '<xs:import schemaLocation="https://stargate.iphone.trenitalia.com:443/xsd1_mobilesolution.xsd" namespace="http://schemas.microsoft.com/2003/10/Serialization/"/>';
-            
-            file_put_contents($this->_wsdl,str_replace($url404, "", file_get_contents('https://stargate.iphone.trenitalia.com/xsd2_mobilesolution.xsd')));
-
-            $client = new SoapClient(null, array('location' => $this->_wsdl, 'uri' => 'http://schemas.datacontract.org/2004/07/TSF.TI.NSV.Common.WCF.ServiceContracts'));
-            var_dump($client);
-            var_dump(file_get_contents($this->_wsdl));
-            */
-           $client = $this->load->library('nusoap',array('https://stargate.iphone.trenitalia.com/serviceMOBILESOLUTION.wsdl', 'wsdl'));
-            //return $client->__getFunctions();
             
             
         }
 	public function getJsonItalo()
 	{       
             
-            /* La genialità di NTV ci obbliga a mandare una finta richiesta alla pagina stessa per ottenre
-             * il cookie con ASP Session Id per poi fare una get su un'altra pagina per ricevere il JSON interessato
-             * 
-             * Non so se questo sia il modo migliore per ottenere le quotazioni ma l'unico che funziona per ora
-             */
-                
-                
-                $this->_debug['curl_info1'] = $this->curl->info;
-                $this->curl->create($this->generateUrl());
-                $this->curl->option(CURLOPT_COOKIEFILE,$this->ckfile); 
-                $this->curl->option(CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:15.0) Gecko/20100101 Firefox/15.0');
-                $this->curl->option(CURLOPT_RETURNTRANSFER, true);
-                $this->curl->option(CURLOPT_SSL_VERIFYPEER, false);
-                $curl = $this->curl->execute();
-                $this->_debug['cookie'] = file_get_contents($this->ckfile);
-                $this->_debug['curl_info2'] = $this->curl->info;
-                return $curl;
                 
 	}
         
-        public function generateItaloPost() {
+        public function generateXml() {
             
+            $xml = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/" xmlns:tsf="http://schemas.datacontract.org/2004/07/TSF.TI.NSV.Common.WCF.ServiceContracts">
+                    <soapenv:Header>
+                       <tem:pHeader>
+                          <!--Optional:-->
+                          <tsf:UnitOfWork>0</tsf:UnitOfWork>
+                          <!--Optional:-->
+                          <tsf:TCOMUserId></tsf:TCOMUserId>
+                          <!--Optional:-->
+                          <tsf:TCOMPassword></tsf:TCOMPassword>
+                          <!--Optional:-->
+                          <tsf:Language>EN</tsf:Language>
+                       </tem:pHeader>
+                    </soapenv:Header>
+                    <soapenv:Body>
+                       <tem:InputSolutionsMobile>
+                          <!--Optional:-->
+                          <tem:pInput>
+                             <!--Optional:-->
+                             <tsf:BoardingRailwayCode>83</tsf:BoardingRailwayCode>
+                             <!--Optional:-->
+                             <tsf:BoardingStationCode>1650</tsf:BoardingStationCode>
+                             <!--Optional:-->
+                             <tsf:ArrivalRailwayCode>83</tsf:ArrivalRailwayCode>
+                             <!--Optional:-->
+                             <tsf:ArrivalStationCode>6998</tsf:ArrivalStationCode>
+                             <!--Optional:-->
+                             <tsf:DepartureDateTime>09/09/2012-12:45:00</tsf:DepartureDateTime>
+                          </tem:pInput>
+                       </tem:InputSolutionsMobile>
+                    </soapenv:Body>
+                 </soapenv:Envelope>';
             
-            $ret['originStation1'] = $this->stazioneHelper($this->_stazioneOrigine);
-            $ret['BookingRicercaBookingAcquistoRicercaView$TextBoxMarketOrigin1'] = $this->stazioneHelper($this->_stazioneOrigine);
-            $ret['destinationStation1'] = $this->stazioneHelper($this->_stazioneDestinazione);
-            $ret['BookingRicercaBookingAcquistoRicercaView$TextBoxMarketDestination1'] = $this->stazioneHelper($this->_stazioneDestinazione);
+            return $xml;
             
-            $ret['BookingRicercaBookingAcquistoRicercaView$DropDownListMarketDay1'] = $this->dataHelper('day');
-            $ret['BookingRicercaBookingAcquistoRicercaView$DropDownListMarketMonth1'] =  $this->dataHelper('year-month');
-            $ret['BookingRicercaBookingAcquistoRicercaView$DropDownListMarketDay2'] = $this->dataHelper('day');
-            $ret['BookingRicercaBookingAcquistoRicercaView$DropDownListMarketMonth2'] =  $this->dataHelper('year-month');
-            
-            
-            //Classe
-            $ret['ControlGroupBookingAcquistoCalendarView$AvailabilitySearchInputBookingAcquistoCalendarView%24DropDownListFarePreference'] = $this->_classe;
-            
-            // Adulti
-            $ret['BookingRicercaBookingAcquistoRicercaView$DropDownListPassengerType_ADT'] = $this->_adulti;
-            // 0-3 anni senza posto
-            $ret['BookingRicercaBookingAcquistoRicercaView$InfantTextBox'] = $this->_infanti;
-            // Bambini 0-14 con posto
-            $ret['BookingRicercaBookingAcquistoRicercaView$DropDownListPassengerType_CHD'] = $this->_bambini;
-            
-            $ret = http_build_query($ret);
-            $ret .= '&__EVENTTARGET=&__EVENTARGUMENT=&__VIEWSTATE=%2FwEPDwUBMGQYAQUeX19Db250cm9sc1JlcXVpcmVQb3N0QmFja0tleV9fFgEFpgFNYXN0ZXJIZWFkZXJCb29raW5nQWNxdWlzdG9SaWNlcmNhVmlldyRNYXN0ZXJIZWFkZXJHbG9iYWxNZW51Qm9va2luZ0FjcXVpc3RvUmljZXJjYVZpZXckTWFzdGVySGVhZGVyR2xvYmFsTWVudU1lbWJlckxvZ2luQm9va2luZ0FjcXVpc3RvUmljZXJjYVZpZXckQ2hlY2tCb3hSZW1lbWJlck1lSNjx0e%2BH1XkWwQmW4oDfIpK0mVg%3D&pageToken=&MasterHeaderBookingAcquistoRicercaView%24MasterHeaderGlobalMenuBookingAcquistoRicercaView%24MasterHeaderGlobalMenuBookingRetrieveInputBookingAcquistoRicercaView%24PAXFIRSTNAME1=&MasterHeaderBookingAcquistoRicercaView%24MasterHeaderGlobalMenuBookingAcquistoRicercaView%24MasterHeaderGlobalMenuBookingRetrieveInputBookingAcquistoRicercaView%24PAXLASTNAME1=&MasterHeaderBookingAcquistoRicercaView%24MasterHeaderGlobalMenuBookingAcquistoRicercaView%24MasterHeaderGlobalMenuBookingRetrieveInputBookingAcquistoRicercaView%24CONFIRMATIONNUMBER1=&MasterHeaderBookingAcquistoRicercaView%24MasterHeaderGlobalMenuBookingAcquistoRicercaView%24MasterHeaderGlobalMenuMemberLoginBookingAcquistoRicercaView%24TextBoxUserID=&MasterHeaderBookingAcquistoRicercaView%24MasterHeaderGlobalMenuBookingAcquistoRicercaView%24MasterHeaderGlobalMenuMemberLoginBookingAcquistoRicercaView%24PasswordFieldPassword=&BookingRicercaBookingAcquistoRicercaView%24DropDownListFareTypes=ST&BookingRicercaBookingAcquistoRicercaView%24RadioButtonMarketStructure=OneWay&date_picker=&date_picker=&BookingRicercaBookingAcquistoRicercaView%24PromoCodeBookingAcquistoRicercaView%24TextBoxPromoCode=&BookingRicercaBookingAcquistoRicercaView%24ButtonSubmit=Continua&BookingRicercaBookingAcquistoRicercaView%24DropDownListSearchBy=columnView';
-            $this->_debug['post'] = $ret;
-            return $ret;
         }
         
         
