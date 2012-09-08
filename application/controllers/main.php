@@ -15,7 +15,7 @@ class Main extends CI_Controller {
         
 	public function index()
 	{       
-            
+            var_dump($_SERVER);
             $data['stazioni'] = implode('","',$this->italotreno->_stazioni);
             
             $this->_renderPage($data);
@@ -33,10 +33,10 @@ class Main extends CI_Controller {
                 $this->italotreno->setStazioni($this->input->post('stazionePartenza', TRUE),$this->input->post('stazioneArrivo', TRUE));
                 $this->italotreno->setPersone();
                 $this->italotreno->setData($this->input->post('dataPartenza', TRUE));
-                $data['content'] = $this->italotreno->getQuotazioni();
-            } else $data['content'] = 'Nessun parametro passato';
+                $data['quotazioni'] = $this->italotreno->getQuotazioni();
+            } else $data['quotazioni'] = 'Nessun parametro passato';
             
-            var_dump($data['content']);
+            $this->load->view('row', $data);
             
         }
         

@@ -15,8 +15,11 @@ class ItaloTreno extends Scanner {
 
         
         public function getPreventivoResult($idPreventivo) {
-            $query = $this->db->get_where('preventivi_result', array('id_preventivo' => $idPreventivo))->result_array();
-            return $query;
+            $query = $this->db->query("SELECT * FROM preventivi_result 
+                AS a, italo_classi AS b WHERE a.id_preventivo = {$idPreventivo} AND a.id_classe = b.codice_classe
+                ORDER BY a.prezzo ASC");
+            $result = $query->result_array();
+            return $result;
         }
         
         public function getQuotazioniRaw($idPreventivo) {
@@ -66,9 +69,10 @@ class ItaloTreno extends Scanner {
            
             if(!$idPreventivo) {
                 $datiPreventivo = array(
-                'id_origine' => $this->stazioneHelper($this->_stazioneOrigine),
-                'id_destinazione' => $this->stazioneHelper($this->_stazioneDestinazione),
-                'data' => $this->dataHelper('year-month-day')
+                    'id_origine' => $this->stazioneHelper($this->_stazioneOrigine),
+                    'id_destinazione' => $this->stazioneHelper($this->_stazioneDestinazione),
+                    'data' => $this->dataHelper('year-month-day'),
+                    'indirizzo_ip' => $_SERVER['REMOTE_ADDR']
                 );
                 $this->db->insert('preventivi',$datiPreventivo);
                 $idPreventivo = $this->db->insert_id();
