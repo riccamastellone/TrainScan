@@ -22,11 +22,9 @@ class ItaloTreno extends Scanner {
         public function getQuotazioniRaw($idPreventivo) {
             
             foreach($this->_classi as $classe){
-                $this->_quotazioni[$this->classeHelper($classe)] = array();
                 $this->setClasse($classe);
                 $this->setSessionId();
                     foreach($this->_fascePrezzo[$classe] as $prezzo) {
-                        $this->_quotazioni[$this->classeHelper($classe)][$prezzo] = array();
                         $this->setPrezzo($prezzo);
                         $json = json_decode($this->getJsonItalo(),true);
                         $json = $json['extendedJourneys'];
@@ -81,25 +79,12 @@ class ItaloTreno extends Scanner {
             }
 
             $quotazioni = $this->getPreventivoResult($idPreventivo);
-            var_dump($this->_debug);
+            print_r($this->_debug);
             return $quotazioni;
             
             
         }
         
-        /*
-         * Recursive multidimensional in_array function
-         */
-        public function in_array_r($needle, $haystack, $strict = true) {
-            foreach ($haystack as $item) {
-                if (($strict ? $item === $needle : $item == $needle) || (is_array($item) && $this->in_array_r($needle, $item, $strict))) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         
         public function setPrezzo($prezzo) {
             $this->_prezzo = $prezzo;
@@ -121,7 +106,9 @@ class ItaloTreno extends Scanner {
             $this->curl->option(CURLOPT_REFERER, $this->_italoUrl);
             $this->curl->option(CURLOPT_POSTFIELDS,$this->generateItaloPost());
             $this->curl->option(CURLOPT_TIMEOUT,1);
-            return $this->curl->execute();
+            $curl = $this->curl->execute();
+            $this->_debug['cookie'][] = file_get_contents($this->ckfile);
+            return $curl;
             
         }
 	public function getJsonItalo()
@@ -141,8 +128,7 @@ class ItaloTreno extends Scanner {
                 $this->curl->option(CURLOPT_RETURNTRANSFER, true);
                 $this->curl->option(CURLOPT_SSL_VERIFYPEER, false);
                 $curl = $this->curl->execute();
-                $this->_debug['cookie'] = file_get_contents($this->ckfile);
-                $this->_debug['curl_info2'] = $this->curl->info;
+                $this->_debug['curl_info2'][] = $this->curl->info;
                 return $curl;
                 
 	}
@@ -162,7 +148,7 @@ class ItaloTreno extends Scanner {
             
             
             //Classe
-            $ret['ControlGroupBookingAcquistoCalendarView$AvailabilitySearchInputBookingAcquistoCalendarView%24DropDownListFarePreference'] = $this->_classe;
+            $ret['ControlGroupBookingAcquistoCalendarView$AvailabilitySearchInputBookingAcquistoCalendarView$DropDownListFarePreference'] = $this->_classe;
             
             // Adulti
             $ret['BookingRicercaBookingAcquistoRicercaView$DropDownListPassengerType_ADT'] = $this->_adulti;
@@ -173,13 +159,13 @@ class ItaloTreno extends Scanner {
             
             $ret = http_build_query($ret);
             $ret .= '&__EVENTTARGET=&__EVENTARGUMENT=&__VIEWSTATE=%2FwEPDwUBMGQYAQUeX19Db250cm9sc1JlcXVpcmVQb3N0QmFja0tleV9fFgEFpgFNYXN0ZXJIZWFkZXJCb29raW5nQWNxdWlzdG9SaWNlcmNhVmlldyRNYXN0ZXJIZWFkZXJHbG9iYWxNZW51Qm9va2luZ0FjcXVpc3RvUmljZXJjYVZpZXckTWFzdGVySGVhZGVyR2xvYmFsTWVudU1lbWJlckxvZ2luQm9va2luZ0FjcXVpc3RvUmljZXJjYVZpZXckQ2hlY2tCb3hSZW1lbWJlck1lSNjx0e%2BH1XkWwQmW4oDfIpK0mVg%3D&pageToken=&MasterHeaderBookingAcquistoRicercaView%24MasterHeaderGlobalMenuBookingAcquistoRicercaView%24MasterHeaderGlobalMenuBookingRetrieveInputBookingAcquistoRicercaView%24PAXFIRSTNAME1=&MasterHeaderBookingAcquistoRicercaView%24MasterHeaderGlobalMenuBookingAcquistoRicercaView%24MasterHeaderGlobalMenuBookingRetrieveInputBookingAcquistoRicercaView%24PAXLASTNAME1=&MasterHeaderBookingAcquistoRicercaView%24MasterHeaderGlobalMenuBookingAcquistoRicercaView%24MasterHeaderGlobalMenuBookingRetrieveInputBookingAcquistoRicercaView%24CONFIRMATIONNUMBER1=&MasterHeaderBookingAcquistoRicercaView%24MasterHeaderGlobalMenuBookingAcquistoRicercaView%24MasterHeaderGlobalMenuMemberLoginBookingAcquistoRicercaView%24TextBoxUserID=&MasterHeaderBookingAcquistoRicercaView%24MasterHeaderGlobalMenuBookingAcquistoRicercaView%24MasterHeaderGlobalMenuMemberLoginBookingAcquistoRicercaView%24PasswordFieldPassword=&BookingRicercaBookingAcquistoRicercaView%24DropDownListFareTypes=ST&BookingRicercaBookingAcquistoRicercaView%24RadioButtonMarketStructure=OneWay&date_picker=&date_picker=&BookingRicercaBookingAcquistoRicercaView%24PromoCodeBookingAcquistoRicercaView%24TextBoxPromoCode=&BookingRicercaBookingAcquistoRicercaView%24ButtonSubmit=Continua&BookingRicercaBookingAcquistoRicercaView%24DropDownListSearchBy=columnView';
-            $this->_debug['post'] = $ret;
+            $this->_debug['post'][] = $ret;
             return $ret;
         }
         
         public function generateUrl() {
             $url = "https://biglietti.italotreno.it/Booking_Calendar_Ajax.aspx?dateMarketId=market_0_date_2012_8_6&marketIndex=0&year={$this->dataHelper('year')}&month={$this->dataHelper('month')}&day={$this->dataHelper('day')}&price={$this->_prezzo}%2C00";
-            $this->_debug['ajax_url'] = $url;
+            $this->_debug['ajax_url'][] = $url;
             return $url;
         }
         
