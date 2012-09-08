@@ -3,7 +3,7 @@
 class Scanner extends CI_Model {
     
         // Stazioni valide
-	public $_stazioni = array("Milano P.G.", "Milano C.", "Firenze SMN", "Bologna", "Milano Rog.", "Napoli C.", "Roma Ost.", "Roma Tib.", "Salerno");        
+	public $_stazioni = array("Milano", "Firenze", "Bologna", "Napoli", "Roma", "Salerno");        
         public $_debug = array();
         
         function __construct() {

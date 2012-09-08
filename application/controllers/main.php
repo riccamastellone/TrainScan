@@ -15,7 +15,6 @@ class Main extends CI_Controller {
         
 	public function index()
 	{       
-            var_dump($_SERVER);
             $data['stazioni'] = implode('","',$this->italotreno->_stazioni);
             
             $this->_renderPage($data);
@@ -23,7 +22,8 @@ class Main extends CI_Controller {
 	}
         
         public function trenitalia() {
-            $this->trenitalia->getQuotazioni();
+            $this->trenitalia->setStazioni('Milano','Firenze');
+            print_r($this->trenitalia->getQuotazioni());
         }
         
         
@@ -31,6 +31,7 @@ class Main extends CI_Controller {
             $post = $this->input->post();
             if(!empty($post)) {            
                 $this->italotreno->setStazioni($this->input->post('stazionePartenza', TRUE),$this->input->post('stazioneArrivo', TRUE));
+                $this->trenitalia->setStazioni($this->input->post('stazionePartenza', TRUE),$this->input->post('stazioneArrivo', TRUE));
                 $this->italotreno->setPersone();
                 $this->italotreno->setData($this->input->post('dataPartenza', TRUE));
                 $data['quotazioni'] = $this->italotreno->getQuotazioni();

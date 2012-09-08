@@ -176,10 +176,10 @@ class ItaloTreno extends Scanner {
         public function stazioneHelper($stazione) {
             
             switch ($stazione) {
-                case "Milano P.G.":
+                case "Milano":
                     return "MPG";
                     break;
-                case "Firenze SMN":
+                case "Firenze":
                     return "SMN";
                     break;
                 case "Bologna":
@@ -188,13 +188,13 @@ class ItaloTreno extends Scanner {
                 case "Milano Rog.":
                     return "MG_";
                     break;
-                case "Napoli C.":
+                case "Napoli":
                     return "NAC";
                     break;
                 case "Roma Ost.":
                     return "OST";
                     break;
-                case "Roma Tib.":
+                case "Roma":
                     return "RTB";
                     break;
                 case "Salerno":

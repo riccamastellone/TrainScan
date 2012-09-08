@@ -14,14 +14,13 @@ class Trenitalia extends Scanner {
         
         
         public function getQuotazioni() {
-            //print_r($this->postParametri($this->generateXml()));
-            $this->updateStazioni();
+            print_r($this->postParametri($this->generateXml()));
+            //$this->updateStazioni();
         }
         
         
        
         public function postParametri($xml, $soap = 'InfoSolutionsMobile') {
-            
             
             $headers = array( "SOAPAction: http://tempuri.org/ISGMOBILEService/{$soap}",                                                                                                                       
                               "Content-Type: text/xml; charset=utf-8",                                                                                                                                                       
@@ -33,8 +32,9 @@ class Trenitalia extends Scanner {
             $this->curl->option(CURLOPT_HTTPHEADER, $headers);
             $this->curl->option(CURLOPT_POST,true);
             $this->curl->option(CURLOPT_POSTFIELDS,($xml));
-            return utf8_decode($this->curl->execute()); 
+            $response = utf8_decode($this->curl->execute()); 
             
+            return $response;
         }
 	public function updateStazioni()
 	{       
@@ -105,13 +105,13 @@ class Trenitalia extends Scanner {
                              <!--Optional:-->
                              <tsf:BoardingRailwayCode>83</tsf:BoardingRailwayCode>
                              <!--Optional:-->
-                             <tsf:BoardingStationCode>1650</tsf:BoardingStationCode>
+                             <tsf:BoardingStationCode>'.$this->stazioneHelper($this->_stazioneOrigine).'</tsf:BoardingStationCode>
                              <!--Optional:-->
                              <tsf:ArrivalRailwayCode>83</tsf:ArrivalRailwayCode>
                              <!--Optional:-->
-                             <tsf:ArrivalStationCode>6998</tsf:ArrivalStationCode>
+                             <tsf:ArrivalStationCode>'.$this->stazioneHelper($this->_stazioneDestinazione).'</tsf:ArrivalStationCode>
                              <!--Optional:-->
-                             <tsf:DepartureDateTime>09/09/2012-12:45:00</tsf:DepartureDateTime>
+                             <tsf:DepartureDateTime>19/09/2012-12:45:00</tsf:DepartureDateTime>
                           </tem:pInput>
                        </tem:InputSolutionsMobile>
                     </soapenv:Body>
@@ -121,34 +121,38 @@ class Trenitalia extends Scanner {
             
         }
         
-        
+        public function getStationCode($stazione) {
+            $sql =$this->db->get_where('trenitalia_stazioni', array('nome_stazione' => $stazione))->result_array();
+            $sql = $sql[0]['stationcode'];
+            return $sql;
+        }
         
         public function stazioneHelper($stazione) {
             
             switch ($stazione) {
-                case "Milano P.G.":
-                    return "MPG";
+                case "Milano":
+                    return $this->getStationCode('Milano');
                     break;
-                case "Firenze SMN":
-                    return "SMN";
+                case "Firenze":
+                    return $this->getStationCode('Firenze');
                     break;
                 case "Bologna":
-                    return "BC_";
+                    return $this->getStationCode('Bologna');
                     break;
                 case "Milano Rog.":
                     return "MG_";
                     break;
-                case "Napoli C.":
-                    return "NAC";
+                case "Napoli":
+                    return $this->getStationCode('Napoli');
                     break;
-                case "Roma Ost.":
-                    return "OST";
+                case "Roma":
+                    return $this->getStationCode('Roma');
                     break;
                 case "Roma Tib.":
                     return "RTB";
                     break;
                 case "Salerno":
-                    return "SAL";
+                    return $this->getStationCode('Salerno');
                     break;
             }
             
