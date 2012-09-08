@@ -4,7 +4,7 @@ class Trenitalia extends Scanner {
     
         public $_trenitaliaUrl = "https://stargate.iphone.trenitalia.com/serviceMOBILESOLUTION.svc";
         public $_trenitaliaSoap = "https://stargate.iphone.trenitalia.com/serviceMOBILESOLUTION.wsdl";
-            public $_classi = array("S","C","P"); // Smart, Club, Prima
+        public $_stazioni = array("Milano", "Bologna", "Firenze", "Roma", "Napoli", "Salerno");
         public $_quotazioni = array();
         
         
@@ -14,38 +14,72 @@ class Trenitalia extends Scanner {
         
         
         public function getQuotazioni() {
-            $this->postParametri();
+            //print_r($this->postParametri($this->generateXml()));
+            $this->updateStazioni();
         }
         
         
        
-        public function postParametri() {
-            
-             $xml = $this->generateXml();
+        public function postParametri($xml, $soap = 'InfoSolutionsMobile') {
             
             
-            
-            $headers = array(                                                                                                                                            
-                                "SOAPAction: http://tempuri.org/ISGMOBILEService/InfoSolutionsMobile",                                                                                                                       
-                               "Content-Type: text/xml; charset=utf-8",                                                                                                                                                       
-                                "content-length: ".strlen($xml)
-                );var_dump($headers);
+            $headers = array( "SOAPAction: http://tempuri.org/ISGMOBILEService/{$soap}",                                                                                                                       
+                              "Content-Type: text/xml; charset=utf-8",                                                                                                                                                       
+                              "content-length: ".strlen($xml)
+                );
             $this->curl->create("https://stargate.iphone.trenitalia.com:443/servicemobilesolution.svc");
             $this->curl->option(CURLOPT_SSL_VERIFYPEER, false);
             $this->curl->option(CURLOPT_RETURNTRANSFER, true);
             $this->curl->option(CURLOPT_HTTPHEADER, $headers);
             $this->curl->option(CURLOPT_POST,true);
             $this->curl->option(CURLOPT_POSTFIELDS,($xml));
-            print_r(utf8_decode($this->curl->execute())); 
-             
-            
+            return utf8_decode($this->curl->execute()); 
             
         }
-	public function getJsonItalo()
+	public function updateStazioni()
 	{       
-            
-                
+               $response = $this->postParametri($this->generateXmlStazioni('Milano'),'InfoAmbiguityStations');
+               $xml = simplexml_load_string($response);
+               $ns = $xml->getNamespaces(true);
+               $soap = $xml->children($ns['s']);
+               die(var_dump($soap));
+                $stations = $soap->body->children($ns['a']);
+                foreach ($stations->children() as $item)
+                {
+                  //This example just accesses the iid node but the others are all available.
+                  echo $item . '<br />';
+                }
 	}
+        
+        public function generateXmlStazioni($stazione) {
+            
+            $xml = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/" xmlns:tsf="http://schemas.datacontract.org/2004/07/TSF.TI.NSV.Common.WCF.ServiceContracts">
+                    <soapenv:Header>
+                       <tem:pHeader>
+                          <!--Optional:-->
+                          <tsf:UnitOfWork>0</tsf:UnitOfWork>
+                          <!--Optional:-->
+                          <tsf:TCOMUserId></tsf:TCOMUserId>
+                          <!--Optional:-->
+                          <tsf:TCOMPassword></tsf:TCOMPassword>
+                          <!--Optional:-->
+                          <tsf:Language>IT</tsf:Language>
+                       </tem:pHeader>
+                    </soapenv:Header>
+                    <soapenv:Body>
+                       <tem:InputAmbiguityStations>
+                          <!--Optional:-->
+                          <tem:pInputMobileStations>
+                             <!--Optional:-->
+                             <tsf:Name>'.$stazione.'</tsf:Name>
+                          </tem:pInputMobileStations>
+                       </tem:InputAmbiguityStations>
+                    </soapenv:Body>
+                 </soapenv:Envelope>';
+            
+            return $xml;
+            
+        }
         
         public function generateXml() {
             
