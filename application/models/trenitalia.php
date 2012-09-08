@@ -12,29 +12,111 @@ class Trenitalia extends Scanner {
              
         }
         
-        
-        public function getQuotazioni() {
-            print_r($this->postParametri($this->generateXml()));
-            //$this->updateStazioni();
+        public function getQuotazioniRaw($idPreventivo) {
+            
+            $quotazioniArray = $this->postParametri($this->generateXml());
+            foreach($quotazioniArray as $quotazione)  {
+                if($quotazione['SolutionTrainMaxCategory'] == 'FR FRECCIAROSSA') {
+                    $primaCosto = 9999;
+                    $secondaCosto = 9999;
+                    foreach($quotazione['fareSolutionsMobile']['FareSolutionsMobile'] as $fare) {
+                        if($fare['SolPriceClass1'] != '0') {
+                            $fare['SolPriceClass1'] = substr($fare['SolPriceClass1'],0,-2);
+                            if($fare['SolPriceClass1'] < $primaCosto) {
+                                $primaCosto = $fare['SolPriceClass1'];
+                                $codicePrima = $fare['OfferCode'];
+                            }
+                        }
+                        if($fare['SolPriceClass2'] != '0') {
+                            $fare['SolPriceClass2'] = substr($fare['SolPriceClass2'],0,-2);
+                            if($fare['SolPriceClass2'] < $secondaCosto) {
+                                $secondaCosto = $fare['SolPriceClass2'];
+                                $codiceSeconda = $fare['OfferCode'];
+                            }
+                        }
+                    }
+                    if($primaCosto != 9999) {
+                         $sql = array(
+                            'id_preventivo' => $idPreventivo,
+                            'codice_treno' => $quotazione['solutionDetail']['SolutionDetail']['TrainNumber'],
+                            'partenza' => date('H:i:s', strtotime($quotazione['SolutionDepartureTime'])),
+                            'arrivo' => date('H:i:s', strtotime($quotazione['SolutionArrivalTime'])),
+                            'id_classe' => '1',
+                            'prezzo' => $primaCosto,
+                            'id_operatore' => 'T',
+                            'id_offerta' => $codicePrima,
+                            'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
+                            );
+                        $this->db->insert('preventivi_result', $sql);
+                        
+                    }
+                    if($secondaCosto != 9999) {
+                        $sql = array(
+                            'id_preventivo' => $idPreventivo,
+                            'codice_treno' => $quotazione['solutionDetail']['SolutionDetail']['TrainNumber'],
+                            'partenza' => date('H:i:s', strtotime($quotazione['SolutionDepartureTime'])),
+                            'arrivo' => date('H:i:s', strtotime($quotazione['SolutionArrivalTime'])),
+                            'id_classe' => '2',
+                            'prezzo' => $secondaCosto,
+                            'id_operatore' => 'T',
+                            'id_offerta' => $codiceSeconda,
+                            'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
+                            );
+                        $this->db->insert('preventivi_result', $sql);
+                    }
+                        
+                }
+            }
         }
         
         
+        public function getQuotazioni() {
+            $datiPreventivo = array(
+                'id_origine' => $this->stazioneHelper($this->_stazioneOrigine),
+                'id_destinazione' => $this->stazioneHelper($this->_stazioneDestinazione),
+                'data' => $this->dataHelper('year-month-day')
+                );            
+            $idPreventivo = $this->db->select('id')->from('preventivi')->where($datiPreventivo)->where('data_generazione >  DATE_SUB(now(), INTERVAL 30 MINUTE)')->get()->result_array();
+           
+            if(!$idPreventivo) {
+                $datiPreventivo = array(
+                    'id_origine' => $this->stazioneHelper($this->_stazioneOrigine),
+                    'id_destinazione' => $this->stazioneHelper($this->_stazioneDestinazione),
+                    'data' => $this->dataHelper('year-month-day'),
+                    'indirizzo_ip' => $_SERVER['REMOTE_ADDR']
+                );
+                $this->db->insert('preventivi',$datiPreventivo);
+                $idPreventivo = $this->db->insert_id();
+                $this->getQuotazioniRaw($idPreventivo);
+            } else {
+                $idPreventivo = $idPreventivo[0]['id'];
+            }
+
+            $quotazioni = $this->getPreventivoResult($idPreventivo);
+            
+            return $quotazioni;
+        }
+        
+        public function getPreventivoResult($idPreventivo) {
+            $query = $this->db->query("SELECT * FROM preventivi_result 
+                AS a, trenitalia_classi AS b, trenitalia_tariffe AS c WHERE a.id_preventivo = {$idPreventivo} AND a.id_classe = b.codice_classe
+                AND a.id_offerta = c.codice_offerta ORDER BY a.prezzo ASC");
+            $result = $query->result_array();
+            return $result;
+        }
        
         public function postParametri($xml, $soap = 'InfoSolutionsMobile') {
             
-            $headers = array( "SOAPAction: http://tempuri.org/ISGMOBILEService/{$soap}",                                                                                                                       
-                              "Content-Type: text/xml; charset=utf-8",                                                                                                                                                       
-                              "content-length: ".strlen($xml)
-                );
-            $this->curl->create("https://stargate.iphone.trenitalia.com:443/servicemobilesolution.svc");
-            $this->curl->option(CURLOPT_SSL_VERIFYPEER, false);
-            $this->curl->option(CURLOPT_RETURNTRANSFER, true);
-            $this->curl->option(CURLOPT_HTTPHEADER, $headers);
-            $this->curl->option(CURLOPT_POST,true);
-            $this->curl->option(CURLOPT_POSTFIELDS,($xml));
-            $response = utf8_decode($this->curl->execute()); 
+            $client = new SoapClient(null, array('location' => "https://stargate.iphone.trenitalia.com:443/servicemobilesolution.svc",
+                                                 'uri'      => "http://tempuri.org/ISGMOBILEService/InfoSolutionsMobile"));
+            $response = ($client->__doRequest($xml,'https://stargate.iphone.trenitalia.com:443/servicemobilesolution.svc','http://tempuri.org/ISGMOBILEService/InfoSolutionsMobile','1.2'));
+            $arrayQuotazioni = $this->xml2array(preg_replace('/a:/', '', $response));
+            $arrayQuotazioni = $arrayQuotazioni['s:Envelope']['s:Body']['OutputSolutionsMobile']['pOutput']['MobileSolutions']['outputInfoSolutionsMobile'];
             
-            return $response;
+            
+            die(print_r($arrayQuotazioni));
+            
+            return $arrayQuotazioni;
         }
 	public function updateStazioni()
 	{       
@@ -95,7 +177,7 @@ class Trenitalia extends Scanner {
                           <!--Optional:-->
                           <tsf:TCOMPassword></tsf:TCOMPassword>
                           <!--Optional:-->
-                          <tsf:Language>EN</tsf:Language>
+                          <tsf:Language>IT</tsf:Language>
                        </tem:pHeader>
                     </soapenv:Header>
                     <soapenv:Body>
@@ -111,7 +193,7 @@ class Trenitalia extends Scanner {
                              <!--Optional:-->
                              <tsf:ArrivalStationCode>'.$this->stazioneHelper($this->_stazioneDestinazione).'</tsf:ArrivalStationCode>
                              <!--Optional:-->
-                             <tsf:DepartureDateTime>19/09/2012-12:45:00</tsf:DepartureDateTime>
+                             <tsf:DepartureDateTime>20/09/2012-08:45:00</tsf:DepartureDateTime>
                           </tem:pInput>
                        </tem:InputSolutionsMobile>
                     </soapenv:Body>
@@ -175,8 +257,7 @@ class Trenitalia extends Scanner {
                     break;
             }
         }
-        
-        function xml2array($contents, $get_attributes=1, $priority = 'tag') { 
+                function xml2array($contents, $get_attributes=1, $priority = 'tag') { 
             if(!$contents) return array(); 
 
             if(!function_exists('xml_parser_create')) { 
