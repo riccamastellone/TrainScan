@@ -6,6 +6,10 @@ class Scanner extends CI_Model {
 	public $_stazioni = array("Milano P.G.", "Milano C.", "Firenze SMN", "Bologna", "Milano Rog.", "Napoli C.", "Roma Ost.", "Roma Tib.", "Salerno");        
         public $_debug = array();
         
+        function __construct() {
+            $this->load->library('curl'); 
+        }
+        
 	public function setStazioni($origine,$destinazione) {
             if(!in_array($origine, $this->_stazioni) || !in_array($destinazione, $this->_stazioni))
                     throw new Exception("Stazioni fornite non corrette");

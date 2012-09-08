@@ -9,6 +9,7 @@ class Main extends CI_Controller {
             $this->load->library('assets');
             $this->load->model('scanner');
             $this->load->model('italotreno');
+            $this->load->model('trenitalia');
         }
         
         
@@ -20,6 +21,11 @@ class Main extends CI_Controller {
             $this->_renderPage($data);
                 
 	}
+        
+        public function trenitalia() {
+            $this->trenitalia->getQuotazioni();
+        }
+        
         
         public function ajaxQuotazioni() {
             $post = $this->input->post();

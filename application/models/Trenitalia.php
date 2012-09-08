@@ -1,127 +1,67 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class ItaloTreno extends Scanner {
+class Trenitalia extends Scanner {
     
-        public $_italoUrl = "https://biglietti.italotreno.it/Booking_Acquisto_Ricerca.aspx";
-        public $_fascePrezzo = array("S" => array("20","30","40","52"), "P" => array("42","52","73"), "C" => array("73","80"));
-        public $_classi = array("S","P","C"); // Smart, Prima, Prima
+        public $_trenitaliaUrl = "https://stargate.iphone.trenitalia.com/serviceMOBILESOLUTION.svc";
+        public $_trenitaliaSoap = "https://stargate.iphone.trenitalia.com/serviceMOBILESOLUTION.wsdl";
+            public $_classi = array("S","C","P"); // Smart, Club, Prima
         public $_quotazioni = array();
         
         
         function __construct() {
-            
+             
         }
         
-
-        
-        public function getPreventivoResult($idPreventivo) {
-            $query = $this->db->get_where('preventivi_result', array('id_preventivo' => $idPreventivo))->result_array();
-            return $query;
-        }
-        
-        public function getQuotazioniRaw($idPreventivo) {
-            
-            foreach($this->_classi as $classe){
-                $this->_quotazioni[$this->classeHelper($classe)] = array();
-                $this->setClasse($classe);
-                $this->setSessionId();
-                    foreach($this->_fascePrezzo[$classe] as $prezzo) {
-                        $this->_quotazioni[$this->classeHelper($classe)][$prezzo] = array();
-                        $this->setPrezzo($prezzo);
-                        $json = json_decode($this->getJsonItalo(),true);
-                        $json = $json['extendedJourneys'];
-                        if(!empty($json))
-                            foreach($json as $quotazione)  {
-                                $dati = array(
-                                    'id_preventivo' => $idPreventivo,
-                                    'codice_treno' => $quotazione['trainNumber'],
-                                    'id_classe' => $classe
-                                );  
-                                $check = $this->db->get_where('preventivi_result',$dati)->num_rows();
-                                if(!$check) {
-                                    $sql = array(
-                                        'id_preventivo' => $idPreventivo,
-                                        'codice_treno' => $quotazione['trainNumber'],
-                                        'partenza' => date('H:i:s', strtotime($quotazione['departureTime'])),
-                                        'arrivo' => date('H:i:s', strtotime($quotazione['arrivalTime'])),
-                                        'id_classe' => $classe,
-                                        'prezzo' => $prezzo,
-                                        'id_operatore' => 'I'
-                                        );
-                                    $this->db->insert('preventivi_result', $sql); 
-                                
-                                }
-                            }
-                }
-            }
-            
-        }
         
         public function getQuotazioni() {
-            
-            $datiPreventivo = array(
-                'id_origine' => $this->stazioneHelper($this->_stazioneOrigine),
-                'id_destinazione' => $this->stazioneHelper($this->_stazioneDestinazione),
-                'data' => $this->dataHelper('year-month-day')
-                );            
-            $idPreventivo = $this->db->select('id')->from('preventivi')->where($datiPreventivo)->where('data_generazione >  DATE_SUB(now(), INTERVAL 30 MINUTE)')->get()->result_array();
-           
-            if(!$idPreventivo) {
-                $datiPreventivo = array(
-                'id_origine' => $this->stazioneHelper($this->_stazioneOrigine),
-                'id_destinazione' => $this->stazioneHelper($this->_stazioneDestinazione),
-                'data' => $this->dataHelper('year-month-day')
-                );
-                $this->db->insert('preventivi',$datiPreventivo);
-                $idPreventivo = $this->db->insert_id();
-                $this->getQuotazioniRaw($idPreventivo);
-            } else {
-                $idPreventivo = $idPreventivo[0]['id'];
-               
-            }
-
-            $quotazioni = $this->getPreventivoResult($idPreventivo);
-            var_dump($this->_debug);
-            return $quotazioni;
-            
-            
+            $this->postParametri();
         }
         
-        /*
-         * Recursive multidimensional in_array function
-         */
-        public function in_array_r($needle, $haystack, $strict = true) {
-            foreach ($haystack as $item) {
-                if (($strict ? $item === $needle : $item == $needle) || (is_array($item) && $this->in_array_r($needle, $item, $strict))) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         
-        public function setPrezzo($prezzo) {
-            $this->_prezzo = $prezzo;
-        }
-        
-        public function setClasse($classe) {
-            $this->_classe = $classe;
-        }
        
-        public function setSessionId() {
-            // set temp cookie file
-            $this->ckfile = tempnam ("/tmp", "CURLCOOKIE");
+        public function postParametri() {
             
-            $this->curl->create($this->_italoUrl);
-            $this->curl->option(CURLOPT_COOKIEJAR, $this->ckfile); 
+            
+            $xml = '<?xml version: "1.0"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:SGMOBILEServiceSvc="http://tempuri.org/" xmlns:ns1="http://tempuri.org/Imports" xmlns:tns1="http://schemas.datacontract.org/2004/07/TSF.TI.NSV.Common.WCF.ServiceContracts" xmlns:tns2="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns3="http://schemas.datacontract.org/2004/07/TSF.TI.NSV.Common.WCF.DataContracts" xmlns:tns4="http://schemas.datacontract.org/2004/07/TSF.TI.NSV.Common.WCF.MessageContracts" xsl:version="1.0"><soap:Header><SGMOBILEServiceSvc:pHeader><tns1:UnitOfWork>0</tns1:UnitOfWork><tns1:Language>EN</tns1:Language></SGMOBILEServiceSvc:pHeader></soap:Header><soap:Body><SGMOBILEServiceSvc:InputSolutionsMobile><SGMOBILEServiceSvc:pInput><tns1:BoardingRailwayCode>83</tns1:BoardingRailwayCode><tns1:BoardingStationCode>1650</tns1:BoardingStationCode><tns1:ArrivalRailwayCode>83</tns1:ArrivalRailwayCode><tns1:ArrivalStationCode>6998</tns1:ArrivalStationCode><tns1:DepartureDateTime>08/09/2012-12:45:00</tns1:DepartureDateTime></SGMOBILEServiceSvc:pInput></SGMOBILEServiceSvc:InputSolutionsMobile></soap:Body></soap:Envelope>';
+            
+            
+            $headers = array( "Host: stargate.iphone.trenitalia.com",                                                                                                                                               
+                                "User-Agent: wsdl2objc",                                                                                                                                                                     
+                                "Accept: */*",                                                                                                                                                                           
+                                "SOAPAction: http://tempuri.org/ISGMOBILEService/InfoSolutionsMobile",                                                                                                                       
+                                "Content-Type: text/xml; charset=utf-8",                                                                                                                                                       
+                                "Accept-Language: en-us",                                                                                                                                                                         
+                                "Accept-Encoding: gzip, deflate",                                                                                                                                                                 
+                                "Connection: keep-alive",                                                                                                                                                                    
+                                "Proxy-Connection: keep-alive",                                                                                                                                                                    
+                                "content-length: ".strlen($xml)
+                );var_dump($headers);
+            $this->curl->create($this->_trenitaliaUrl);
             $this->curl->option(CURLOPT_SSL_VERIFYPEER, false);
-            $this->curl->option(CURLOPT_RETURNTRANSFER, false);
-            $this->curl->option(CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:15.0) Gecko/20100101 Firefox/15.0');
-            $this->curl->option(CURLOPT_REFERER, $this->_italoUrl);
-            $this->curl->option(CURLOPT_POSTFIELDS,$this->generateItaloPost());
-            $this->curl->option(CURLOPT_TIMEOUT,1);
-            return $this->curl->execute();
+            $this->curl->option(CURLOPT_RETURNTRANSFER, true);
+            //$this->curl->option(CURLOPT_USERAGENT, 'wsdl2objc');
+            $this->curl->option(CURLOPT_HTTPHEADER, $headers);
+            $this->curl->option(CURLOPT_HEADER, true);
+            $this->curl->option(CURLOPT_VERBOSE, true); 
+            $this->curl->option(CURLOPT_POST,true);
+            
+            $this->curl->option(CURLOPT_POSTFIELDS,urlencode($xml));
+            
+            //$this->curl->option(CURLOPT_TIMEOUT,1);
+            //echo ($this->curl->execute()); 
+             
+            /*$this->_wsdl = tempnam ("/tmp", "tempWSDLnew");
+            $url404 = '<xs:import schemaLocation="https://stargate.iphone.trenitalia.com:443/xsd1_mobilesolution.xsd" namespace="http://schemas.microsoft.com/2003/10/Serialization/"/>';
+            
+            file_put_contents($this->_wsdl,str_replace($url404, "", file_get_contents('https://stargate.iphone.trenitalia.com/xsd2_mobilesolution.xsd')));
+
+            $client = new SoapClient(null, array('location' => $this->_wsdl, 'uri' => 'http://schemas.datacontract.org/2004/07/TSF.TI.NSV.Common.WCF.ServiceContracts'));
+            var_dump($client);
+            var_dump(file_get_contents($this->_wsdl));
+            */
+           $client = $this->load->library('nusoap',array('https://stargate.iphone.trenitalia.com/serviceMOBILESOLUTION.wsdl', 'wsdl'));
+            //return $client->__getFunctions();
+            
             
         }
 	public function getJsonItalo()
@@ -177,11 +117,7 @@ class ItaloTreno extends Scanner {
             return $ret;
         }
         
-        public function generateUrl() {
-            $url = "https://biglietti.italotreno.it/Booking_Calendar_Ajax.aspx?dateMarketId=market_0_date_2012_8_6&marketIndex=0&year={$this->dataHelper('year')}&month={$this->dataHelper('month')}&day={$this->dataHelper('day')}&price={$this->_prezzo}%2C00";
-            $this->_debug['ajax_url'] = $url;
-            return $url;
-        }
+        
         
         public function stazioneHelper($stazione) {
             
@@ -214,21 +150,6 @@ class ItaloTreno extends Scanner {
             
         }
         
-        public function classeHelper($classe) {
-            
-            switch ($classe) {
-                case "S":
-                    return "Smart";
-                    break;
-                case "C":
-                    return "Club";
-                    break;
-                case "P":
-                    return "Prima";
-                    break;
-            }
-            
-        }
         
         public function dataHelper($case) {
             switch ($case) {
@@ -237,9 +158,6 @@ class ItaloTreno extends Scanner {
                     break;
                 case 'year-month';
                     return date("Y-m",$this->_dataPartenza);
-                    break;
-                case 'year-month-day';
-                    return date("Y-m-d",$this->_dataPartenza);
                     break;
                 case 'month';
                     return date("m",$this->_dataPartenza);
