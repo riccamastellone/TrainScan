@@ -36,7 +36,7 @@ class Main extends CI_Controller {
                 $data['content'] = $this->italotreno->getQuotazioni();
             } else $data['content'] = 'Nessun parametro passato';
             
-            print_r($data['content']);
+            var_dump($data['content']);
             
         }
         

@@ -79,7 +79,7 @@ class ItaloTreno extends Scanner {
             }
 
             $quotazioni = $this->getPreventivoResult($idPreventivo);
-            print_r($this->_debug);
+            //print_r($this->_debug);
             return $quotazioni;
             
             

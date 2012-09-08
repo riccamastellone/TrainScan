@@ -14,10 +14,12 @@ $(function() {
    
 function getQuotazioni() {
     $('#submitBtn').button('loading');
+    $('#loader').show();
     $.post("/main/ajaxQuotazioni", $('#formPost').serialize() ,
         function(data){
             $('#results').html(data);
             $('#submitBtn').button('reset');
+            $('#loader').hide();
         });
     
 }
