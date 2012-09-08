@@ -17,24 +17,22 @@ class Trenitalia extends Scanner {
             $quotazioniArray = $this->postParametri($this->generateXml());
             foreach($quotazioniArray as $quotazione)  {
                 if($quotazione['SolutionTrainMaxCategory'] == 'FR FRECCIAROSSA') {
-                    $primaCosto = 9999;
-                    $secondaCosto = 9999;
+                    print_r($quotazione['fareSolutionsMobile']);
                     foreach($quotazione['fareSolutionsMobile']['FareSolutionsMobile'] as $fare) {
-                        if($fare['SolPriceClass1'] != '0') {
-                            $fare['SolPriceClass1'] = substr($fare['SolPriceClass1'],0,-2);
-                            if($fare['SolPriceClass1'] < $primaCosto) {
-                                $primaCosto = $fare['SolPriceClass1'];
-                                $codicePrima = $fare['OfferCode'];
-                            }
+                        
+                        if($fare['SolPriceClass1'] != 0) {
+                            $prima[] = array(
+                                'prezzo' => (string)$fare['SolPriceClass1'], 
+                                'codice' => (string)$fare['OfferCode']);
                         }
-                        if($fare['SolPriceClass2'] != '0') {
-                            $fare['SolPriceClass2'] = substr($fare['SolPriceClass2'],0,-2);
-                            if($fare['SolPriceClass2'] < $secondaCosto) {
-                                $secondaCosto = $fare['SolPriceClass2'];
-                                $codiceSeconda = $fare['OfferCode'];
-                            }
+                        if($fare['SolPriceClass2'] != 0) {
+                             $seconda[] = array(
+                                'prezzo' => ($fare['SolPriceClass1']), 
+                                'codice' => $fare['OfferCode']);
                         }
                     }
+                    var_dump($prima);
+                    var_dump($seconda);
                     if($primaCosto != 9999) {
                          $sql = array(
                             'id_preventivo' => $idPreventivo,
@@ -48,8 +46,8 @@ class Trenitalia extends Scanner {
                             'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
                             );
                         $this->db->insert('preventivi_result', $sql);
-                        
-                    }
+                       
+                    } 
                     if($secondaCosto != 9999) {
                         $sql = array(
                             'id_preventivo' => $idPreventivo,
@@ -63,25 +61,25 @@ class Trenitalia extends Scanner {
                             'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
                             );
                         $this->db->insert('preventivi_result', $sql);
-                    }
+                    } 
                         
                 }
-            }
+            } die();
         }
         
         
         public function getQuotazioni() {
             $datiPreventivo = array(
-                'id_origine' => $this->stazioneHelper($this->_stazioneOrigine),
-                'id_destinazione' => $this->stazioneHelper($this->_stazioneDestinazione),
+                'id_origine' => ($this->_stazioneOrigine),
+                'id_destinazione' => ($this->_stazioneDestinazione),
                 'data' => $this->dataHelper('year-month-day')
                 );            
             $idPreventivo = $this->db->select('id')->from('preventivi')->where($datiPreventivo)->where('data_generazione >  DATE_SUB(now(), INTERVAL 30 MINUTE)')->get()->result_array();
            
             if(!$idPreventivo) {
                 $datiPreventivo = array(
-                    'id_origine' => $this->stazioneHelper($this->_stazioneOrigine),
-                    'id_destinazione' => $this->stazioneHelper($this->_stazioneDestinazione),
+                    'id_origine' => ($this->_stazioneOrigine),
+                    'id_destinazione' => ($this->_stazioneDestinazione),
                     'data' => $this->dataHelper('year-month-day'),
                     'indirizzo_ip' => $_SERVER['REMOTE_ADDR']
                 );
@@ -97,7 +95,7 @@ class Trenitalia extends Scanner {
             return $quotazioni;
         }
         
-        public function getPreventivoResult($idPreventivo) {
+        public function getPreventivoResult54($idPreventivo) {
             $query = $this->db->query("SELECT * FROM preventivi_result 
                 AS a, trenitalia_classi AS b, trenitalia_tariffe AS c WHERE a.id_preventivo = {$idPreventivo} AND a.id_classe = b.codice_classe
                 AND a.id_offerta = c.codice_offerta ORDER BY a.prezzo ASC");
@@ -113,9 +111,7 @@ class Trenitalia extends Scanner {
             $arrayQuotazioni = $this->xml2array(preg_replace('/a:/', '', $response));
             $arrayQuotazioni = $arrayQuotazioni['s:Envelope']['s:Body']['OutputSolutionsMobile']['pOutput']['MobileSolutions']['outputInfoSolutionsMobile'];
             
-            
-            die(print_r($arrayQuotazioni));
-            
+                    
             return $arrayQuotazioni;
         }
 	public function updateStazioni()
@@ -193,12 +189,12 @@ class Trenitalia extends Scanner {
                              <!--Optional:-->
                              <tsf:ArrivalStationCode>'.$this->stazioneHelper($this->_stazioneDestinazione).'</tsf:ArrivalStationCode>
                              <!--Optional:-->
-                             <tsf:DepartureDateTime>20/09/2012-08:45:00</tsf:DepartureDateTime>
+                             <tsf:DepartureDateTime>'.date("d/m/Y",$this->_dataPartenza).'-05:00:00</tsf:DepartureDateTime>
                           </tem:pInput>
                        </tem:InputSolutionsMobile>
                     </soapenv:Body>
                  </soapenv:Envelope>';
-            
+            //die(print_r($xml));
             return $xml;
             
         }
@@ -248,6 +244,9 @@ class Trenitalia extends Scanner {
                     break;
                 case 'year-month';
                     return date("Y-m",$this->_dataPartenza);
+                    break;
+                case 'year-month-day';
+                    return date("Y-m-d",$this->_dataPartenza);
                     break;
                 case 'month';
                     return date("m",$this->_dataPartenza);

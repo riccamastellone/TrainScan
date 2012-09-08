@@ -12,16 +12,6 @@ class ItaloTreno extends Scanner {
             
         }
         
-
-        
-        public function getPreventivoResult($idPreventivo) {
-            $query = $this->db->query("SELECT * FROM preventivi_result 
-                AS a, italo_classi AS b WHERE a.id_preventivo = {$idPreventivo} AND a.id_classe = b.codice_classe
-                ORDER BY a.prezzo ASC");
-            $result = $query->result_array();
-            return $result;
-        }
-        
         public function getQuotazioniRaw($idPreventivo) {
             
             foreach($this->_classi as $classe){
@@ -61,16 +51,16 @@ class ItaloTreno extends Scanner {
         public function getQuotazioni() {
             
             $datiPreventivo = array(
-                'id_origine' => $this->stazioneHelper($this->_stazioneOrigine),
-                'id_destinazione' => $this->stazioneHelper($this->_stazioneDestinazione),
+                'id_origine' => ($this->_stazioneOrigine),
+                'id_destinazione' => ($this->_stazioneDestinazione),
                 'data' => $this->dataHelper('year-month-day')
                 );            
             $idPreventivo = $this->db->select('id')->from('preventivi')->where($datiPreventivo)->where('data_generazione >  DATE_SUB(now(), INTERVAL 30 MINUTE)')->get()->result_array();
            
             if(!$idPreventivo) {
                 $datiPreventivo = array(
-                    'id_origine' => $this->stazioneHelper($this->_stazioneOrigine),
-                    'id_destinazione' => $this->stazioneHelper($this->_stazioneDestinazione),
+                    'id_origine' => ($this->_stazioneOrigine),
+                    'id_destinazione' => ($this->_stazioneDestinazione),
                     'data' => $this->dataHelper('year-month-day'),
                     'indirizzo_ip' => $_SERVER['REMOTE_ADDR']
                 );
@@ -82,9 +72,8 @@ class ItaloTreno extends Scanner {
                
             }
 
-            $quotazioni = $this->getPreventivoResult($idPreventivo);
-            //print_r($this->_debug);
-            return $quotazioni;
+            //$quotazioni = $this->getPreventivoResult($idPreventivo);
+            return $idPreventivo;
             
             
         }

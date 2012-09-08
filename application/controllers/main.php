@@ -22,6 +22,7 @@ class Main extends CI_Controller {
 	}
         
         public function trenitalia() {
+            $this->trenitalia->setData();
             $this->trenitalia->setStazioni('Milano','Firenze');
             print_r($this->trenitalia->getQuotazioni());
         }
@@ -34,7 +35,10 @@ class Main extends CI_Controller {
                 $this->trenitalia->setStazioni($this->input->post('stazionePartenza', TRUE),$this->input->post('stazioneArrivo', TRUE));
                 $this->italotreno->setPersone();
                 $this->italotreno->setData($this->input->post('dataPartenza', TRUE));
-                $data['quotazioni'] = $this->italotreno->getQuotazioni();
+                $this->trenitalia->setData($this->input->post('dataPartenza', TRUE));
+                $data['id_preventivo'] = $this->italotreno->getQuotazioni();
+                $data['id_preventivo'] = $this->trenitalia->getQuotazioni();
+                $data['quotazioni'] = $this->scanner->getPreventivoResult($data['id_preventivo']);
             } else $data['quotazioni'] = 'Nessun parametro passato';
             
             $this->load->view('row', $data);

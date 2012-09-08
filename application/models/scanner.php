@@ -24,9 +24,22 @@ class Scanner extends CI_Model {
         }
        
         public function setData($data = null) {
-            $this->_dataPartenza = ($data != null) ? strtotime($data) : strtotime(date("Y-m-d"));
+            if($data == null) {
+                $date = date("Y-m-d");// current date
+                $this->_dataPartenza = strtotime(date("Y-m-d", strtotime($date)) . " +2 day");
+            } else
+            $this->_dataPartenza = strtotime($data);
         }
-}
+        
+        
+        public function getPreventivoResult($idPreventivo) {
+            $query = $this->db->query("SELECT * FROM preventivi_result 
+                AS a, italo_classi AS b, trenitalia_classi AS c, operatori AS o WHERE  a.id_preventivo = {$idPreventivo} AND a.id_operatore = o.id
+                ORDER BY a.prezzo ASC");
+            $result = $query->result_array();
+            return $result;
+        }
+}// IF(a.id_operatore = 'I', b.codice_classe, c.codice_classe ) = a.id_classe AND
 /*
  * 
  */

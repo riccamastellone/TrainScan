@@ -1,6 +1,7 @@
 <table class="table table-striped">
     <thead>
         <tr>
+            <th>Operatore</th>
             <th>Numero Treno</th>
             <th>Partenza</th>
             <th>Arrivo</th>
@@ -12,6 +13,7 @@
     <tbody>
         <?php foreach($quotazioni as $quotazione) { ?>
             <tr>
+                <td><?php echo $quotazione["nome_operatore"]; ?></td>
                 <td><?php echo $quotazione["codice_treno"]; ?></td>
                 <td><?php echo substr($quotazione["partenza"], 0, -3); ?></td>
                 <td><?php echo substr($quotazione["arrivo"], 0, -3); ?></td>
