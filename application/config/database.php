@@ -48,10 +48,19 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
-$db['default']['password'] = '';
-$db['default']['database'] = 'rmdesign_trainscan';
+if($_SERVER['HTTP_HOST'] == 'testing.trainscan.it') {
+    $db['default']['hostname'] = 'localhost';
+    $db['default']['username'] = 'rmdesign_trainsc';
+    $db['default']['password'] = 'F(3$6xXbFpI}COl0eV';
+    $db['default']['database'] = 'rmdesign_trainscan';
+    
+    
+} else {
+    $db['default']['hostname'] = 'localhost';
+    $db['default']['username'] = 'root';
+    $db['default']['password'] = '';
+    $db['default']['database'] = 'rmdesign_trainscan';
+}
 $db['default']['dbdriver'] = 'mysqli';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;

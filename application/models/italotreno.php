@@ -101,7 +101,7 @@ class ItaloTreno extends Scanner {
             $this->curl->create($this->_italoUrl);
             $this->curl->option(CURLOPT_COOKIEJAR, $this->ckfile); 
             $this->curl->option(CURLOPT_SSL_VERIFYPEER, false);
-            $this->curl->option(CURLOPT_RETURNTRANSFER, false);
+            $this->curl->option(CURLOPT_RETURNTRANSFER, true);
             $this->curl->option(CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:15.0) Gecko/20100101 Firefox/15.0');
             $this->curl->option(CURLOPT_REFERER, $this->_italoUrl);
             $this->curl->option(CURLOPT_POSTFIELDS,$this->generateItaloPost());
