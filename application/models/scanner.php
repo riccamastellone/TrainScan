@@ -78,6 +78,14 @@ class Scanner extends CI_Model {
             return $result;
         }
         
+        public function getClassi() {
+            $query = $this->db->query("SELECT * FROM italo_classi ");
+            $result[] = $query->result_array();
+            $query = $this->db->query("SELECT * FROM trenitalia_classi ");
+            $result[] = $query->result_array();
+            return $result;
+        }
+        
         
         public function dataHelper($case) {
             switch ($case) {

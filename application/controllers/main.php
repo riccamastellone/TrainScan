@@ -15,7 +15,7 @@ class Main extends CI_Controller {
 	public function index()
 	{       
             $data['stazioni'] = implode('","',$this->italotreno->_stazioni);
-            
+            $data['classi'] = $this->scanner->getClassi();
             $this->_renderPage($data);
                 
 	}

@@ -22,6 +22,14 @@ function getQuotazioni() {
             $('#results').html(data);
             $('#submitBtn').button('reset');
             $('#loader').hide();
+            $('.dettagliClasse').each(function(){
+                $(this).popover({
+                    trigger : 'hover',
+                    title : $( '.' + $(this).attr('dettagli') + ' .title').html(),
+                    content : $( '.' + $(this).attr('dettagli') + ' .content').html()
+                });
+            })
         });
     
 }
+
