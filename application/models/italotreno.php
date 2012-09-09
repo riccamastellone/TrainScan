@@ -47,35 +47,17 @@ class ItaloTreno extends Scanner {
             }
             
         }
+        public function getPreventivoResultItaloTreno($idPreventivo) {
+            $query = $this->db->query("SELECT * FROM preventivi_result WHERE id_preventivo = {$idPreventivo} AND id_operatore = 'I'");
+            $result = $query->result_array();
+            return $result;
+        }
         
-        public function getQuotazioni() {
-            
-            $datiPreventivo = array(
-                'id_origine' => ($this->_stazioneOrigine),
-                'id_destinazione' => ($this->_stazioneDestinazione),
-                'data' => $this->dataHelper('year-month-day')
-                );            
-            $idPreventivo = $this->db->select('id')->from('preventivi')->where($datiPreventivo)->where('data_generazione >  DATE_SUB(now(), INTERVAL 30 MINUTE)')->get()->result_array();
-           
-            if(!$idPreventivo) {
-                $datiPreventivo = array(
-                    'id_origine' => ($this->_stazioneOrigine),
-                    'id_destinazione' => ($this->_stazioneDestinazione),
-                    'data' => $this->dataHelper('year-month-day'),
-                    'indirizzo_ip' => $_SERVER['REMOTE_ADDR']
-                );
-                $this->db->insert('preventivi',$datiPreventivo);
-                $idPreventivo = $this->db->insert_id();
-                $this->getQuotazioniRaw($idPreventivo);
-            } else {
-                $idPreventivo = $idPreventivo[0]['id'];
-               
-            }
-
-            //$quotazioni = $this->getPreventivoResult($idPreventivo);
-            return $idPreventivo;
-            
-            
+        public function getQuotazioni($idPreventivo) {
+            $quotazioni = $this->getPreventivoResultItaloTreno($idPreventivo);
+            if(empty($quotazioni)) {
+                    $this->getQuotazioniRaw($idPreventivo);
+                }
         }
         
         

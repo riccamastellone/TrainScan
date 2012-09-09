@@ -33,12 +33,16 @@ class Main extends CI_Controller {
             if(!empty($post)) {            
                 $this->italotreno->setStazioni($this->input->post('stazionePartenza', TRUE),$this->input->post('stazioneArrivo', TRUE));
                 $this->trenitalia->setStazioni($this->input->post('stazionePartenza', TRUE),$this->input->post('stazioneArrivo', TRUE));
+                $this->scanner->setStazioni($this->input->post('stazionePartenza', TRUE),$this->input->post('stazioneArrivo', TRUE));
                 $this->italotreno->setPersone();
                 $this->italotreno->setData($this->input->post('dataPartenza', TRUE));
                 $this->trenitalia->setData($this->input->post('dataPartenza', TRUE));
-                $data['id_preventivo'] = $this->trenitalia->getQuotazioni();
-                if($data['id_preventivo'])
-                    $this->italotreno->getQuotazioni();
+                $this->scanner->setData($this->input->post('dataPartenza', TRUE));
+                
+                $data['idPreventivo'] = $this->scanner->checkPreventivo();
+                
+                $this->trenitalia->getQuotazioni($data['idPreventivo']);
+                $this->italotreno->getQuotazioni($data['idPreventivo']);
                 
                 $data['quotazioni'] = $this->scanner->getPreventivoResult($data['id_preventivo']);
             } else $data['quotazioni'] = 'Nessun parametro passato';

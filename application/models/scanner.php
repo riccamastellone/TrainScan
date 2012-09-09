@@ -31,12 +31,54 @@ class Scanner extends CI_Model {
             $this->_dataPartenza = strtotime($data);
         }
         
+        public function checkPreventivo() {
+            
+            $datiPreventivo = array(
+                'id_origine' => ($this->_stazioneOrigine),
+                'id_destinazione' => ($this->_stazioneDestinazione),
+                'data' => $this->dataHelper('year-month-day')
+                );            
+            $idPreventivo = $this->db->select('id')->from('preventivi')->where($datiPreventivo)->where('data_generazione >  DATE_SUB(now(), INTERVAL 30 MINUTE)')->get()->result_array();
+           
+            if(!$idPreventivo) {
+                $datiPreventivo = array(
+                    'id_origine' => ($this->_stazioneOrigine),
+                    'id_destinazione' => ($this->_stazioneDestinazione),
+                    'data' => $this->dataHelper('year-month-day'),
+                    'indirizzo_ip' => $_SERVER['REMOTE_ADDR']
+                );
+                $this->db->insert('preventivi',$datiPreventivo);
+                $idPreventivo = $this->db->insert_id();
+            } else $idPreventivo = $idPreventivo[0]['id'];
+            return $idPreventivo;
+        }
+        
         
         public function getPreventivoResult($idPreventivo) {
             $query = $this->db->query("SELECT * FROM preventivi_result AS a, operatori AS o WHERE  a.id_preventivo = {$idPreventivo} AND a.id_operatore = o.id
                 ORDER BY a.prezzo ASC");
             $result = $query->result_array();
             return $result;
+        }
+        
+        public function dataHelper($case) {
+            switch ($case) {
+                case 'day':
+                    return date("d",$this->_dataPartenza);
+                    break;
+                case 'year-month';
+                    return date("Y-m",$this->_dataPartenza);
+                    break;
+                case 'year-month-day';
+                    return date("Y-m-d",$this->_dataPartenza);
+                    break;
+                case 'month';
+                    return date("m",$this->_dataPartenza);
+                    break;
+                case 'year';
+                    return date("Y",$this->_dataPartenza);
+                    break;
+            }
         }
 }// IF(a.id_operatore = 'I', b.codice_classe, c.codice_classe ) = a.id_classe AND
 /*
