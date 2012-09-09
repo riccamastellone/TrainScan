@@ -22,9 +22,12 @@ class Main extends CI_Controller {
 	}
         
         public function trenitalia() {
-            $this->trenitalia->setData();
+            $this->trenitalia->setData('2012-10-10');
+            $this->scanner->setData('2012-10-10');
             $this->trenitalia->setStazioni('Milano','Firenze');
-            print_r($this->trenitalia->getQuotazioni());
+            $this->scanner->setStazioni('Milano','Firenze');
+            $data['idPreventivo'] = (int)$this->scanner->checkPreventivo();
+            print_r($this->trenitalia->getQuotazioni($data['idPreventivo']));
         }
         
         
