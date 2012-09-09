@@ -17,7 +17,7 @@
                 <td><?php echo $quotazione["codice_treno"]; ?></td>
                 <td><?php echo substr($quotazione["partenza"], 0, -3); ?></td>
                 <td><?php echo substr($quotazione["arrivo"], 0, -3); ?></td>
-                <td><?php echo $quotazione["nome_classe"]; ?></td>
+                <td><?php echo $quotazione["id_classe"]; ?></td>
                 <td><?php echo $quotazione["prezzo"]; ?> €</td>
                 <td><button type="button" onclick="javascript:alert('minga bello')" class="btn btn-success">Acquista</button></td>
             </tr>

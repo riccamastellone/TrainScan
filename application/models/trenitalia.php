@@ -95,7 +95,6 @@ class Trenitalia extends Scanner {
                 $this->db->insert('preventivi',$datiPreventivo);
                 $idPreventivo = $this->db->insert_id();
                 $this->getQuotazioniRaw($idPreventivo);
-                $quotazioni = $this->getPreventivoResult($idPreventivo);
             } else {
                 $idPreventivo = $idPreventivo[0]['id'];
                 $quotazioni = $this->getPreventivoResult($idPreventivo);
@@ -103,7 +102,7 @@ class Trenitalia extends Scanner {
                     $this->getQuotazioniRaw($idPreventivo);
                 }
             }
-            return $quotazioni;
+            return $idPreventivo;
         }
         
         public function getPreventivoResult54($idPreventivo) {
