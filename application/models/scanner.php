@@ -8,6 +8,7 @@ class Scanner extends CI_Model {
         public $_interval = '2 HOUR'; // validità del preventivo
         
         function __construct() {
+            
             $this->load->library('curl'); 
             $this->load->model('italotreno');
             $this->load->model('trenitalia');
@@ -113,10 +114,11 @@ class Scanner extends CI_Model {
             }
         }
         public function _ago($tm) {
-            $cur_tm = time(); 
+            if($this->config->item('glasgow')) {
+                $cur_tm = time()-3600*6; 
+            } else $cur_tm = time(); 
             $tm = strtotime($tm);
             $dif = ($cur_tm-$tm);
-            
             $pds = array('secondo','minuto','ora','giorno','settimana','mese','anno','decade');
             $pdsPlurale = array('secondi','minuti','ore','giorni','settimane','mesi','anni','decadi');
             $lngh = array(1,60,3600,86400,604800,2630880,31570560,315705600);
