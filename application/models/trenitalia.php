@@ -26,12 +26,12 @@ class Trenitalia extends Scanner {
                 if($quotazione['SolutionTrainMaxCategory'] == 'FR FRECCIAROSSA') {
                     foreach($quotazione['fareSolutionsMobile']['FareSolutionsMobile'] as $fare) {
                         
-                        if($fare['SolPriceClass1'] != 0) {
+                        if(isset($fare['SolPriceClass1']) && $fare['SolPriceClass1'] != 0) {
                             $prima[] = array(
                                 'prezzo' => (string)$fare['SolPriceClass1'], 
                                 'codice' => (string)$fare['OfferCode']);
                         }
-                        if($fare['SolPriceClass2'] != 0) {
+                        if(isset($fare['SolPriceClass2']) && $fare['SolPriceClass2'] != 0) {
                              $seconda[] = array(
                                 'prezzo' => ($fare['SolPriceClass2']), 
                                 'codice' => $fare['OfferCode']);
@@ -209,7 +209,7 @@ class Trenitalia extends Scanner {
                        </tem:InputSolutionsMobile>
                     </soapenv:Body>
                  </soapenv:Envelope>';
-            //die(print_r($xml));
+
             return $xml;
             
         }

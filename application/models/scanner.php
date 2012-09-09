@@ -33,8 +33,7 @@ class Scanner extends CI_Model {
         
         
         public function getPreventivoResult($idPreventivo) {
-            $query = $this->db->query("SELECT * FROM preventivi_result 
-                AS a, italo_classi AS b, trenitalia_classi AS c, operatori AS o WHERE  a.id_preventivo = {$idPreventivo} AND a.id_operatore = o.id
+            $query = $this->db->query("SELECT * FROM preventivi_result AS a, operatori AS o WHERE  a.id_preventivo = {$idPreventivo} AND a.id_operatore = o.id
                 ORDER BY a.prezzo ASC");
             $result = $query->result_array();
             return $result;
