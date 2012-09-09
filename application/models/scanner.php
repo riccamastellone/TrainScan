@@ -78,6 +78,7 @@ class Scanner extends CI_Model {
             return $result;
         }
         
+        
         public function dataHelper($case) {
             switch ($case) {
                 case 'day':

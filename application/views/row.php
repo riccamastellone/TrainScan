@@ -1,3 +1,4 @@
+<p style="text-align:center">Totale treni trovati: <?php echo $risultati; ?></p>
 <table class="table table-striped">
     <thead>
         <tr>

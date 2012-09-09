@@ -52,6 +52,7 @@ class Main extends CI_Controller {
                 $this->scanner->setData($dataPartenza);
                 $data['idPreventivo'] = $this->scanner->getBothQuotazioni();
                 $data['quotazioni'] = $this->scanner->getPreventivoResult($data['idPreventivo']);
+                $data['risultati'] = count($data['quotazioni']);
                 $data['quotazioni'] = $this->renderClassi($data['quotazioni']);
             } else $data['quotazioni'] = 'Nessun parametro passato';
             

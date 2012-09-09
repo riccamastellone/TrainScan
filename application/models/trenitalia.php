@@ -86,7 +86,6 @@ class Trenitalia extends Scanner {
                     if(!empty($seconda)) {
                         usort($seconda, array('Trenitalia', 'comparaPrezzo'));
                         if($seconda[0]['prezzo'] > 1) {
-                            var_dump($seconda[0]['prezzo']);
                             $sql = array(
                                 'id_preventivo' => $idPreventivo,
                                 'codice_treno' => $quotazione['solutionDetail']['SolutionDetail']['TrainNumber'],
@@ -98,7 +97,6 @@ class Trenitalia extends Scanner {
                                 'id_offerta' => $seconda[0]['codice'],
                                 'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
                                 );
-                            var_dump($sql);
                             $this->db->insert('preventivi_result', $sql);
                         }
                     }
