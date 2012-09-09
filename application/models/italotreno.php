@@ -59,6 +59,7 @@ class ItaloTreno extends Scanner {
                                         'codice_treno' => $quotazione['trainNumber'],
                                         'partenza' => date('H:i:s', strtotime($quotazione['departureTime'])),
                                         'arrivo' => date('H:i:s', strtotime($quotazione['arrivalTime'])),
+                                        'durata' => date('H:i:s', ((int)strtotime($quotazione['arrivalTime']) - (int)strtotime($quotazione['departureTime']))),
                                         'id_classe' => $classe,
                                         'prezzo' => $prezzo,
                                         'id_operatore' => 'I'
