@@ -13,7 +13,7 @@
     <tbody>
         <?php foreach($quotazioni as $quotazione) { ?>
             <tr>
-                <td><?php echo $quotazione["nome_operatore"]; ?></td>
+                <td><strong><?php echo $quotazione["nome_operatore"]; ?></strong></td>
                 <td><?php echo $quotazione["codice_treno"]; ?></td>
                 <td><?php echo substr($quotazione["partenza"], 0, -3); ?></td>
                 <td><?php echo substr($quotazione["arrivo"], 0, -3); ?></td>
