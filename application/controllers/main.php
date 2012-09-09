@@ -49,13 +49,39 @@ class Main extends CI_Controller {
                 $this->italotreno->getQuotazioni($data['idPreventivo']);
                 
                 $data['quotazioni'] = $this->scanner->getPreventivoResult($data['idPreventivo']);
+                $data['quotazioni'] = $this->renderClassi($data['quotazioni']);
             } else $data['quotazioni'] = 'Nessun parametro passato';
             
             $this->load->view('row', $data);
             
         }
         
-        protected function renderRow($data) {
+        public function renderClassi($data) {
+            foreach($data as $key => $element) {
+                if($data[$key]['id_operatore'] == 'I') {
+                    switch ($data[$key]['id_classe']) {
+                        case "S":
+                            $data[$key]['nome_classe'] =  "Smart";
+                            break;
+                        case "C":
+                            $data[$key]['nome_classe'] =  "Club";
+                            break;
+                        case "P":
+                            $data[$key]['nome_classe'] =  "Prima";
+                            break;
+                    }
+                } else if($data[$key]['id_operatore'] == 'T') {
+                    switch ($data[$key]['id_classe']) {
+                        case "1":
+                            $data[$key]['nome_classe'] =  "1° Classe";
+                            break;
+                        case "2":
+                            $data[$key]['nome_classe'] =  "2° Classe";
+                            break;
+                    }
+                }
+            }
+            return $data;
         }
         
         protected function _renderPage($data) {
