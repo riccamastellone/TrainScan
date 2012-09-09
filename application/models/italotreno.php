@@ -3,7 +3,29 @@
 class ItaloTreno extends Scanner {
     
         public $_italoUrl = "https://biglietti.italotreno.it/Booking_Acquisto_Ricerca.aspx";
-        public $_fascePrezzo = array("S" => array("20","30","40","52"), "P" => array("42","52","73"), "C" => array("73","80"));
+        public $_fascePrezzo = array(
+            'MF' => array("S" => array("20","30","40","52"), "P" => array("42","52","73"), "C" => array("73","80")),
+            'FM' => array("S" => array("20","30","40","52"), "P" => array("42","52","73"), "C" => array("73","80")),
+            
+            'MB' => array("S" => array("20","30","43"), "P" => array("35","43","61"), "C" => array("61","70")),
+            'BM' => array("S" => array("20","30","43"), "P" => array("35","43","61"), "C" => array("61","70")),
+            
+            'MR' => array("S" => array("35","45","61","88"), "P" => array("55","88","118"), "C" => array("118","130")),
+            'RM' => array("S" => array("35","45","61","88"), "P" => array("55","88","118"), "C" => array("118","130")),
+            
+            'MN' => array("S" => array("40","52","62","97"), "P" => array("65","97","135"), "C" => array("135","155")),
+            'NM' => array("S" => array("40","52","62","97"), "P" => array("65","97","135"), "C" => array("135","155")),
+            
+            'MS' => array("S" => array("40","55","63","99"), "P" => array("66","99","143"), "C" => array("143","166")),
+            'SM' => array("S" => array("40","55","63","99"), "P" => array("66","99","143"), "C" => array("143","166")),
+            
+            'BF' => array("S" => array("15","20","26"), "P" => array("22","26","37"), "C" => array("37","43")),
+            'FB' => array("S" => array("15","20","26"), "P" => array("22","26","37"), "C" => array("37","43")),
+            
+            'FR' => array("S" => array("20","32","46"), "P" => array("35","46","64"), "C" => array("64","70")),
+            'RF' => array("S" => array("20","32","46"), "P" => array("35","46","64"), "C" => array("64","70"))
+            
+            );
         public $_classi = array("S","P","C"); // Smart, Prima, Prima
         public $_stazioneOrigine = '';
         public $_stazioneDestinazione = '';
@@ -19,7 +41,7 @@ class ItaloTreno extends Scanner {
             foreach($this->_classi as $classe){
                 $this->setClasse($classe);
                 $this->setSessionId();
-                    foreach($this->_fascePrezzo[$classe] as $prezzo) {
+                    foreach($this->_fascePrezzo[$this->getTratta()][$classe] as $prezzo) {
                         $this->setPrezzo($prezzo);
                         $json = json_decode($this->getJsonItalo(),true);
                         $json = $json['extendedJourneys'];
@@ -88,6 +110,12 @@ class ItaloTreno extends Scanner {
             return $curl;
             
         }
+        
+        public function getTratta() {
+            $iniziali = substr($this->_stazioneOrigine,0,1).substr($this->_stazioneDestinazione,0,1);
+            return $iniziali;
+        }
+        
 	public function getJsonItalo()
 	{       
             
