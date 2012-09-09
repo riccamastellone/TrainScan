@@ -47,7 +47,7 @@
             foreach($classi as $classiDoppia) {
                 foreach($classiDoppia as $classe) {
                     echo "<div class='classe_{$classe['codice_classe']}'>";
-                    echo '<span class="title">'.$classe['nome_classe'].'</span>';
+                    echo '<span class="title"><strong>'.$classe['nome_classe'].'</strong></span>';
                     echo '<span class="content">'.nl2br($classe['descrizione']).'</span>';
                     echo '</div>';
 
