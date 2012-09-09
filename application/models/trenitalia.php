@@ -6,12 +6,19 @@ class Trenitalia extends Scanner {
         public $_trenitaliaSoap = "https://stargate.iphone.trenitalia.com/serviceMOBILESOLUTION.wsdl";
         public $_stazioni = array("Milano", "Bologna", "Firenze", "Roma", "Napoli", "Salerno");
         public $_quotazioni = array();
-        
+        public $_timeout = '15';
         
         function __construct() {
              
         }
         
+        static function comparaPrezzo($a, $b) {
+            if ($a['prezzo'] == $b['prezzo']) {
+                return 0;
+            }
+            return ($a['prezzo'] < $b['prezzo']) ? -1 : 1;
+        }
+                
         public function getQuotazioniRaw($idPreventivo) {
             
             $quotazioniArray = $this->postParametri($this->generateXml());
@@ -31,40 +38,43 @@ class Trenitalia extends Scanner {
                                 'codice' => $fare['OfferCode']);
                         }
                     }
-                    var_dump($prima);
-                    var_dump($seconda);
-                    if($primaCosto != 9999) {
+                    
+                    uasort($prima, array('Trenitalia', 'comparaPrezzo'));
+                    uasort($seconda, array('Trenitalia', 'comparaPrezzo'));
+                    
+                    die();
+                    if(!empty($prima)) {
                          $sql = array(
                             'id_preventivo' => $idPreventivo,
                             'codice_treno' => $quotazione['solutionDetail']['SolutionDetail']['TrainNumber'],
                             'partenza' => date('H:i:s', strtotime($quotazione['SolutionDepartureTime'])),
                             'arrivo' => date('H:i:s', strtotime($quotazione['SolutionArrivalTime'])),
                             'id_classe' => '1',
-                            'prezzo' => $primaCosto,
+                            'prezzo' => $prima[0]['prezzo'],
                             'id_operatore' => 'T',
-                            'id_offerta' => $codicePrima,
+                            'id_offerta' => $prima[0]['prezzo'],
                             'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
                             );
                         $this->db->insert('preventivi_result', $sql);
                        
                     } 
-                    if($secondaCosto != 9999) {
+                    if(!empty($seconda)) {
                         $sql = array(
                             'id_preventivo' => $idPreventivo,
                             'codice_treno' => $quotazione['solutionDetail']['SolutionDetail']['TrainNumber'],
                             'partenza' => date('H:i:s', strtotime($quotazione['SolutionDepartureTime'])),
                             'arrivo' => date('H:i:s', strtotime($quotazione['SolutionArrivalTime'])),
                             'id_classe' => '2',
-                            'prezzo' => $secondaCosto,
+                            'prezzo' => $seconda[0]['prezzo'],
                             'id_operatore' => 'T',
-                            'id_offerta' => $codiceSeconda,
+                            'id_offerta' => $seconda[0]['prezzo'],
                             'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
                             );
                         $this->db->insert('preventivi_result', $sql);
                     } 
                         
                 }
-            } die();
+            }
         }
         
         
@@ -86,12 +96,14 @@ class Trenitalia extends Scanner {
                 $this->db->insert('preventivi',$datiPreventivo);
                 $idPreventivo = $this->db->insert_id();
                 $this->getQuotazioniRaw($idPreventivo);
+                $quotazioni = $this->getPreventivoResult($idPreventivo);
             } else {
                 $idPreventivo = $idPreventivo[0]['id'];
+                $quotazioni = $this->getPreventivoResult($idPreventivo);
+                if(empty($quotazioni)) {
+                    $this->getQuotazioniRaw($idPreventivo);
+                }
             }
-
-            $quotazioni = $this->getPreventivoResult($idPreventivo);
-            
             return $quotazioni;
         }
         
@@ -106,11 +118,15 @@ class Trenitalia extends Scanner {
         public function postParametri($xml, $soap = 'InfoSolutionsMobile') {
             
             $client = new SoapClient(null, array('location' => "https://stargate.iphone.trenitalia.com:443/servicemobilesolution.svc",
-                                                 'uri'      => "http://tempuri.org/ISGMOBILEService/InfoSolutionsMobile"));
+                                                 'uri'      => "http://tempuri.org/ISGMOBILEService/InfoSolutionsMobile",
+                                                 'connection_timeout' => $this->_timeout ) );
             $response = ($client->__doRequest($xml,'https://stargate.iphone.trenitalia.com:443/servicemobilesolution.svc','http://tempuri.org/ISGMOBILEService/InfoSolutionsMobile','1.2'));
             $arrayQuotazioni = $this->xml2array(preg_replace('/a:/', '', $response));
             $arrayQuotazioni = $arrayQuotazioni['s:Envelope']['s:Body']['OutputSolutionsMobile']['pOutput']['MobileSolutions']['outputInfoSolutionsMobile'];
             
+            if(!is_array($arrayQuotazioni)) {
+                throw new Exception('Server Trenitalia Down');
+            }
                     
             return $arrayQuotazioni;
         }
