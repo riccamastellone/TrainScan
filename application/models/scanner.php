@@ -8,11 +8,17 @@ class Scanner extends CI_Model {
         
         function __construct() {
             $this->load->library('curl'); 
+            $this->load->model('italotreno');
+            $this->load->model('trenitalia');
         }
         
 	public function setStazioni($origine,$destinazione) {
             if(!in_array($origine, $this->_stazioni) || !in_array($destinazione, $this->_stazioni))
                     throw new Exception("Stazioni fornite non corrette");
+            $this->trenitalia->_stazioneOrigine = $origine;
+            $this->trenitalia->_stazioneDestinazione = $destinazione;
+            $this->italotreno->_stazioneOrigine = $origine;
+            $this->italotreno->_stazioneDestinazione = $destinazione;
             $this->_stazioneOrigine = $origine;
             $this->_stazioneDestinazione = $destinazione;
         }
@@ -29,8 +35,19 @@ class Scanner extends CI_Model {
                 $this->_dataPartenza = strtotime(date("Y-m-d", strtotime($date)) . " +2 day");
             } else
             $this->_dataPartenza = strtotime($data);
+            
+            $this->trenitalia->_dataPartenza = $this->_dataPartenza;
+            $this->italotreno->_dataPartenza = $this->_dataPartenza;
+            
         }
         
+        public function getBothQuotazioni() {
+            $this->italotreno->setPersone();
+            $data['idPreventivo'] = (int)$this->checkPreventivo();
+            $this->trenitalia->getQuotazioni($data['idPreventivo']);
+            $this->italotreno->getQuotazioni($data['idPreventivo']);
+            
+        }
         public function checkPreventivo() {
             
             $datiPreventivo = array(

@@ -5,7 +5,9 @@ class Trenitalia extends Scanner {
         public $_trenitaliaUrl = "https://stargate.iphone.trenitalia.com/serviceMOBILESOLUTION.svc";
         public $_trenitaliaSoap = "https://stargate.iphone.trenitalia.com/serviceMOBILESOLUTION.wsdl";
         public $_stazioni = array("Milano", "Bologna", "Firenze", "Roma", "Napoli", "Salerno");
-        public $_quotazioni = array();
+        public $_stazioneOrigine = '';
+        public $_stazioneDestinazione = '';
+        public $_dataPartenza = '';
         public $_timeout = '15';
         
         function __construct() {

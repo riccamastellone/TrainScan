@@ -8,8 +8,6 @@ class Main extends CI_Controller {
             $this->load->helper('url');
             $this->load->library('assets');
             $this->load->model('scanner');
-            $this->load->model('italotreno');
-            $this->load->model('trenitalia');
             $this->load->library('session');
         }
         
@@ -50,21 +48,9 @@ class Main extends CI_Controller {
                 );
                 $this->session->set_userdata($newdata);
                 
-                
-                $this->italotreno->setStazioni($stazionePartenza,$stazioneArrivo);
-                $this->trenitalia->setStazioni($stazionePartenza,$stazioneArrivo);
                 $this->scanner->setStazioni($stazionePartenza,$stazioneArrivo);
-                $this->italotreno->setPersone();
-                $this->italotreno->setData($dataPartenza);
-                $this->trenitalia->setData($dataPartenza);
                 $this->scanner->setData($dataPartenza);
-                
-                $data['idPreventivo'] = (int)$this->scanner->checkPreventivo();
-                //die(var_dump($data['idPreventivo']));
-                
-                $this->trenitalia->getQuotazioni($data['idPreventivo']);
-                $this->italotreno->getQuotazioni($data['idPreventivo']);
-                
+                $this->scanner->getBothQuotazioni();
                 $data['quotazioni'] = $this->scanner->getPreventivoResult($data['idPreventivo']);
                 $data['quotazioni'] = $this->renderClassi($data['quotazioni']);
             } else $data['quotazioni'] = 'Nessun parametro passato';

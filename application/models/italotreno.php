@@ -5,7 +5,9 @@ class ItaloTreno extends Scanner {
         public $_italoUrl = "https://biglietti.italotreno.it/Booking_Acquisto_Ricerca.aspx";
         public $_fascePrezzo = array("S" => array("20","30","40","52"), "P" => array("42","52","73"), "C" => array("73","80"));
         public $_classi = array("S","P","C"); // Smart, Prima, Prima
-        public $_quotazioni = array();
+        public $_stazioneOrigine = '';
+        public $_stazioneDestinazione = '';
+        public $_dataPartenza = '';
         
         
         function __construct() {
