@@ -34,32 +34,32 @@ class Trenitalia extends Scanner {
                     $standard = array();
                     foreach($quotazione['fareSolutionsMobile']['FareSolutionsMobile'] as $fare) {
                         
-                        if(isset($fare['SolPriceClass1']) && (int)$fare['SolPriceClass1'] > 0) {
+                        if(isset($fare['SolPriceClass1']) && (int)$fare['SolPriceClass1'] > 1) {
                             $prima[] = array(
                                 'prezzo' => (int)substr($fare['SolPriceClass1'],0,-2), 
                                 'codice' => (int)$fare['OfferCode']);
                         }
-                        if(isset($fare['SolPriceClass2']) && (int)$fare['SolPriceClass2'] > 0) {
+                        if(isset($fare['SolPriceClass2']) && (int)$fare['SolPriceClass2'] > 1) {
                              $seconda[] = array(
                                 'prezzo' => (int)substr($fare['SolPriceClass2'],0,-2),
                                 'codice' => (int)$fare['OfferCode']);
                         }
-                        if(isset($fare['SolPriceExecutive']) && (int)$fare['SolPriceExecutive'] > 0) {
+                        if(isset($fare['SolPriceExecutive']) && (int)$fare['SolPriceExecutive'] > 1) {
                             $executive[] = array(
                                 'prezzo' => (int)substr($fare['SolPriceExecutive'],0,-2),
                                 'codice' => (int)$fare['OfferCode']);
                         }
-                        if(isset($fare['SolPriceBusiness']) && (int)$fare['SolPriceBusiness'] > 0) {
+                        if(isset($fare['SolPriceBusiness']) && (int)$fare['SolPriceBusiness'] > 1) {
                              $business[] = array(
                                 'prezzo' => (int)substr($fare['SolPriceBusiness'],0,-2),
                                 'codice' => (int)$fare['OfferCode']);
                         }
-                        if(isset($fare['SolPricePremium']) && (int)$fare['SolPricePremium'] > 0) {
+                        if(isset($fare['SolPricePremium']) && (int)$fare['SolPricePremium'] > 1) {
                             $premium[] = array(
                                 'prezzo' => (int)substr($fare['SolPricePremium'],0,-2),
                                 'codice' => (int)$fare['OfferCode']);
                         }
-                        if(isset($fare['SolPriceStandard']) && (int)$fare['SolPriceStandard'] > 0) {
+                        if(isset($fare['SolPriceStandard']) && (int)$fare['SolPriceStandard'] > 1) {
                             $standard[] = array(
                                 'prezzo' => (int)substr($fare['SolPriceStandard'],0,-2),
                                 'codice' => (int)$fare['OfferCode']);
@@ -86,17 +86,19 @@ class Trenitalia extends Scanner {
                     if(!empty($seconda)) {
                         usort($seconda, array('Trenitalia', 'comparaPrezzo'));
                         if($seconda[0]['prezzo'] > 1) {
+                            var_dump($seconda[0]['prezzo']);
                             $sql = array(
                                 'id_preventivo' => $idPreventivo,
                                 'codice_treno' => $quotazione['solutionDetail']['SolutionDetail']['TrainNumber'],
                                 'partenza' => date('H:i:s', strtotime($quotazione['SolutionDepartureTime'])),
                                 'arrivo' => date('H:i:s', strtotime($quotazione['SolutionArrivalTime'])),
                                 'id_classe' => '2',
-                                'prezzo' => substr($seconda[0]['prezzo'],0,-2),
+                                'prezzo' => ($seconda[0]['prezzo']),
                                 'id_operatore' => 'T',
                                 'id_offerta' => $seconda[0]['codice'],
                                 'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
                                 );
+                            var_dump($sql);
                             $this->db->insert('preventivi_result', $sql);
                         }
                     }
@@ -109,7 +111,7 @@ class Trenitalia extends Scanner {
                                 'partenza' => date('H:i:s', strtotime($quotazione['SolutionDepartureTime'])),
                                 'arrivo' => date('H:i:s', strtotime($quotazione['SolutionArrivalTime'])),
                                 'id_classe' => '3',
-                                'prezzo' => substr($executive[0]['prezzo'],0,-2),
+                                'prezzo' => ($executive[0]['prezzo']),
                                 'id_operatore' => 'T',
                                 'id_offerta' => $executive[0]['codice'],
                                 'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
@@ -126,7 +128,7 @@ class Trenitalia extends Scanner {
                                 'partenza' => date('H:i:s', strtotime($quotazione['SolutionDepartureTime'])),
                                 'arrivo' => date('H:i:s', strtotime($quotazione['SolutionArrivalTime'])),
                                 'id_classe' => '4',
-                                'prezzo' => substr($business[0]['prezzo'],0,-2),
+                                'prezzo' => ($business[0]['prezzo']),
                                 'id_operatore' => 'T',
                                 'id_offerta' => $business[0]['codice'],
                                 'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
@@ -143,7 +145,7 @@ class Trenitalia extends Scanner {
                                 'partenza' => date('H:i:s', strtotime($quotazione['SolutionDepartureTime'])),
                                 'arrivo' => date('H:i:s', strtotime($quotazione['SolutionArrivalTime'])),
                                 'id_classe' => '5',
-                                'prezzo' => substr($premium[0]['prezzo'],0,-2),
+                                'prezzo' => ($premium[0]['prezzo']),
                                 'id_operatore' => 'T',
                                 'id_offerta' => $premium[0]['codice'],
                                 'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
@@ -160,7 +162,7 @@ class Trenitalia extends Scanner {
                                 'partenza' => date('H:i:s', strtotime($quotazione['SolutionDepartureTime'])),
                                 'arrivo' => date('H:i:s', strtotime($quotazione['SolutionArrivalTime'])),
                                 'id_classe' => '6',
-                                'prezzo' => substr($standard[0]['prezzo'],0,-2),
+                                'prezzo' => ($standard[0]['prezzo']),
                                 'id_operatore' => 'T',
                                 'id_offerta' => $standard[0]['codice'],
                                 'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
