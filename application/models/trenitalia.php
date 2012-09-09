@@ -33,8 +33,8 @@ class Trenitalia extends Scanner {
                         }
                         if(isset($fare['SolPriceClass2']) && $fare['SolPriceClass2'] != 0) {
                              $seconda[] = array(
-                                'prezzo' => ($fare['SolPriceClass2']), 
-                                'codice' => $fare['OfferCode']);
+                                'prezzo' => (string)$fare['SolPriceClass2'], 
+                                'codice' => (string)$fare['OfferCode']);
                         }
                     }
                     
@@ -49,9 +49,9 @@ class Trenitalia extends Scanner {
                             'partenza' => date('H:i:s', strtotime($quotazione['SolutionDepartureTime'])),
                             'arrivo' => date('H:i:s', strtotime($quotazione['SolutionArrivalTime'])),
                             'id_classe' => '1',
-                            'prezzo' => $prima[0]['prezzo'],
+                            'prezzo' => substr($prima[0]['prezzo'],0,-2),
                             'id_operatore' => 'T',
-                            'id_offerta' => $prima[0]['prezzo'],
+                            'id_offerta' => $prima[0]['codice'],
                             'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
                             );
                         $this->db->insert('preventivi_result', $sql);
@@ -64,9 +64,9 @@ class Trenitalia extends Scanner {
                             'partenza' => date('H:i:s', strtotime($quotazione['SolutionDepartureTime'])),
                             'arrivo' => date('H:i:s', strtotime($quotazione['SolutionArrivalTime'])),
                             'id_classe' => '2',
-                            'prezzo' => $seconda[0]['prezzo'],
+                            'prezzo' => substr($seconda[0]['prezzo'],0,-2),
                             'id_operatore' => 'T',
-                            'id_offerta' => $seconda[0]['prezzo'],
+                            'id_offerta' => $seconda[0]['codice'],
                             'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
                             );
                         $this->db->insert('preventivi_result', $sql);
