@@ -1,4 +1,6 @@
-<p style="text-align:center">Totale treni trovati: <?php echo $risultati; ?></p>
+<p style="text-align:center">
+   Totale treni trovati: <?php echo $risultati; ?> - Ultimo aggiornamento: <?php echo $lastUpdate; ?> <a class="icon-refresh" href="javascript:alert('ora pretendi che funzionino troppe cose')"></a>
+</p>
 <table class="table table-striped">
     <thead>
         <tr>

@@ -9,6 +9,7 @@ class Main extends CI_Controller {
             $this->load->library('assets');
             $this->load->model('scanner');
             $this->load->library('session');
+            date_default_timezone_set('Europe/Rome');
         }
         
         
@@ -53,6 +54,7 @@ class Main extends CI_Controller {
                 $data['idPreventivo'] = $this->scanner->getBothQuotazioni();
                 $data['quotazioni'] = $this->scanner->getPreventivoResult($data['idPreventivo']);
                 $data['risultati'] = count($data['quotazioni']);
+                $data['lastUpdate'] = $this->scanner->_ago($this->scanner->getTimePreventivo($data['idPreventivo']));
                 $data['quotazioni'] = $this->renderClassi($data['quotazioni']);
             } else $data['quotazioni'] = 'Nessun parametro passato';
             

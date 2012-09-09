@@ -5,6 +5,7 @@ class Scanner extends CI_Model {
         // Stazioni valide
 	public $_stazioni = array("Milano", "Firenze", "Bologna", "Napoli", "Roma", "Salerno");        
         public $_debug = array();
+        public $_interval = '2 HOUR'; // validità del preventivo
         
         function __construct() {
             $this->load->library('curl'); 
@@ -55,7 +56,7 @@ class Scanner extends CI_Model {
                 'id_destinazione' => ($this->_stazioneDestinazione),
                 'data' => $this->dataHelper('year-month-day')
                 );            
-            $idPreventivo = $this->db->select('id')->from('preventivi')->where($datiPreventivo)->where('data_generazione >  DATE_SUB(now(), INTERVAL 30 MINUTE)')->get()->result_array();
+            $idPreventivo = $this->db->select('id')->from('preventivi')->where($datiPreventivo)->where('data_generazione >  DATE_SUB(now(), INTERVAL '.$this->_interval.')')->get()->result_array();
            
             if(!$idPreventivo) {
                 $datiPreventivo = array(
@@ -70,6 +71,11 @@ class Scanner extends CI_Model {
             return $idPreventivo;
         }
         
+        public function getTimePreventivo($idPreventivo) {
+            $query = $this->db->query("SELECT data_generazione FROM preventivi WHERE id = {$idPreventivo} LIMIT 1");
+            $result = $query->result();
+            return $result[0]->data_generazione;
+        }
         
         public function getPreventivoResult($idPreventivo) {
             $query = $this->db->query("SELECT * FROM preventivi_result AS a, operatori AS o WHERE  a.id_preventivo = {$idPreventivo} AND a.id_operatore = o.id
@@ -106,6 +112,26 @@ class Scanner extends CI_Model {
                     break;
             }
         }
+        public function _ago($tm) {
+            $cur_tm = time(); 
+            $tm = strtotime($tm);
+            $dif = ($cur_tm-$tm);
+            
+            $pds = array('secondo','minuto','ora','giorno','settimana','mese','anno','decade');
+            $pdsPlurale = array('secondi','minuti','ore','giorni','settimane','mesi','anni','decadi');
+            $lngh = array(1,60,3600,86400,604800,2630880,31570560,315705600);
+
+            for($v = sizeof($lngh)-1; ($v >= 0)&&(($no = $dif/$lngh[$v])<=1); $v--); if($v < 0) $v = 0; $_tm = $cur_tm-($dif%$lngh[$v]);
+
+            $no = floor($no); 
+            if($no <> 1) 
+                $tempo = $pdsPlurale[$v];
+            else  
+                $tempo = $pds[$v]; 
+
+            $x=sprintf("%d %s fa",$no,$tempo);
+            return $x;
+        }   
 }// IF(a.id_operatore = 'I', b.codice_classe, c.codice_classe ) = a.id_classe AND
 /*
  * 
