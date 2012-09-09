@@ -42,7 +42,6 @@ class Trenitalia extends Scanner {
                     uasort($prima, array('Trenitalia', 'comparaPrezzo'));
                     uasort($seconda, array('Trenitalia', 'comparaPrezzo'));
                     
-                    die();
                     if(!empty($prima)) {
                          $sql = array(
                             'id_preventivo' => $idPreventivo,
