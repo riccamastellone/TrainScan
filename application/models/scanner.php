@@ -79,7 +79,7 @@ class Scanner extends CI_Model {
         }
         
         public function getPreventivoResult($idPreventivo) {
-            $query = $this->db->query("SELECT * FROM preventivi_result AS a, operatori AS o WHERE  a.id_preventivo = {$idPreventivo} AND a.id_operatore = o.id
+            $query = $this->db->query("SELECT *, a.id AS result_id FROM preventivi_result AS a, operatori AS o WHERE  a.id_preventivo = {$idPreventivo} AND a.id_operatore = o.id
                 ORDER BY a.prezzo ASC");
             $result = $query->result_array();
             return $result;
@@ -93,6 +93,17 @@ class Scanner extends CI_Model {
             return $result;
         }
         
+        public function getDettaglioResult($idResult) {
+            $query = $this->db->query("SELECT id_operatore FROM preventivi_result WHERE id = {$idResult} LIMIT 1")->result();
+            $operatore = $query[0]->id_operatore;
+            if($operatore == 'I') $tabella = 'italo'; else $tabella = 'trenitalia';
+            $query = $this->db->query("SELECT * FROM preventivi_result AS a, operatori AS b,
+                {$tabella}_classi AS c, preventivi AS d
+                WHERE a.id_operatore = b.id AND a.id = {$idResult} AND a.id_classe = c.codice_classe AND a.id_preventivo = d.id LIMIT 1");
+            $result = $query->result_array();
+            return $result[0];
+            
+        }
         
         public function dataHelper($case) {
             switch ($case) {

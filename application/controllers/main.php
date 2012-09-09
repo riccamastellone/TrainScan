@@ -33,7 +33,18 @@ class Main extends CI_Controller {
             print_r($this->trenitalia->getQuotazioni($data['idPreventivo']));
         }
         
-        
+        public function dettagliPreventivo() {
+            
+            
+            $idPreventivo = $this->input->get('idPreventivo', TRUE);
+            if(!empty($idPreventivo)) { 
+                $data['quotazione'] = $this->scanner->getDettaglioResult($idPreventivo);
+               
+            } else $data['contenuto'] = 'Nessuna quotazione selezionata';
+            
+            $this->load->view('dettagli', $data);
+            
+        }
         public function ajaxQuotazioni() {
             
             

@@ -55,7 +55,18 @@
             }?>
         </div>
     </div>
-    
+    <div class="modal hide" id="modalRiepilogo">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Dettagli del viaggio</h3>
+          </div>
+          <div class="modal-body">
+          </div>
+          <div class="modal-footer">
+            <a href="#" data-dismiss="modal" class="btn">Chiudi</a>
+            <a href="javascript:alter('ciao minga')" class="btn btn-primary">Acquista</a>
+          </div>
+        </div>
 
 
         <!--<script>

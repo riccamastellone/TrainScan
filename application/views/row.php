@@ -24,7 +24,7 @@
                     <?php echo $quotazione["nome_classe"]; ?></span>
                 </td>
                 <td><?php echo $quotazione["prezzo"]; ?> €</td>
-                <td><button type="button" onclick="javascript:alert('minga bello')" class="btn btn-inverse">Acquista</button></td>
+                <td><button type="button" onclick="javascript:showDettagli(<?php echo $quotazione["result_id"]; ?>)" class="btn btn-inverse">Acquista</button></td>
             </tr>
        <?php } ?>
     </tbody>

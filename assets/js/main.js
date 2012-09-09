@@ -32,4 +32,12 @@ function getQuotazioni() {
         });
     
 }
-
+function showDettagli(idPreventivo) {
+    $.get("/main/dettagliPreventivo", {'idPreventivo' : idPreventivo} ,
+        function(data){
+            $('#modalRiepilogo .modal-body').html(data);
+            $('.modal').modal('show');
+            $(".accordion").collapse()
+        });
+    
+}
