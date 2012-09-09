@@ -26,51 +26,148 @@ class Trenitalia extends Scanner {
             $quotazioniArray = $this->postParametri($this->generateXml());
             foreach($quotazioniArray as $quotazione)  {
                 if($quotazione['SolutionTrainMaxCategory'] == 'FR FRECCIAROSSA') {
+                    $prima = array();
+                    $seconda = array();
+                    $executive = array();
+                    $business = array();
+                    $premium = array();
+                    $standard = array();
                     foreach($quotazione['fareSolutionsMobile']['FareSolutionsMobile'] as $fare) {
                         
-                        if(isset($fare['SolPriceClass1']) && $fare['SolPriceClass1'] != 0) {
+                        if(isset($fare['SolPriceClass1']) && (int)$fare['SolPriceClass1'] > 0) {
                             $prima[] = array(
-                                'prezzo' => (string)$fare['SolPriceClass1'], 
-                                'codice' => (string)$fare['OfferCode']);
+                                'prezzo' => (int)substr($fare['SolPriceClass1'],0,-2), 
+                                'codice' => (int)$fare['OfferCode']);
                         }
-                        if(isset($fare['SolPriceClass2']) && $fare['SolPriceClass2'] != 0) {
+                        if(isset($fare['SolPriceClass2']) && (int)$fare['SolPriceClass2'] > 0) {
                              $seconda[] = array(
-                                'prezzo' => (string)$fare['SolPriceClass2'], 
-                                'codice' => (string)$fare['OfferCode']);
+                                'prezzo' => (int)substr($fare['SolPriceClass2'],0,-2),
+                                'codice' => (int)$fare['OfferCode']);
+                        }
+                        if(isset($fare['SolPriceExecutive']) && (int)$fare['SolPriceExecutive'] > 0) {
+                            $executive[] = array(
+                                'prezzo' => (int)substr($fare['SolPriceExecutive'],0,-2),
+                                'codice' => (int)$fare['OfferCode']);
+                        }
+                        if(isset($fare['SolPriceBusiness']) && (int)$fare['SolPriceBusiness'] > 0) {
+                             $business[] = array(
+                                'prezzo' => (int)substr($fare['SolPriceBusiness'],0,-2),
+                                'codice' => (int)$fare['OfferCode']);
+                        }
+                        if(isset($fare['SolPricePremium']) && (int)$fare['SolPricePremium'] > 0) {
+                            $premium[] = array(
+                                'prezzo' => (int)substr($fare['SolPricePremium'],0,-2),
+                                'codice' => (int)$fare['OfferCode']);
+                        }
+                        if(isset($fare['SolPriceStandard']) && (int)$fare['SolPriceStandard'] > 0) {
+                            $standard[] = array(
+                                'prezzo' => (int)substr($fare['SolPriceStandard'],0,-2),
+                                'codice' => (int)$fare['OfferCode']);
                         }
                     }
-                                        
                     if(!empty($prima)) {
                         usort($prima, array('Trenitalia', 'comparaPrezzo'));
-                        $sql = array(
-                            'id_preventivo' => $idPreventivo,
-                            'codice_treno' => $quotazione['solutionDetail']['SolutionDetail']['TrainNumber'],
-                            'partenza' => date('H:i:s', strtotime($quotazione['SolutionDepartureTime'])),
-                            'arrivo' => date('H:i:s', strtotime($quotazione['SolutionArrivalTime'])),
-                            'id_classe' => '1',
-                            'prezzo' => substr($prima[0]['prezzo'],0,-2),
-                            'id_operatore' => 'T',
-                            'id_offerta' => $prima[0]['codice'],
-                            'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
-                            );
-                        $this->db->insert('preventivi_result', $sql);
+                        if($prima[0]['prezzo'] > 1) {
+                            $sql = array(
+                                'id_preventivo' => $idPreventivo,
+                                'codice_treno' => $quotazione['solutionDetail']['SolutionDetail']['TrainNumber'],
+                                'partenza' => date('H:i:s', strtotime($quotazione['SolutionDepartureTime'])),
+                                'arrivo' => date('H:i:s', strtotime($quotazione['SolutionArrivalTime'])),
+                                'id_classe' => '1',
+                                'prezzo' => $prima[0]['prezzo'],
+                                'id_operatore' => 'T',
+                                'id_offerta' => $prima[0]['codice'],
+                                'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
+                                );
+                            $this->db->insert('preventivi_result', $sql);
+                        }
                        
                     } 
                     if(!empty($seconda)) {
                         usort($seconda, array('Trenitalia', 'comparaPrezzo'));
-                        $sql = array(
-                            'id_preventivo' => $idPreventivo,
-                            'codice_treno' => $quotazione['solutionDetail']['SolutionDetail']['TrainNumber'],
-                            'partenza' => date('H:i:s', strtotime($quotazione['SolutionDepartureTime'])),
-                            'arrivo' => date('H:i:s', strtotime($quotazione['SolutionArrivalTime'])),
-                            'id_classe' => '2',
-                            'prezzo' => substr($seconda[0]['prezzo'],0,-2),
-                            'id_operatore' => 'T',
-                            'id_offerta' => $seconda[0]['codice'],
-                            'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
-                            );
-                        $this->db->insert('preventivi_result', $sql);
-                    }                         
+                        if($seconda[0]['prezzo'] > 1) {
+                            $sql = array(
+                                'id_preventivo' => $idPreventivo,
+                                'codice_treno' => $quotazione['solutionDetail']['SolutionDetail']['TrainNumber'],
+                                'partenza' => date('H:i:s', strtotime($quotazione['SolutionDepartureTime'])),
+                                'arrivo' => date('H:i:s', strtotime($quotazione['SolutionArrivalTime'])),
+                                'id_classe' => '2',
+                                'prezzo' => substr($seconda[0]['prezzo'],0,-2),
+                                'id_operatore' => 'T',
+                                'id_offerta' => $seconda[0]['codice'],
+                                'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
+                                );
+                            $this->db->insert('preventivi_result', $sql);
+                        }
+                    }
+                    if(!empty($executive)) {
+                        usort($executive, array('Trenitalia', 'comparaPrezzo'));
+                        if($executive[0]['prezzo'] > 1) {
+                            $sql = array(
+                                'id_preventivo' => $idPreventivo,
+                                'codice_treno' => $quotazione['solutionDetail']['SolutionDetail']['TrainNumber'],
+                                'partenza' => date('H:i:s', strtotime($quotazione['SolutionDepartureTime'])),
+                                'arrivo' => date('H:i:s', strtotime($quotazione['SolutionArrivalTime'])),
+                                'id_classe' => '3',
+                                'prezzo' => substr($executive[0]['prezzo'],0,-2),
+                                'id_operatore' => 'T',
+                                'id_offerta' => $executive[0]['codice'],
+                                'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
+                                );
+                            $this->db->insert('preventivi_result', $sql);
+                        }
+                    }
+                    if(!empty($business)) {
+                        usort($business, array('Trenitalia', 'comparaPrezzo'));
+                        if($business[0]['prezzo'] > 1) {
+                            $sql = array(
+                                'id_preventivo' => $idPreventivo,
+                                'codice_treno' => $quotazione['solutionDetail']['SolutionDetail']['TrainNumber'],
+                                'partenza' => date('H:i:s', strtotime($quotazione['SolutionDepartureTime'])),
+                                'arrivo' => date('H:i:s', strtotime($quotazione['SolutionArrivalTime'])),
+                                'id_classe' => '4',
+                                'prezzo' => substr($business[0]['prezzo'],0,-2),
+                                'id_operatore' => 'T',
+                                'id_offerta' => $business[0]['codice'],
+                                'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
+                                );
+                            $this->db->insert('preventivi_result', $sql);
+                        }
+                    }
+                    if(!empty($premium)) {
+                        usort($premium, array('Trenitalia', 'comparaPrezzo'));
+                        if($premium[0]['prezzo'] > 1) {
+                            $sql = array(
+                                'id_preventivo' => $idPreventivo,
+                                'codice_treno' => $quotazione['solutionDetail']['SolutionDetail']['TrainNumber'],
+                                'partenza' => date('H:i:s', strtotime($quotazione['SolutionDepartureTime'])),
+                                'arrivo' => date('H:i:s', strtotime($quotazione['SolutionArrivalTime'])),
+                                'id_classe' => '5',
+                                'prezzo' => substr($premium[0]['prezzo'],0,-2),
+                                'id_operatore' => 'T',
+                                'id_offerta' => $premium[0]['codice'],
+                                'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
+                                );
+                            $this->db->insert('preventivi_result', $sql);
+                        }
+                    }
+                    if(!empty($standard)) {
+                        usort($standard, array('Trenitalia', 'comparaPrezzo'));
+                        if($standard[0]['prezzo'] > 1) {
+                            $sql = array(
+                                'id_preventivo' => $idPreventivo,
+                                'codice_treno' => $quotazione['solutionDetail']['SolutionDetail']['TrainNumber'],
+                                'partenza' => date('H:i:s', strtotime($quotazione['SolutionDepartureTime'])),
+                                'arrivo' => date('H:i:s', strtotime($quotazione['SolutionArrivalTime'])),
+                                'id_classe' => '6',
+                                'prezzo' => substr($standard[0]['prezzo'],0,-2),
+                                'id_operatore' => 'T',
+                                'id_offerta' => $standard[0]['codice'],
+                                'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
+                                );
+                            $this->db->insert('preventivi_result', $sql);
+                        }
+                    }
                 }
             }
         }

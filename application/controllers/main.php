@@ -81,6 +81,18 @@ class Main extends CI_Controller {
                         case "2":
                             $data[$key]['nome_classe'] =  "2° Classe";
                             break;
+                        case "3":
+                            $data[$key]['nome_classe'] =  "Executive";
+                            break;
+                        case "4":
+                            $data[$key]['nome_classe'] =  "Business";
+                            break;
+                        case "5":
+                            $data[$key]['nome_classe'] =  "Premium";
+                            break;
+                        case "6":
+                            $data[$key]['nome_classe'] =  "Standard";
+                            break;
                     }
                 }
             }
