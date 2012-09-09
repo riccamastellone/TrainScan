@@ -13,13 +13,13 @@
     <tbody>
         <?php foreach($quotazioni as $quotazione) { ?>
             <tr>
-                <td><strong><?php echo $quotazione["nome_operatore"]; ?></strong></td>
+                <td><img src="<?php echo base_url().$quotazione["path_logo"]; ?>" title="<?php echo $quotazione["nome_operatore"]; ?>"></td>
                 <td><?php echo $quotazione["codice_treno"]; ?></td>
                 <td><?php echo substr($quotazione["partenza"], 0, -3); ?></td>
                 <td><?php echo substr($quotazione["arrivo"], 0, -3); ?></td>
                 <td><?php echo $quotazione["nome_classe"]; ?></td>
                 <td><?php echo $quotazione["prezzo"]; ?> €</td>
-                <td><button type="button" onclick="javascript:alert('minga bello')" class="btn btn-success">Acquista</button></td>
+                <td><button type="button" onclick="javascript:alert('minga bello')" class="btn btn-inverse">Acquista</button></td>
             </tr>
        <?php } ?>
     </tbody>

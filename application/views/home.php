@@ -6,9 +6,9 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>TrainScan</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width">
+        <title>TrainScan | Il primo comparatore dell'alta velocità</title>
+        <meta name="description" content="Scopri qual è il modo più economico di viaggiare attraverso l'Italia">
+        <meta name="viewport" content="width=845">
         
 <?php echo $css_js; ?>
     </head>
