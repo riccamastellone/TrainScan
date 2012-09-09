@@ -21,17 +21,17 @@
             <form id="formPost" method="post">
                 <div class="span3">
                     <label>Stazione di partenza</label>
-                    <input type="text" class="stazioni" placeholder="Milano P.G." data-provide="typeahead" data-items="4" autocomplete="off" name="stazionePartenza" data-source='["<?php echo $stazioni; ?>"]'>
+                    <input type="text" class="stazioni" placeholder="Milano" value="<?php echo $this->session->userdata('stazionePartenza'); ?>" data-provide="typeahead" data-items="4" autocomplete="off" name="stazionePartenza" data-source='["<?php echo $stazioni; ?>"]'>
                     <span class="help-block">Inserisci qui la stazione da dove vuoi partire</span>
                 </div>
                 <div class="span3">
                     <label>Stazione di arrivo</label>
-                    <input type="text" class="stazioni" placeholder="Firenze SMN" data-provide="typeahead" data-items="4" autocomplete="off" name="stazioneArrivo" data-source='["<?php echo $stazioni; ?>"]'>
+                    <input type="text" class="stazioni" placeholder="Firenze" value="<?php echo $this->session->userdata('stazioneArrivo'); ?>"  data-provide="typeahead" data-items="4" autocomplete="off" name="stazioneArrivo" data-source='["<?php echo $stazioni; ?>"]'>
                     <span class="help-block">Inserisci qui la stazione dove vuoi arrivare</span>
                 </div>
                 <div class="span3">
                     <label>Data di partenza</label>
-                    <input type="text" class="datapicker" placeholder="2012-10-12" name="dataPartenza">
+                    <input type="text" class="datapicker" placeholder="2012-10-12"  value="<?php echo $this->session->userdata('dataPartenza'); ?>"  name="dataPartenza">
                     <span class="help-block">Inserisci la data (yyyy-mm-gg)</span>
                 </div>
                 <div class="span9">

@@ -10,6 +10,7 @@ class Main extends CI_Controller {
             $this->load->model('scanner');
             $this->load->model('italotreno');
             $this->load->model('trenitalia');
+            $this->load->library('session');
         }
         
         
@@ -21,7 +22,7 @@ class Main extends CI_Controller {
                 
 	}
         
-        public function trenitalia() {
+        public function _trenitalia() {
             $this->trenitalia->setData('2012-09-25');
             $this->scanner->setData('2012-09-25');
             $this->trenitalia->setStazioni('Milano','Firenze');
@@ -32,15 +33,31 @@ class Main extends CI_Controller {
         
         
         public function ajaxQuotazioni() {
+            
+            
             $post = $this->input->post();
-            if(!empty($post)) {            
-                $this->italotreno->setStazioni($this->input->post('stazionePartenza', TRUE),$this->input->post('stazioneArrivo', TRUE));
-                $this->trenitalia->setStazioni($this->input->post('stazionePartenza', TRUE),$this->input->post('stazioneArrivo', TRUE));
-                $this->scanner->setStazioni($this->input->post('stazionePartenza', TRUE),$this->input->post('stazioneArrivo', TRUE));
+            if(!empty($post)) {      
+                
+                $stazionePartenza = $this->input->post('stazionePartenza', TRUE);
+                $stazioneArrivo = $this->input->post('stazioneArrivo', TRUE);
+                $dataPartenza = $this->input->post('dataPartenza', TRUE);
+            
+                // Salviamo i dati del preventivo in sessione
+                $newdata = array(
+                   'stazionePartenza'  => $stazionePartenza,
+                   'stazioneArrivo'     =>$stazioneArrivo,
+                   'dataPartenza' => $dataPartenza
+                );
+                $this->session->set_userdata($newdata);
+                
+                
+                $this->italotreno->setStazioni($stazionePartenza,$stazioneArrivo);
+                $this->trenitalia->setStazioni($stazionePartenza,$stazioneArrivo);
+                $this->scanner->setStazioni($stazionePartenza,$stazioneArrivo);
                 $this->italotreno->setPersone();
-                $this->italotreno->setData($this->input->post('dataPartenza', TRUE));
-                $this->trenitalia->setData($this->input->post('dataPartenza', TRUE));
-                $this->scanner->setData($this->input->post('dataPartenza', TRUE));
+                $this->italotreno->setData($dataPartenza);
+                $this->trenitalia->setData($dataPartenza);
+                $this->scanner->setData($dataPartenza);
                 
                 $data['idPreventivo'] = (int)$this->scanner->checkPreventivo();
                 //die(var_dump($data['idPreventivo']));
