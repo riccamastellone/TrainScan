@@ -16,7 +16,7 @@ class Trenitalia extends Scanner {
             if ($a['prezzo'] == $b['prezzo']) {
                 return 0;
             }
-            return ($a['prezzo'] > $b['prezzo']) ? -1 : 1;
+            return ($a['prezzo'] < $b['prezzo']) ? -1 : 1;
         }
                 
         public function getQuotazioniRaw($idPreventivo) {
@@ -42,6 +42,7 @@ class Trenitalia extends Scanner {
                     uasort($seconda, array('Trenitalia', 'comparaPrezzo'));
                     
                     var_dump($quotazione['fareSolutionsMobile']['FareSolutionsMobile']);
+                    (var_dump($prima));
                     die(var_dump($seconda));
                     if(!empty($prima)) {
                          $sql = array(
