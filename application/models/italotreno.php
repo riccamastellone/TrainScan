@@ -54,12 +54,15 @@ class ItaloTreno extends Scanner {
                                 );  
                                 $check = $this->db->get_where('preventivi_result',$dati)->num_rows();
                                 if(!$check) {
+                                    // dio solo sa perchè torni sempre un ora in più
+                                    $durata  = strtotime($quotazione['arrivalTime']) - strtotime($quotazione['departureTime']);
+                                    $durata = date('H:i:s', strtotime('-1 hour',$durata));
                                     $sql = array(
                                         'id_preventivo' => $idPreventivo,
                                         'codice_treno' => $quotazione['trainNumber'],
                                         'partenza' => date('H:i:s', strtotime($quotazione['departureTime'])),
                                         'arrivo' => date('H:i:s', strtotime($quotazione['arrivalTime'])),
-                                        'durata' => date('H:i:s', ((int)strtotime($quotazione['arrivalTime']) - (int)strtotime($quotazione['departureTime']))),
+                                        'durata' => $durata,
                                         'id_classe' => $classe,
                                         'prezzo' => $prezzo,
                                         'id_operatore' => 'I'

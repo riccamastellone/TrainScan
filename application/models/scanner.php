@@ -5,7 +5,7 @@ class Scanner extends CI_Model {
         // Stazioni valide
 	public $_stazioni = array("Milano", "Firenze", "Bologna", "Napoli", "Roma", "Salerno");        
         public $_debug = array();
-        public $_interval = '2 HOUR'; // validità del preventivo
+        public $_interval = '3 HOUR'; // validità del preventivo
         
         function __construct() {
             
@@ -46,8 +46,8 @@ class Scanner extends CI_Model {
         public function getBothQuotazioni() {
             $this->italotreno->setPersone();
             $data['idPreventivo'] = (int)$this->checkPreventivo();
-            $this->trenitalia->getQuotazioni($data['idPreventivo']);
             $this->italotreno->getQuotazioni($data['idPreventivo']);
+            $this->trenitalia->getQuotazioni($data['idPreventivo']);
             return $data['idPreventivo'];
         }
         public function checkPreventivo() {

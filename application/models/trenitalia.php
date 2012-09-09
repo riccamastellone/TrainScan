@@ -200,10 +200,10 @@ class Trenitalia extends Scanner {
                                                  'connection_timeout' => $this->_timeout ) );
             $response = ($client->__doRequest($xml,'https://stargate.iphone.trenitalia.com:443/servicemobilesolution.svc','http://tempuri.org/ISGMOBILEService/InfoSolutionsMobile','1.2'));
             $arrayQuotazioni = $this->xml2array(preg_replace('/a:/', '', $response));
-            $arrayQuotazioni = $arrayQuotazioni['s:Envelope']['s:Body']['OutputSolutionsMobile']['pOutput']['MobileSolutions']['outputInfoSolutionsMobile'];
+            $arrayQuotazioni = @$arrayQuotazioni['s:Envelope']['s:Body']['OutputSolutionsMobile']['pOutput']['MobileSolutions']['outputInfoSolutionsMobile'];
             
             if(!is_array($arrayQuotazioni)) {
-                throw new Exception('Server Trenitalia Down');
+                die('<p style="text-align:center;font-weight:bold">Server Trenitalia Down</p>');
             }
                     
             return $arrayQuotazioni;
