@@ -37,12 +37,9 @@ class Trenitalia extends Scanner {
                                 'codice' => (string)$fare['OfferCode']);
                         }
                     }
-                    
-                    var_dump($quotazione['fareSolutionsMobile']['FareSolutionsMobile']);
-                    
+                                        
                     if(!empty($prima)) {
                         usort($prima, array('Trenitalia', 'comparaPrezzo'));
-                        var_dump($prima);
                         $sql = array(
                             'id_preventivo' => $idPreventivo,
                             'codice_treno' => $quotazione['solutionDetail']['SolutionDetail']['TrainNumber'],
@@ -54,12 +51,11 @@ class Trenitalia extends Scanner {
                             'id_offerta' => $prima[0]['codice'],
                             'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
                             );
-                        //$this->db->insert('preventivi_result', $sql);
+                        $this->db->insert('preventivi_result', $sql);
                        
                     } 
                     if(!empty($seconda)) {
                         usort($seconda, array('Trenitalia', 'comparaPrezzo'));
-                        var_dump($seconda);
                         $sql = array(
                             'id_preventivo' => $idPreventivo,
                             'codice_treno' => $quotazione['solutionDetail']['SolutionDetail']['TrainNumber'],
@@ -71,9 +67,8 @@ class Trenitalia extends Scanner {
                             'id_offerta' => $seconda[0]['codice'],
                             'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
                             );
-                        //$this->db->insert('preventivi_result', $sql);
-                    } 
-die();                        
+                        $this->db->insert('preventivi_result', $sql);
+                    }                         
                 }
             }
         }
