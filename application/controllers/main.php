@@ -50,7 +50,7 @@ class Main extends CI_Controller {
                 
                 $this->scanner->setStazioni($stazionePartenza,$stazioneArrivo);
                 $this->scanner->setData($dataPartenza);
-                $this->scanner->getBothQuotazioni();
+                $data['idPreventivo'] = $this->scanner->getBothQuotazioni();
                 $data['quotazioni'] = $this->scanner->getPreventivoResult($data['idPreventivo']);
                 $data['quotazioni'] = $this->renderClassi($data['quotazioni']);
             } else $data['quotazioni'] = 'Nessun parametro passato';
