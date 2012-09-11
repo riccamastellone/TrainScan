@@ -1,7 +1,10 @@
-<p style="text-align:center">
-   Totale treni trovati: <?php echo $risultati; ?> - Ultimo aggiornamento: <?php echo $lastUpdate; ?> <a class="icon-refresh" href="javascript:alert('ora pretendi che funzionino troppe cose')"></a>
-</p>
-<table class="table table-striped">
+<div class="alert alert-info alertRisultati">
+   Totale treni trovati: <?php echo $risultati; ?> - Ultimo aggiornamento: <?php echo $lastUpdate; ?> 
+   <a id="newLoaderCall" class="icon-refresh" href="javascript:getQuotazioni(1);"></a>
+   <span id="newLoader" class="hidden"><img src="<?php echo base_url(); ?>assets/img/loader2.gif"><span>
+               
+</div>
+<table class="table table-striped" id="resultsTable">
     <thead>
         <tr>
             <th>Operatore</th>

@@ -46,8 +46,8 @@ class Scanner extends CI_Model {
         public function getBothQuotazioni() {
             $this->italotreno->setPersone();
             $data['idPreventivo'] = (int)$this->checkPreventivo();
-            $this->italotreno->getQuotazioni($data['idPreventivo']);
             $this->trenitalia->getQuotazioni($data['idPreventivo']);
+            $this->italotreno->getQuotazioni($data['idPreventivo']);
             return $data['idPreventivo'];
         }
         public function checkPreventivo() {

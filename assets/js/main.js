@@ -14,14 +14,27 @@ $(function() {
     $('.datapicker').datepicker({format: 'yyyy-mm-dd'});
 });
    
-function getQuotazioni() {
-    $('#submitBtn').button('loading');
-    $('#loader').show();
+function getQuotazioni(deleteCache) {
+    $('#resultsTable').css('opacity',0.5);
+    if(deleteCache == '1') {
+        $('#newLoader').show();
+        $('#newLoaderCall').hide();
+    } else {
+        $('#submitBtn').button('loading');
+        $('#loader').show();
+    }
+    
     $.post("/main/ajaxQuotazioni", $('#formPost').serialize() ,
         function(data){
             $('#results').html(data);
             $('#submitBtn').button('reset');
             $('#loader').hide();
+            
+            $('#newLoader').hide();
+            $('#newLoaderCall').show();
+            
+            $('#resultsTable').css('opacity',1);
+        
             $('.dettagliClasse').each(function(){
                 $(this).popover({
                     trigger : 'hover',
