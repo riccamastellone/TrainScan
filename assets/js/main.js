@@ -11,11 +11,15 @@ $(function() {
             var day = startDate.getDate();
         $('.datapicker').val(startDate.getFullYear() + '-' + month + '-' + day); 
     }
-    $('.datapicker').datepicker({format: 'yyyy-mm-dd'});
+    $('.datapicker').datepicker({format: 'yyyy-mm-dd'}) .on('changeDate', function(){blockRisultati();});
+    $('#formPost input').change(function(){blockRisultati();});
 });
-   
-function getQuotazioni(deleteCache) {
+function blockRisultati() {
     $('#resultsTable').css('opacity',0.5);
+    
+}
+function getQuotazioni(deleteCache) {
+    blockRisultati();
     if(deleteCache == '1') {
         $('#newLoader').show();
         $('#newLoaderCall').hide();
