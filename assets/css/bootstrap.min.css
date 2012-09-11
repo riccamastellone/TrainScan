@@ -2771,7 +2771,7 @@ table [class*=span],
   z-index: 1000;
   display: none;
   float: left;
-  min-width: 160px;
+  min-width:217px;
   padding: 5px 0;
   margin: 2px 0 0;
   list-style: none;
@@ -5783,3 +5783,4 @@ a.badge:hover {
 .datepicker .day {cursor:pointer; text-align: center}
 .alertRisultati {text-align: center;}
 #newLoader{position:relative;bottom:2px}
+.page-header {background-image:url('../img/train.png'); background-repeat:no-repeat; background-position: right}

@@ -37,7 +37,7 @@
         
         <div class="page-header">
             <h1>TrainScan</h1>
-            <p>Compara in maniera semplice e veloce le tariffe dell'alta velocità italiana</p>
+            <p>Compara in maniera semplice e veloce e risparmia sulle tariffe dell'alta velocità italiana</p>
         </div>
         
             <form id="formPost" method="post">
