@@ -5,7 +5,7 @@ class Scanner extends CI_Model {
         // Stazioni valide
 	public $_stazioni = array("Milano", "Firenze", "Bologna", "Napoli", "Roma", "Salerno");        
         public $_debug = array();
-        public $_interval = '3 HOUR'; // validità del preventivo
+        public $_interval = '4 HOUR'; // validità del preventivo
         
         function __construct() {
             
