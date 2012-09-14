@@ -125,8 +125,10 @@ class Main extends CI_Controller {
             
             $this->assets->add_js('bootstrap.min.js');
             $this->assets->add_js('main.js');
+            $this->assets->add_css('jquery-ui-1.8.16.custom.css');
             $this->assets->add_css('bootstrap.min.css');
             $this->assets->add_external_js('http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js');
+            $this->assets->add_external_js('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js');
             
             $data['css_js'] = $this->assets->render_css_js();
             $this->load->view('home', $data);

@@ -64,6 +64,7 @@
             </form>
         <div class="clearfix"></div>
         <div id="loader"><img src="<?php echo base_url(); ?>assets/img/loader.gif"></div>
+        
         <div id="results"></div>
         <div class="invisible">
             <?php 

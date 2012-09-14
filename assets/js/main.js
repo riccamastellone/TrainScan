@@ -14,6 +14,8 @@ $(function() {
     $('.datapicker').datepicker({format: 'yyyy-mm-dd'}) .on('changeDate', function(){blockRisultati();});
     $('#formPost input').change(function(){blockRisultati();});
     $('.stazioni').change(function(){checkStazioni();})
+    
+    
 });
 function blockRisultati() {
     $('#resultsTable').css('opacity',0.5);
@@ -76,9 +78,42 @@ function getQuotazioni(deleteCache) {
                     title : $( '.' + $(this).attr('dettagli') + ' .title').html(),
                     content : $( '.' + $(this).attr('dettagli') + ' .content').html()
                 });
+                
+                
+                triggerSliders();
             })
         });
     
+}
+function updateSlider(val1,val2) {
+    $( "#amount" ).html( "€" + val1 + " - €" + val2 );
+    $('#results tr').each(function(){
+        if($(this).attr('costo') > val2 || $(this).attr('costo') < val1) {
+            $(this).hide();
+        } else $(this).show();
+        if ( $("#results tr:visible").length === 1) {
+            $('#noresults').show();
+        } else {
+            $('#noresults').hide();
+        }
+    })
+    
+}
+function triggerSliders() {
+    var valore1 = 0;
+    var valore2 = 100;
+    $( "#slider" ).slider({
+			range: true,
+			min: 0,
+			max: 200,
+			values: [ valore1, valore2 ],
+			slide: function( event, ui ) {
+				updateSlider(ui.values[ 0 ],ui.values[ 1 ]);
+			}
+		});
+    $( "#amount" ).html( "€" + $( "#slider" ).slider( "values", 0 ) +
+                     " - €" + $( "#slider" ).slider( "values", 1 ) );
+    updateSlider(valore1,valore2);
 }
 function showDettagli(idPreventivo) {
     $.get("/main/dettagliPreventivo", {'idPreventivo' : idPreventivo} ,

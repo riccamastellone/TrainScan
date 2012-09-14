@@ -4,6 +4,12 @@
    <span id="newLoader" class="hidden"><img src="<?php echo base_url(); ?>assets/img/loader2.gif"><span>
                
 </div>
+<div class="well">
+            <div class="">
+                <div id="amount"></div>
+                <div id="slider"></div>
+            </div>
+</div>   
 <table class="table table-striped" id="resultsTable">
     <thead>
         <tr>
@@ -32,3 +38,7 @@
        <?php } ?>
     </tbody>
 </table>
+<div class="alert alert-block hidden" id="noresults" >
+  <button type="button" class="close" data-dismiss="alert">×</button>
+  Nessuna quotazione disponibile con i parametri da te inseriti
+</div>
