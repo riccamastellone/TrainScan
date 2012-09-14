@@ -78,6 +78,8 @@ class Trenitalia extends Scanner {
                                 'id_operatore' => 'T',
                                 'id_offerta' => $prima[0]['codice'],
                                 'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
+                                'id_partenza' => $quotazione['SolutionBoardingStationCode'],
+                                'id_arrivo' => $quotazione['SolutionArrivalStationCode']
                                 );
                             $this->db->insert('preventivi_result', $sql);
                         }
@@ -96,6 +98,8 @@ class Trenitalia extends Scanner {
                                 'id_operatore' => 'T',
                                 'id_offerta' => $seconda[0]['codice'],
                                 'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
+                                'id_partenza' => $quotazione['SolutionBoardingStationCode'],
+                                'id_arrivo' => $quotazione['SolutionArrivalStationCode']
                                 );
                             $this->db->insert('preventivi_result', $sql);
                         }
@@ -113,6 +117,8 @@ class Trenitalia extends Scanner {
                                 'id_operatore' => 'T',
                                 'id_offerta' => $executive[0]['codice'],
                                 'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
+                                'id_partenza' => $quotazione['SolutionBoardingStationCode'],
+                                'id_arrivo' => $quotazione['SolutionArrivalStationCode']
                                 );
                             $this->db->insert('preventivi_result', $sql);
                         }
@@ -130,6 +136,8 @@ class Trenitalia extends Scanner {
                                 'id_operatore' => 'T',
                                 'id_offerta' => $business[0]['codice'],
                                 'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
+                                'id_partenza' => $quotazione['SolutionBoardingStationCode'],
+                                'id_arrivo' => $quotazione['SolutionArrivalStationCode']
                                 );
                             $this->db->insert('preventivi_result', $sql);
                         }
@@ -147,6 +155,8 @@ class Trenitalia extends Scanner {
                                 'id_operatore' => 'T',
                                 'id_offerta' => $premium[0]['codice'],
                                 'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
+                                'id_partenza' => $quotazione['SolutionBoardingStationCode'],
+                                'id_arrivo' => $quotazione['SolutionArrivalStationCode']
                                 );
                             $this->db->insert('preventivi_result', $sql);
                         }
@@ -164,6 +174,8 @@ class Trenitalia extends Scanner {
                                 'id_operatore' => 'T',
                                 'id_offerta' => $standard[0]['codice'],
                                 'durata' => date('H:i:s', strtotime($quotazione['SolutionTotalJourneyTime'])),
+                                'id_partenza' => $quotazione['SolutionBoardingStationCode'],
+                                'id_arrivo' => $quotazione['SolutionArrivalStationCode']
                                 );
                             $this->db->insert('preventivi_result', $sql);
                         }
@@ -203,9 +215,8 @@ class Trenitalia extends Scanner {
             $arrayQuotazioni = @$arrayQuotazioni['s:Envelope']['s:Body']['OutputSolutionsMobile']['pOutput']['MobileSolutions']['outputInfoSolutionsMobile'];
             
             if(!is_array($arrayQuotazioni)) {
-                die('<p style="text-align:center;font-weight:bold">Server Trenitalia Down</p>');
+                die('<p style="text-align:center;padding-top:20px;font-weight:bold">Server Trenitalia Down</p>');
             }
-                    
             return $arrayQuotazioni;
         }
 	public function updateStazioni()

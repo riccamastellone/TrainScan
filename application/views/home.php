@@ -26,9 +26,10 @@
 
                     <ul class="nav">
                         <li class="active"><a href="#">Comparatore</a></li>
-                        <li><a href="#">Perchè noi?</a></li>
-                        <li><a href="#">News</a></li>
+                        <li><a href="#">Perchè noi</a></li>
+                        <li><a href="#">Come funziona</a></li>
                         <li><a href="#">Contatti</a></li>
+                        <li><a href="#">Feedback</a></li>
                     </ul>
 
                 </div>

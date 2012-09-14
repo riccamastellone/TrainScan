@@ -18,7 +18,7 @@
     </thead>
     <tbody>
         <?php foreach($quotazioni as $quotazione) { ?>
-            <tr>
+            <tr partenza="<?php echo substr($quotazione["partenza"], 0, -3); ?>" arrivo="<?php echo substr($quotazione["arrivo"], 0, -3); ?>" costo="<?php echo $quotazione["prezzo"]; ?>">
                 <td><img src="<?php echo base_url().$quotazione["path_logo"]; ?>" title="<?php echo $quotazione["nome_operatore"]; ?>"></td>
                 <td><?php echo $quotazione["codice_treno"]; ?></td>
                 <td><?php echo substr($quotazione["partenza"], 0, -3); ?></td>

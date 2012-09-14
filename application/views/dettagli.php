@@ -1,4 +1,12 @@
-<?php //var_dump($quotazione); ?>
+<?php 
+
+function nl2li($str) {
+    $str = "<ul><li>" . $str ."</li></ul>"; 
+    $str = str_replace("\n","</li>\n<li>",$str);
+    return $str;
+}
+
+?>
 
 <table class="table table-striped">
     <thead>
@@ -27,9 +35,7 @@
     Durata totale del viaggio <strong><?php echo substr($quotazione["durata"], 0, -3); ?></strong></p>
 <p><i class="icon-chevron-down"></i> <a data-toggle="collapse" href="javascript:void(0)"  data-target="#descrizioneClasse">Classe: <?php echo $quotazione["nome_classe"]; ?></a></p>
 <div id="descrizioneClasse" class="collapse ">
-    <p class="well">
-        <?php echo nl2br($quotazione["descrizione"]); ?>
-    </p>
+    <?php echo nl2li($quotazione["descrizione"]); ?>
 </div>
 
 
