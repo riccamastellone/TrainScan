@@ -310,6 +310,12 @@ class Trenitalia extends Scanner {
             return $sql;
         }
         
+        public function getStationName($code) {
+            $sql =$this->db->get_where('trenitalia_stazioni', array('stationcode' => $code))->result_array();
+            $sql = $sql[0]['nome_stazione'];
+            return $sql;
+        }
+        
         public function stazioneHelper($stazione) {
             
             switch ($stazione) {

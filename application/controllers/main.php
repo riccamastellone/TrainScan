@@ -39,7 +39,12 @@ class Main extends CI_Controller {
             $idPreventivo = $this->input->get('idPreventivo', TRUE);
             if(!empty($idPreventivo)) { 
                 $data['quotazione'] = $this->scanner->getDettaglioResult($idPreventivo);
-               
+                if($data['quotazione']['id_partenza'] > 0) {
+                    $data['quotazione']['id_origine'] = $this->trenitalia->getStationName($data['quotazione']['id_partenza']);
+                }
+                if($data['quotazione']['id_arrivo'] > 0) {
+                    $data['quotazione']['id_destinazione'] = $this->trenitalia->getStationName($data['quotazione']['id_arrivo']);
+                }
             } else $data['contenuto'] = 'Nessuna quotazione selezionata';
             
             $this->load->view('dettagli', $data);
@@ -111,6 +116,7 @@ class Main extends CI_Controller {
                             $data[$key]['nome_classe'] =  "Standard";
                             break;
                     }
+                    
                 }
             }
             return $data;
