@@ -8,7 +8,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>TrainScan | Il primo comparatore dell'alta velocità</title>
         <meta name="description" content="Scopri qual è il modo più economico di viaggiare attraverso l'Italia">
-        <meta name="viewport" content="width=845">
+        <meta name="viewport" content="width=940">
         
 <?php echo $css_js; ?>
     </head>
@@ -41,17 +41,17 @@
         </div>
         
             <form id="formPost" method="post">
-                <div class="span4">
+                <div class="span4 control-group">
                     <label>Stazione di partenza</label>
                     <input type="text" class="stazioni" placeholder="Milano" value="<?php echo $this->session->userdata('stazionePartenza'); ?>" data-provide="typeahead" data-items="4" autocomplete="off" name="stazionePartenza" data-source='["<?php echo $stazioni; ?>"]'>
                     <span class="help-block">Inserisci qui la stazione da dove vuoi partire</span>
                 </div>
-                <div class="span4">
+                <div class="span4 control-group">
                     <label>Stazione di arrivo</label>
                     <input type="text" class="stazioni" placeholder="Firenze" value="<?php echo $this->session->userdata('stazioneArrivo'); ?>"  data-provide="typeahead" data-items="4" autocomplete="off" name="stazioneArrivo" data-source='["<?php echo $stazioni; ?>"]'>
                     <span class="help-block">Inserisci qui la stazione dove vuoi arrivare</span>
                 </div>
-                <div class="span4">
+                <div class="span4 control-group">
                     <label>Data di partenza</label>
                     <input type="text" class="datapicker" placeholder="2012-10-12"  value="<?php echo $this->session->userdata('dataPartenza'); ?>"  name="dataPartenza">
                     <span class="help-block">Inserisci la data (yyyy-mm-gg)</span>

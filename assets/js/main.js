@@ -13,10 +13,40 @@ $(function() {
     }
     $('.datapicker').datepicker({format: 'yyyy-mm-dd'}) .on('changeDate', function(){blockRisultati();});
     $('#formPost input').change(function(){blockRisultati();});
+    $('.stazioni').change(function(){checkStazioni();})
 });
 function blockRisultati() {
     $('#resultsTable').css('opacity',0.5);
     
+}
+function unBlockRisultati() {
+    $('#resultsTable').css('opacity',1);
+    $('#loader').hide();
+    $('#submitBtn').button('reset');
+    
+}
+function inArray(needle, haystack) {
+    var length = haystack.length;
+    for(var i = 0; i < length; i++) {
+        if(haystack[i] == needle) return true;
+    }
+    return false;
+}
+function checkStazioni() {
+    var error = 0;
+    var stazioniArray = new Array("Milano", "Bologna", "Firenze", "Roma", "Napoli", "Salerno");
+    $('.stazioni').each(function(){
+       var stazione = $(this).val();
+       if(inArray(stazione,stazioniArray) == false) {
+           unBlockRisultati();
+           $(this).parent().addClass('error');
+           error = 1;
+       } else {
+           $(this).parent().removeClass('error');
+       }
+    })
+    
+    return error;
 }
 function getQuotazioni(deleteCache) {
     blockRisultati();
@@ -28,17 +58,16 @@ function getQuotazioni(deleteCache) {
         $('#loader').show();
     }
     
+    var error = checkStazioni();
+    
+    if(error == 0)
     $.post("/main/ajaxQuotazioni", $('#formPost').serialize() ,
         function(data){
             $('#results').html(data);
-            $('#submitBtn').button('reset');
-            $('#loader').hide();
             
             $('#newLoader').hide();
             $('#newLoaderCall').show();
-            
-            $('#resultsTable').css('opacity',1);
-        
+            unBlockRisultati();
             $('.dettagliClasse').each(function(){
                 $(this).popover({
                     trigger : 'hover',
