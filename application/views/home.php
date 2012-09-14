@@ -60,6 +60,7 @@
                 <div class="span12">
                     <button autocomplete="off" type="button" id="submitBtn" onclick="javascript:getQuotazioni();" class="btn btn-large btn-block">Cerca</button>
                 </div>
+                <input type="hidden" name="cache" value="1">
             </form>
         <div class="clearfix"></div>
         <div id="loader"><img src="<?php echo base_url(); ?>assets/img/loader.gif"></div>

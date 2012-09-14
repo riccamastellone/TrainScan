@@ -43,22 +43,25 @@ class Scanner extends CI_Model {
             
         }
         
-        public function getBothQuotazioni() {
+        public function getBothQuotazioni($cache = true) {
             $this->italotreno->setPersone();
-            $data['idPreventivo'] = (int)$this->checkPreventivo();
+            $data['idPreventivo'] = (int)$this->checkPreventivo($cache);
             $this->trenitalia->getQuotazioni($data['idPreventivo']);
             $this->italotreno->getQuotazioni($data['idPreventivo']);
             return $data['idPreventivo'];
         }
-        public function checkPreventivo() {
+        public function checkPreventivo($cache) {
             
+            if($cache) {
             $datiPreventivo = array(
                 'id_origine' => ($this->_stazioneOrigine),
                 'id_destinazione' => ($this->_stazioneDestinazione),
                 'data' => $this->dataHelper('year-month-day')
-                );            
-            $idPreventivo = $this->db->select('id')->from('preventivi')->where($datiPreventivo)->where('data_generazione >  DATE_SUB(now(), INTERVAL '.$this->_interval.')')->get()->result_array();
-           
+                );   
+            $idPreventivo = $this->db->select('id')->from('preventivi')->where($datiPreventivo)
+                    ->where('data_generazione >  DATE_SUB(now(), INTERVAL '.$this->_interval.')')
+                    ->order_by("data_generazione", "desc")->limit(1, 0)->get()->result_array();
+            } else $idPreventivo = false;
             if(!$idPreventivo) {
                 $datiPreventivo = array(
                     'id_origine' => ($this->_stazioneOrigine),

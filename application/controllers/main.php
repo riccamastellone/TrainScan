@@ -55,7 +55,7 @@ class Main extends CI_Controller {
             
             $post = $this->input->post();
             if(!empty($post)) {      
-                
+                $cache = ($this->input->post('cache', TRUE) == '1')? true : false;
                 $stazionePartenza = $this->input->post('stazionePartenza', TRUE);
                 $stazioneArrivo = $this->input->post('stazioneArrivo', TRUE);
                 $dataPartenza = $this->input->post('dataPartenza', TRUE);
@@ -67,10 +67,9 @@ class Main extends CI_Controller {
                    'dataPartenza' => $dataPartenza
                 );
                 $this->session->set_userdata($newdata);
-                
                 $this->scanner->setStazioni($stazionePartenza,$stazioneArrivo);
                 $this->scanner->setData($dataPartenza);
-                $data['idPreventivo'] = $this->scanner->getBothQuotazioni();
+                $data['idPreventivo'] = $this->scanner->getBothQuotazioni($cache);
                 $data['quotazioni'] = $this->scanner->getPreventivoResult($data['idPreventivo']);
                 $data['risultati'] = count($data['quotazioni']);
                 $data['lastUpdate'] = $this->scanner->_ago($this->scanner->getTimePreventivo($data['idPreventivo']));

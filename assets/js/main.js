@@ -51,11 +51,13 @@ function checkStazioni() {
 function getQuotazioni(deleteCache) {
     blockRisultati();
     if(deleteCache == '1') {
+        $('input[name=cache]').val(0);
         $('#newLoader').show();
         $('#newLoaderCall').hide();
     } else {
         $('#submitBtn').button('loading');
         $('#loader').show();
+        $('input[name=cache]').val(1);
     }
     
     var error = checkStazioni();
