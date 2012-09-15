@@ -39,6 +39,5 @@
     </tbody>
 </table>
 <div class="alert alert-block hidden" id="noresults" >
-  <button type="button" class="close" data-dismiss="alert">×</button>
   Nessuna quotazione disponibile con i parametri da te inseriti
 </div>

@@ -25,11 +25,11 @@
                    <!--  <a class="brand" href="#">TrainScan</a> -->
 
                     <ul class="nav">
-                        <li class="active"><a href="#">Comparatore</a></li>
-                        <li><a href="#">Perchè noi</a></li>
-                        <li><a href="#">Come funziona</a></li>
-                        <li><a href="#">Contatti</a></li>
-                        <li><a href="#">Feedback</a></li>
+                        <li class="active"><a href="/">Comparatore</a></li>
+                        <li><a href="/perche-noi">Perchè noi</a></li>
+                        <li><a href="/come-funziona">Come funziona</a></li>
+                        <li><a href="/contatti">Contatti</a></li>
+                        <li><a href="/feedback">Feedback</a></li>
                     </ul>
 
                 </div>
@@ -89,16 +89,16 @@
           </div>
           <div class="modal-footer">
             <a href="#" data-dismiss="modal" class="btn">Chiudi</a>
-            <a href="javascript:alter('ciao minga')" class="btn btn-primary">Acquista</a>
+            <a href="javascript:alert('ciao minga')" class="btn btn-primary">Acquista</a>
           </div>
         </div>
 
 
-        <!--<script>
-            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+        <script>
+            var _gaq=[['_setAccount','UA-20963057-20'],['_setDomainName', 'trainscan.it'],['_trackPageview']];
             (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
             g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
             s.parentNode.insertBefore(g,s)}(document,'script'));
-        </script>-->
+        </script>
     </body>
 </html>

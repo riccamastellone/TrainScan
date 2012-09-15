@@ -15,15 +15,33 @@ class Main extends CI_Controller {
             date_default_timezone_set('Europe/Rome');
         }
         
-        
 	public function index()
 	{       
+            
             $data['stazioni'] = implode('","',$this->italotreno->_stazioni);
             $data['classi'] = $this->scanner->getClassi();
-            $this->_renderPage($data);
+            $this->_renderHome($data);
                 
 	}
-        
+        public function page($page,$id = null) {
+            
+            $data['active1'] = '';
+            $data['active2'] = '';
+            $data['active3'] = '';
+            $data['active4'] = '';
+            
+            switch($page) {
+                case 'perche-noi':
+                    $data['active1'] = 'class="active"';
+                    $data['title'] = 'Perche scegliere noi';
+                    $data['description'] = 'TrainScan si propone come il primo servizio di comparazione treni in Italia';
+                    $data['content'] = $this->load->view('perche_noi', $data, true);
+                    break;
+                default:
+                    show_404($page, FALSE);
+            }
+            $this->_renderPage($data);
+        }
         public function _trenitalia() {
             $this->trenitalia->setData('2012-09-25');
             $this->scanner->setData('2012-09-25');
@@ -74,7 +92,7 @@ class Main extends CI_Controller {
                 $data['risultati'] = count($data['quotazioni']);
                 $data['lastUpdate'] = $this->scanner->_ago($this->scanner->getTimePreventivo($data['idPreventivo']));
                 $data['quotazioni'] = $this->renderClassi($data['quotazioni']);
-            } else $data['quotazioni'] = 'Nessun parametro passato';
+            } else die('Nessun parametro passato');
             
             $this->load->view('row', $data);
             
@@ -121,8 +139,22 @@ class Main extends CI_Controller {
             return $data;
         }
         
-        protected function _renderPage($data) {
+        protected function _renderHome($data) {
+            $this->assets->add_js('jquery.ui.touch-punch.min.js');
+            $this->assets->add_js('bootstrap.min.js');
+            $this->assets->add_js('main.js');
+            $this->assets->add_css('jquery-ui-1.8.16.custom.css');
+            $this->assets->add_css('bootstrap.min.css');
+            $this->assets->add_external_js('http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js');
+            $this->assets->add_external_js('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js');
             
+            
+            $data['css_js'] = $this->assets->render_css_js();
+            $this->load->view('home', $data);
+        }
+        
+        protected function _renderPage($data) {
+            $this->assets->add_js('jquery.ui.touch-punch.min.js');
             $this->assets->add_js('bootstrap.min.js');
             $this->assets->add_js('main.js');
             $this->assets->add_css('jquery-ui-1.8.16.custom.css');
@@ -131,7 +163,7 @@ class Main extends CI_Controller {
             $this->assets->add_external_js('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js');
             
             $data['css_js'] = $this->assets->render_css_js();
-            $this->load->view('home', $data);
+            $this->load->view('page', $data);
         }
       
 }

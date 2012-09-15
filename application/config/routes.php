@@ -40,6 +40,8 @@
 
 $route['default_controller'] = "main";
 $route['404_override'] = '';
+$route['main/(:any)'] = "main/$1";
+$route['(:any)'] = "main/page/$1";
 
 
 /* End of file routes.php */
