@@ -1,4 +1,4 @@
-<div class="">
+<div>
     <div class="span3 well">
         <p class="lead">Ad oggi più di XXXX persone utilizzano regolarmente il nostro serivizio.</p>
     </div>
