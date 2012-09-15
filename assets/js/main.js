@@ -50,6 +50,23 @@ function checkStazioni() {
     
     return error;
 }
+function checkData() {
+    var selectedDate = $('.datapicker').val();
+    var now = new Date();
+    var month = now.getMonth()+1;
+    var day = now.getDate();
+    var year = now.getFullYear();
+    selectedDate = selectedDate.split('-');
+    if(selectedDate[0] < year || selectedDate[1] < month || selectedDate[2] < day)  {
+      $('.datapicker').parent().addClass('error');
+      unBlockRisultati();
+      return false;
+    } else {
+        $('.datapicker').parent().removeClass('error');
+        return true;
+    }
+    
+}
 function getQuotazioni(deleteCache) {
     blockRisultati();
     if(deleteCache == '1') {
@@ -63,6 +80,10 @@ function getQuotazioni(deleteCache) {
     }
     
     var error = checkStazioni();
+    
+    if(checkData() == false)
+        error == 1;
+    
     
     if(error == 0)
     $.post("/main/ajaxQuotazioni", $('#formPost').serialize() ,
