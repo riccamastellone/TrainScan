@@ -35,11 +35,6 @@
                 </div>
             </div>
         </div>
-        
-        <div class="page-header">
-            <h1>TrainScan</h1>
-            <p>Compara in maniera semplice e veloce e risparmia sulle tariffe dell'alta velocità italiana</p>
-        </div>
         <?php echo $content; ?>
     </div>
     </div><!-- fine container fluid -->
