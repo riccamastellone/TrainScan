@@ -21,6 +21,12 @@ class ItaloTreno extends Scanner {
                 $this->load->library("html_dom");
                 $this->html_dom->loadHTML($html,'utf-8');
                 $tabella = $this->html_dom->find('#grigliaTreni',0);
+                
+                // Nel caso non vengano ritornati treni
+                if(empty($tabella)) {
+                    return null;
+                }
+                exit;
                 $treni = $tabella->find('h3');
                 $dettaglioTreni = $tabella->find('div');
                 foreach($treni as $id => $treno) {

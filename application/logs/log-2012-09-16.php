@@ -97,3 +97,4 @@ ERROR - 2012-09-16 18:17:06 --> Query error: You have an error in your SQL synta
 ERROR - 2012-09-16 18:17:44 --> Query error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-15, 0' at line 2
 ERROR - 2012-09-16 18:17:47 --> Query error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-15, 0' at line 2
 ERROR - 2012-09-16 18:22:01 --> Severity: Notice  --> Undefined variable: offest E:\wamp\www\trainscan\application\models\scanner.php 88
+ERROR - 2012-09-16 22:45:04 --> Severity: Notice  --> Undefined index: MobileSolutions E:\wamp\www\trainscan\application\models\trenitalia.php 215

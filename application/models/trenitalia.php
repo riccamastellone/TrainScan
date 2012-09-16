@@ -24,7 +24,10 @@ class Trenitalia extends Scanner {
         public function getQuotazioniRaw($idPreventivo) {
             
             $quotazioniArray = $this->postParametri($this->generateXml());
+            
             foreach($quotazioniArray as $quotazione)  {
+                var_dump($quotazione);
+            exit();
                 if($quotazione['SolutionTrainMaxCategory'] == 'FR FRECCIAROSSA') {
                     $prima = array();
                     $seconda = array();
