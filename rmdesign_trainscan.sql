@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generato il: Set 09, 2012 alle 09:51
+-- Generato il: Set 16, 2012 alle 15:15
 -- Versione del server: 5.5.16
 -- Versione PHP: 5.3.8
 
@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS `italo_classi` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `codice_classe` varchar(5) COLLATE utf8_unicode_ci NOT NULL,
   `nome_classe` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `descrizione` text COLLATE utf8_unicode_ci NOT NULL,
   UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
 
@@ -37,10 +38,34 @@ CREATE TABLE IF NOT EXISTS `italo_classi` (
 -- Dump dei dati per la tabella `italo_classi`
 --
 
-INSERT INTO `italo_classi` (`id`, `codice_classe`, `nome_classe`) VALUES
-(1, 'S', 'Smart'),
-(2, 'C', 'Club'),
-(3, 'P', 'Prima');
+INSERT INTO `italo_classi` (`id`, `codice_classe`, `nome_classe`, `descrizione`) VALUES
+(1, 'S', 'Smart', 'Sedili in pelle reclinabili\r\nFasciatoio\r\nServizio ristorazione\r\nDistributori automatici\r\nWi-Fi gratuito\r\nCarrozza cinema'),
+(2, 'C', 'Club', 'Sedili in pelle reclinabili\r\nServizio ristorazione al posto\r\nWi-Fi gratuito\r\nTouch Screen personale da 9" con Tv Live\r\nSoluzione salotto'),
+(3, 'P', 'Prima', 'Sedili in pelle reclinabili\r\nServizio ristorazione al posto\r\nWi-Fi gratuito\r\nCarrozza Relax\r\nServizio di benvenuto');
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `italo_tariffe`
+--
+
+CREATE TABLE IF NOT EXISTS `italo_tariffe` (
+  `id` int(11) NOT NULL,
+  `codice_offerta` varchar(12) COLLATE utf8_unicode_ci NOT NULL,
+  `nome_offerta` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `descrizione_offerta` text COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dump dei dati per la tabella `italo_tariffe`
+--
+
+INSERT INTO `italo_tariffe` (`id`, `codice_offerta`, `nome_offerta`, `descrizione_offerta`) VALUES
+(1, '1', 'Base', 'Modificabile e rimborsabile\r\n<strong>Cambio Nome</strong> Gratuito\r\n<strong>Modifica Data/Orario</strong> Gratuito\r\n<strong>Rinuncia al viaggio</strong>  Trattenuta 20%\r\n<strong>Punti Italo Più</strong> Si\r\n\r\nLa modifica è possibile fino a tre minuti prima della partenza'),
+(2, '2', 'Economy', 'Modificabile con integrazione e non rimborsabile\r\n<strong>Cambio Nome</strong> Gratuito\r\n<strong>Modifica Data/Orario</strong> Integrazione 10%\r\n<strong>Rinuncia al viaggio</strong>  Non rimborsabile\r\n<strong>Punti Italo Più</strong> Si'),
+(3, '3', 'Low Cost', 'Non modificabile e non rimborsabile\r\n<strong>Cambio Nome</strong> Gratuito\r\n<strong>Modifica Data/Orario</strong> Non permessa\r\n<strong>Rinuncia al viaggio</strong>  Non rimborsabile\r\n<strong>Punti Italo Più</strong> Si'),
+(4, '4', 'Altro', '');
 
 -- --------------------------------------------------------
 
@@ -51,6 +76,8 @@ INSERT INTO `italo_classi` (`id`, `codice_classe`, `nome_classe`) VALUES
 CREATE TABLE IF NOT EXISTS `operatori` (
   `id` varchar(4) COLLATE utf8_unicode_ci NOT NULL,
   `nome_operatore` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `path_logo` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `descrizione` text COLLATE utf8_unicode_ci NOT NULL,
   UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -58,9 +85,9 @@ CREATE TABLE IF NOT EXISTS `operatori` (
 -- Dump dei dati per la tabella `operatori`
 --
 
-INSERT INTO `operatori` (`id`, `nome_operatore`) VALUES
-('I', 'ItaloTreno'),
-('T', 'Trenitalia');
+INSERT INTO `operatori` (`id`, `nome_operatore`, `path_logo`, `descrizione`) VALUES
+('I', 'ItaloTreno', '/assets/img/italotreno.png', 'Nuovo Trasporto Viaggiatori (NTV) è una società per azioni italiana che opera nel campo dei trasporti ferroviari ad alta velocità.'),
+('T', 'Trenitalia', '/assets/img/trenitalia.png', 'Trenitalia S.p.A. è un''azienda partecipata al 100% da Ferrovie dello Stato Italiane, ed è la principale società italiana per la gestione del trasporto ferroviario di passeggeri e merci.');
 
 -- --------------------------------------------------------
 
@@ -76,14 +103,7 @@ CREATE TABLE IF NOT EXISTS `preventivi` (
   `data_generazione` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `indirizzo_ip` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
-
---
--- Dump dei dati per la tabella `preventivi`
---
-
-INSERT INTO `preventivi` (`id`, `id_origine`, `id_destinazione`, `data`, `data_generazione`, `indirizzo_ip`) VALUES
-(1, 'Firenze', 'Milano', '2012-09-23', '2012-09-09 09:51:02', '127.0.0.1');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -102,55 +122,11 @@ CREATE TABLE IF NOT EXISTS `preventivi_result` (
   `id_operatore` varchar(4) COLLATE utf8_unicode_ci NOT NULL,
   `durata` time DEFAULT NULL,
   `id_offerta` tinyint(4) DEFAULT NULL,
+  `id_partenza` int(11) DEFAULT NULL,
+  `id_arrivo` int(11) DEFAULT NULL,
+  `fermate` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=42 ;
-
---
--- Dump dei dati per la tabella `preventivi_result`
---
-
-INSERT INTO `preventivi_result` (`id`, `id_preventivo`, `codice_treno`, `partenza`, `arrivo`, `id_classe`, `prezzo`, `id_operatore`, `durata`, `id_offerta`) VALUES
-(1, 1, 9907, '06:19:00', '08:15:00', 'C', 73, 'I', NULL, NULL),
-(2, 1, 9911, '07:19:00', '09:15:00', 'C', 73, 'I', NULL, NULL),
-(3, 1, 9915, '08:19:00', '10:15:00', 'C', 73, 'I', NULL, NULL),
-(4, 1, 9923, '10:19:00', '12:15:00', 'C', 73, 'I', NULL, NULL),
-(5, 1, 9927, '11:19:00', '13:15:00', 'C', 73, 'I', NULL, NULL),
-(6, 1, 9931, '12:19:00', '14:15:00', 'C', 73, 'I', NULL, NULL),
-(7, 1, 9943, '15:19:00', '17:15:00', 'C', 73, 'I', NULL, NULL),
-(8, 1, 9951, '17:19:00', '19:15:00', 'C', 73, 'I', NULL, NULL),
-(9, 1, 9959, '19:19:00', '21:15:00', 'C', 73, 'I', NULL, NULL),
-(10, 1, 9570, '11:30:00', '13:26:00', '1', 71, 'T', '01:56:00', 1),
-(11, 1, 9570, '11:30:00', '13:26:00', '2', 50, 'T', '01:56:00', 1),
-(12, 1, 9520, '11:55:00', '13:40:00', '1', 71, 'T', '01:45:00', 1),
-(13, 1, 9520, '11:55:00', '13:40:00', '2', 50, 'T', '01:45:00', 1),
-(14, 1, 9526, '12:55:00', '14:40:00', '1', 71, 'T', '01:45:00', 1),
-(15, 1, 9526, '12:55:00', '14:40:00', '2', 50, 'T', '01:45:00', 1),
-(16, 1, 9528, '13:55:00', '15:40:00', '1', 71, 'T', '01:45:00', 1),
-(17, 1, 9528, '13:55:00', '15:40:00', '2', 50, 'T', '01:45:00', 1),
-(18, 1, 9532, '14:55:00', '16:40:00', '1', 71, 'T', '01:45:00', 1),
-(19, 1, 9532, '14:55:00', '16:40:00', '2', 50, 'T', '01:45:00', 1),
-(20, 1, 9536, '15:55:00', '17:40:00', '1', 71, 'T', '01:45:00', 1),
-(21, 1, 9536, '15:55:00', '17:40:00', '2', 50, 'T', '01:45:00', 1),
-(22, 1, 9572, '16:30:00', '18:26:00', '1', 71, 'T', '01:56:00', 1),
-(23, 1, 9572, '16:30:00', '18:26:00', '2', 50, 'T', '01:56:00', 1),
-(24, 1, 9540, '16:55:00', '18:40:00', '1', 71, 'T', '01:45:00', 1),
-(25, 1, 9540, '16:55:00', '18:40:00', '2', 50, 'T', '01:45:00', 1),
-(26, 1, 9574, '17:30:00', '19:26:00', '1', 71, 'T', '01:56:00', 1),
-(27, 1, 9574, '17:30:00', '19:26:00', '2', 50, 'T', '01:56:00', 1),
-(28, 1, 9544, '17:55:00', '19:40:00', '1', 71, 'T', '01:45:00', 1),
-(29, 1, 9544, '17:55:00', '19:40:00', '2', 50, 'T', '01:45:00', 1),
-(30, 1, 9550, '18:55:00', '20:40:00', '1', 71, 'T', '01:45:00', 1),
-(31, 1, 9550, '18:55:00', '20:40:00', '2', 50, 'T', '01:45:00', 1),
-(32, 1, 9578, '19:30:00', '21:26:00', '1', 71, 'T', '01:56:00', 1),
-(33, 1, 9578, '19:30:00', '21:26:00', '2', 50, 'T', '01:56:00', 1),
-(34, 1, 9552, '19:55:00', '21:40:00', '1', 71, 'T', '01:45:00', 1),
-(35, 1, 9552, '19:55:00', '21:40:00', '2', 50, 'T', '01:45:00', 1),
-(36, 1, 9586, '20:00:00', '21:45:00', '1', 71, 'T', '01:45:00', 1),
-(37, 1, 9586, '20:00:00', '21:45:00', '2', 50, 'T', '01:45:00', 1),
-(38, 1, 9558, '20:55:00', '22:40:00', '1', 71, 'T', '01:45:00', 1),
-(39, 1, 9558, '20:55:00', '22:40:00', '2', 50, 'T', '01:45:00', 1),
-(40, 1, 9560, '21:55:00', '23:40:00', '1', 71, 'T', '01:45:00', 1),
-(41, 1, 9560, '21:55:00', '23:40:00', '2', 50, 'T', '01:45:00', 1);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -162,16 +138,21 @@ CREATE TABLE IF NOT EXISTS `trenitalia_classi` (
   `id` tinyint(4) NOT NULL AUTO_INCREMENT,
   `codice_classe` varchar(12) COLLATE utf8_unicode_ci NOT NULL,
   `nome_classe` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `descrizione` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
 
 --
 -- Dump dei dati per la tabella `trenitalia_classi`
 --
 
-INSERT INTO `trenitalia_classi` (`id`, `codice_classe`, `nome_classe`) VALUES
-(1, '1', '1° Classe'),
-(2, '2', '2° Classe');
+INSERT INTO `trenitalia_classi` (`id`, `codice_classe`, `nome_classe`, `descrizione`) VALUES
+(1, '1', '1° Classe', 'Poltrone in pelle\r\nPareti divisorie in cristallo \r\nPiù spazio per i bagagli\r\nServizio di benvenuto con snack e bevande serviti al posto e quotidiani al mattino.   \r\nPortale Frecciarossa\r\nServizio bar/ristorante'),
+(2, '2', '2° Classe', 'Nuova illuminazione con luci led\r\nPortale Frecciarossa\r\nServizio bar/ristorante'),
+(3, '3', 'Executive', 'Attesa nei FrecciaClub\r\nAccolti al binario di partenza del treno dal nostro personale\r\nPoltrone in pelle\r\nReclining servo-assistito con comandi al bracciolo fino a 122° e poggiagambe regolabile\r\nDistanza fra le poltrone fino a 1,5 metri\r\nPareti divisorie in cristallo \r\nPiù spazio per i bagagli\r\nArea del Silenzio\r\nWelcome drink con prodotti e bevande fresche e calde di alta qualità e quotidiani nazionali ed internazionali al mattino\r\nPortale Frecciarossa\r\nServizio bar/ristorante\r\nSala meeting'),
+(4, '4', 'Business', 'Accolti al binario di partenza del treno dal nostro personale\r\nPoltrone in pelle\r\nReclining servo-assistito con comandi al bracciolo fino a 115°\r\nPareti divisorie in cristallo \r\nPiù spazio per i bagagli\r\nArea del Silenzio\r\nWelcome drink con prodotti e bevande fresche e calde di alta qualità e quotidiani nazionali ed internazionali al mattino\r\nPortale Frecciarossa\r\nServizio bar/ristorante\r\nSalottini BusinessPlus'),
+(5, '5', 'Premium', 'Poltrone in pelle\r\nPareti divisorie in cristallo \r\nPiù spazio per i bagagli\r\nServizio di benvenuto con snack e bevande serviti al posto e quotidiani al mattino.   \r\nPortale Frecciarossa\r\nServizio bar/ristorante'),
+(6, '6', 'Standard', 'Nuova illuminazione con luci led\r\nPortale Frecciarossa\r\nServizio bar/ristorante');
 
 -- --------------------------------------------------------
 
@@ -290,6 +271,7 @@ CREATE TABLE IF NOT EXISTS `trenitalia_tariffe` (
   `id` tinyint(4) NOT NULL AUTO_INCREMENT,
   `codice_offerta` int(11) NOT NULL,
   `nome_offerta` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `descrizione_offerta` text COLLATE utf8_unicode_ci NOT NULL,
   UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
 
@@ -297,10 +279,10 @@ CREATE TABLE IF NOT EXISTS `trenitalia_tariffe` (
 -- Dump dei dati per la tabella `trenitalia_tariffe`
 --
 
-INSERT INTO `trenitalia_tariffe` (`id`, `codice_offerta`, `nome_offerta`) VALUES
-(1, 83, 'Super Economy'),
-(2, 82, 'Economy'),
-(3, 1, 'Base');
+INSERT INTO `trenitalia_tariffe` (`id`, `codice_offerta`, `nome_offerta`, `descrizione_offerta`) VALUES
+(1, 83, 'Super Economy', ''),
+(2, 82, 'Economy', ''),
+(3, 1, 'Base', '');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
