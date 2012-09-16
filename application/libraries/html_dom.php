@@ -77,13 +77,13 @@ class html_dom
 	 * @param string $encoding [optional]
 	 * @return 
 	 */
-	public function loadHTML($str, $encoding = "UTF-8")
+	public function loadHTML($str, $encoding = "utf-8")
 	{
 		libxml_use_internal_errors(true);
 		$this->dom = new DOMDocument('1.0', $encoding);
 		$this->dom->formatOutput = false;
 		
-		$str = mb_convert_encoding($str, "HTML-ENTITIES", $encoding);// need this to fix encoding problem
+		$str = mb_convert_encoding($str, "HTML-ENTITIES", 'utf-8');// need this to fix encoding problem
 		$this->dom->loadHTML('<?xml encoding="'.$encoding.'">' .$str);
 		foreach ($this->dom->childNodes as $item)
 	    	if ($item->nodeType == XML_PI_NODE)
@@ -255,7 +255,7 @@ class html_dom_node
 	 * @param string $encoding [optional]
 	 * @return 
 	 */
-	public function setInnerText($value, $encoding= "UTF-8")
+	public function setInnerText($value, $encoding= "utf-8")
 	{
 		// Create a new document
 		$newdoc = new DOMDocument('1.0');

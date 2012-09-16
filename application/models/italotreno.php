@@ -39,13 +39,26 @@ class ItaloTreno extends Scanner {
         public function getQuotazioniRaw($idPreventivo) {
             
             foreach($this->_classi as $classe){
+                $this->output->set_header('charset: utf-8');
                 $this->setClasse($classe);
                 $this->setSessionId();
                 $html = utf8_decode($this->getItaloResult());
                 $this->load->library("html_dom");
                 $this->html_dom->loadHTML($html,'utf-8');
                 $tabella = $this->html_dom->find('#grigliaTreni',0);
-                echo ($rank[0]->getInnerText());
+                $treni = $tabella->find('h3');
+                $dettaglioTreni = $tabella->find('h3');
+                foreach($treni as $treno) {
+                    $treno = $treno->find('span.accordion_c',0);
+                    $orario = $treno->find('.accordion_c_one',0)->getInnerText();
+                    $orario = explode('<img src="images/NTV_Base/transparent.gif" class="arrowRightMedium" />', $orario);
+                    $durata = $treno->find('.accordion_c_two',0)->getInnerText();
+                    $fermate = $treno->find('.accordion_c_three',0)->getInnerText();
+                    $numeroTreno = $treno->find('.accordion_c_four',0)->getInnerText();
+                    var_dump($orario);
+                    
+                    
+                }
                 exit;
                     foreach($this->_fascePrezzo[$this->getTratta()][$classe] as $prezzo) {
                         $this->setPrezzo($prezzo);
