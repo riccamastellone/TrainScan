@@ -67,3 +67,4 @@ ERROR - 2012-09-16 15:20:14 --> 404 Page Not Found --> main/images
 ERROR - 2012-09-16 15:20:14 --> 404 Page Not Found --> main/images
 ERROR - 2012-09-16 15:20:14 --> 404 Page Not Found --> main/images
 ERROR - 2012-09-16 15:27:14 --> 404 Page Not Found --> main/images
+ERROR - 2012-09-16 15:59:17 --> Severity: Notice  --> Undefined offset: 0 E:\wamp\www\trainscan\application\models\italotreno.php 63

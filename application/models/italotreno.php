@@ -47,17 +47,32 @@ class ItaloTreno extends Scanner {
                 $this->html_dom->loadHTML($html,'utf-8');
                 $tabella = $this->html_dom->find('#grigliaTreni',0);
                 $treni = $tabella->find('h3');
-                $dettaglioTreni = $tabella->find('h3');
-                foreach($treni as $treno) {
+                $dettaglioTreni = $tabella->find('div');
+                foreach($treni as $id => $treno) {
+                    
                     $treno = $treno->find('span.accordion_c',0);
+                    
                     $orario = $treno->find('.accordion_c_one',0)->getInnerText();
-                    $orario = explode('<img src="images/NTV_Base/transparent.gif" class="arrowRightMedium" />', $orario);
-                    $durata = $treno->find('.accordion_c_two',0)->getInnerText();
-                    $fermate = $treno->find('.accordion_c_three',0)->getInnerText();
-                    $numeroTreno = $treno->find('.accordion_c_four',0)->getInnerText();
-                    var_dump($orario);
+                    list($trenoArray['orario']['partenza'],$trenoArray['orario']['arrivo']) = explode('<img src="images/NTV_Base/transparent.gif" class="arrowRightMedium" />', $orario);
+                    
+                    $trenoArray['durata'] = $treno->find('.accordion_c_two',0)->getInnerText();
+                    $trenoArray['fermate'] = $treno->find('.accordion_c_three',0)->find('span',0)->getInnerText();
+                    $trenoArray['numero'] = $treno->find('.accordion_c_four',0)->find('span',0)->getInnerText();
                     
                     
+                    $tariffe = $dettaglioTreni[$id]->find('div.riga_tariffa');
+                    foreach($tariffe as $id => $tariffa) {
+                        $tariffaArray[$id]['nome'] = strip_tags($tariffa->find('.c_riga_tariffa',0)->find('div',0)->getInnerText());
+                        
+                        $tariffa->find('.c_riga_tariffa',0)->remove();
+                        $costo = $tariffa->find('.c_riga_tariffa');
+                        $tariffaArray[$id]['S'] = (int)strip_tags($costo[0]->getInnerText()); // Smart
+                        $tariffaArray[$id]['P'] = (int)strip_tags($costo[1]->getInnerText()); // Prima
+                        $tariffaArray[$id]['C'] = (int)strip_tags($costo[2]->getInnerText()); // Club
+                        
+                    }
+                    $trenoArray['tariffe'] = $tariffaArray;
+                    var_dump($trenoArray);
                 }
                 exit;
                     foreach($this->_fascePrezzo[$this->getTratta()][$classe] as $prezzo) {
@@ -73,7 +88,7 @@ class ItaloTreno extends Scanner {
                                 );  
                                 $check = $this->db->get_where('preventivi_result',$dati)->num_rows();
                                 if(!$check) {
-                                    // dio solo sa perchÃ¨ torni sempre un ora in piÃ¹
+                                    // dio solo sa perchè torni sempre un ora in più
                                     $durata  = strtotime($quotazione['arrivalTime']) - strtotime($quotazione['departureTime']);
                                     $durata = date('H:i:s', strtotime('-1 hour',$durata));
                                     $sql = array(
@@ -220,6 +235,25 @@ class ItaloTreno extends Scanner {
             $url = "https://biglietti.italotreno.it/Booking_Calendar_Ajax.aspx?dateMarketId=market_0_date_2012_8_6&marketIndex=0&year={$this->dataHelper('year')}&month={$this->dataHelper('month')}&day={$this->dataHelper('day')}&price={$this->_prezzo}%2C00";
             $this->_debug['ajax_url'][] = $url;
             return $url;
+        }
+        
+        public function tariffeHelper($nomeTariffa) {
+            switch($nomeTariffa) {
+                case 'Base':
+                    $cod = 1;
+                    break;
+                case 'Economy': 
+                    $cod = 2;
+                    break;
+                case 'Low Cost': 
+                    $cod = 3;
+                    break;
+                default:
+                    $cod = 4;
+                    break;
+            }
+            return $cod;
+            
         }
         
         public function stazioneHelper($stazione) {
