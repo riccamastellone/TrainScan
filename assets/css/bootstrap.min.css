@@ -326,6 +326,7 @@ a:hover {
 .row-fluid {
   width: 100%;
   *zoom: 1;
+  position:relative;
 }
 
 .row-fluid:before,
@@ -5784,3 +5785,6 @@ a.badge:hover {
 .alertRisultati {text-align: center;}
 #newLoader{position:relative;bottom:2px}
 .page-header {background-image:url('../img/train.png'); background-repeat:no-repeat; background-position: right}
+#invertStazioni {position: absolute;
+left: 292px;cursor:pointer;
+top: 212px;}

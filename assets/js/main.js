@@ -17,6 +17,12 @@ $(function() {
     
     
 });
+function invertStazioni() {
+    var partenza = $('input[name=stazionePartenza]').val();
+    var arrivo = $('input[name=stazioneArrivo]').val();
+    $('input[name=stazionePartenza]').val(arrivo);
+    $('input[name=stazioneArrivo]').val(partenza);
+}
 function blockRisultati() {
     $('#resultsTable').css('opacity',0.5);
     
@@ -107,7 +113,7 @@ function getQuotazioni(deleteCache) {
     
 }
 function updateSlider(val1,val2) {
-    $( "#amount" ).html( "€" + val1 + " - €" + val2 );
+    $( "#amount" ).html( "â‚¬" + val1 + " - â‚¬" + val2 );
     $('#results tr').each(function(){
         if($(this).attr('costo') > val2 || $(this).attr('costo') < val1) {
             $(this).hide();
@@ -132,8 +138,8 @@ function triggerSliders() {
 				updateSlider(ui.values[ 0 ],ui.values[ 1 ]);
 			}
 		});
-    $( "#amount" ).html( "€" + $( "#slider" ).slider( "values", 0 ) +
-                     " - €" + $( "#slider" ).slider( "values", 1 ) );
+    $( "#amount" ).html( "â‚¬" + $( "#slider" ).slider( "values", 0 ) +
+                     " - â‚¬" + $( "#slider" ).slider( "values", 1 ) );
     updateSlider(valore1,valore2);
 }
 function showDettagli(idPreventivo) {
