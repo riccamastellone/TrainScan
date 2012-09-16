@@ -41,7 +41,11 @@ class ItaloTreno extends Scanner {
             foreach($this->_classi as $classe){
                 $this->setClasse($classe);
                 $this->setSessionId();
-                echo $this->getItaloResult();
+                $html = utf8_decode($this->getItaloResult());
+                $this->load->library("html_dom");
+                $this->html_dom->loadHTML($html,'utf-8');
+                $tabella = $this->html_dom->find('#grigliaTreni',0);
+                echo ($rank[0]->getInnerText());
                 exit;
                     foreach($this->_fascePrezzo[$this->getTratta()][$classe] as $prezzo) {
                         $this->setPrezzo($prezzo);
@@ -56,7 +60,7 @@ class ItaloTreno extends Scanner {
                                 );  
                                 $check = $this->db->get_where('preventivi_result',$dati)->num_rows();
                                 if(!$check) {
-                                    // dio solo sa perchè torni sempre un ora in più
+                                    // dio solo sa perchÃ¨ torni sempre un ora in piÃ¹
                                     $durata  = strtotime($quotazione['arrivalTime']) - strtotime($quotazione['departureTime']);
                                     $durata = date('H:i:s', strtotime('-1 hour',$durata));
                                     $sql = array(
@@ -128,7 +132,7 @@ class ItaloTreno extends Scanner {
 	public function getJsonItalo()
 	{       
             
-            /* La genialità di NTV ci obbliga a mandare una finta richiesta alla pagina stessa per ottenre
+            /* La genialitÃ  di NTV ci obbliga a mandare una finta richiesta alla pagina stessa per ottenre
              * il cookie con ASP Session Id per poi fare una get su un'altra pagina per ricevere il JSON interessato
              * 
              * Non so se questo sia il modo migliore per ottenere le quotazioni ma l'unico che funziona per ora
@@ -150,7 +154,7 @@ class ItaloTreno extends Scanner {
         public function getItaloResult()
 	{       
             
-            /* La genialità di NTV ci obbliga a mandare una finta richiesta alla pagina stessa per ottenre
+            /* La genialitÃ  di NTV ci obbliga a mandare una finta richiesta alla pagina stessa per ottenre
              * il cookie con ASP Session Id per poi fare una get su un'altra pagina per ricevere il JSON interessato
              * 
              * Non so se questo sia il modo migliore per ottenere le quotazioni ma l'unico che funziona per ora
