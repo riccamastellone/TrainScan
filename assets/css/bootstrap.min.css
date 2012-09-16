@@ -5780,7 +5780,7 @@ a.badge:hover {
   position: fixed;
 }
 #formPost {text-align: center}
-#loader {position: absolute; top:55%; left:50%; margin-top:-64px; margin-left:-64px;display:none}
+#loader {position: fixed; top:55%; left:50%; margin-top:-64px; margin-left:-64px;display:none}
 .datepicker .day {cursor:pointer; text-align: center}
 .alertRisultati {text-align: center;}
 #newLoader{position:relative;bottom:2px}

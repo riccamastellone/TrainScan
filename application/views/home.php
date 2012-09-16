@@ -64,7 +64,7 @@
             </form>
         <i class="icon-resize-horizontal" id="invertStazioni" onclick="invertStazioni();"></i>
         <div class="clearfix"></div>
-        <div id="loader"><img src="<?php echo base_url(); ?>assets/img/loader.gif"></div>
+        
         
         <div id="results"></div>
         <div class="invisible">
@@ -80,6 +80,7 @@
             }?>
         </div>
     </div>
+    <div id="loader"><img src="<?php echo base_url(); ?>assets/img/loader.gif"></div>
     </div><!-- fine container fluid -->
     <div class="modal hide" id="modalRiepilogo">
         <div class="modal-header">

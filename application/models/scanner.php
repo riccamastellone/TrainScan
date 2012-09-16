@@ -6,6 +6,7 @@ class Scanner extends CI_Model {
 	public $_stazioni = array("Milano", "Firenze", "Bologna", "Napoli", "Roma", "Salerno");        
         public $_debug = array();
         public $_interval = '4 HOUR'; // validità del preventivo
+        public $_quotesPerPage = 15; // quotazioni per pagina da visualizzare
         
         function __construct() {
             
@@ -81,9 +82,12 @@ class Scanner extends CI_Model {
             return $result[0]->data_generazione;
         }
         
-        public function getPreventivoResult($idPreventivo) {
+        public function getPreventivoResult($idPreventivo,$page) {
+             $start = ($page-1)*$this->_quotesPerPage;
+             $offset = $this->_quotesPerPage;
+            
             $query = $this->db->query("SELECT *, a.id AS result_id FROM preventivi_result AS a, operatori AS o WHERE  a.id_preventivo = {$idPreventivo} AND a.id_operatore = o.id
-                ORDER BY a.prezzo ASC");
+                ORDER BY a.prezzo ASC LIMIT {$start}, {$offset}");
             $result = $query->result_array();
             return $result;
         }
@@ -97,6 +101,7 @@ class Scanner extends CI_Model {
         }
         
         public function getDettaglioResult($idResult) {
+            
             $query = $this->db->query("SELECT id_operatore FROM preventivi_result WHERE id = {$idResult} LIMIT 1")->result();
             $operatore = $query[0]->id_operatore;
             if($operatore == 'I') $tabella = 'italo'; else $tabella = 'trenitalia';
@@ -108,7 +113,12 @@ class Scanner extends CI_Model {
             return $result[0];
             
         }
-        
+        public function countPreventivoResult($idPreventivo) {
+            $query = $this->db->query("SELECT count(id) FROM preventivi_result WHERE id_preventivo = {$idPreventivo}")->result_array();
+            return (int)$query[0]['count(id)'];
+            
+            
+        }
         public function dataHelper($case) {
             switch ($case) {
                 case 'day':
