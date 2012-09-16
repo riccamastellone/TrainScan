@@ -26,7 +26,6 @@ class ItaloTreno extends Scanner {
                 if(empty($tabella)) {
                     return null;
                 }
-                exit;
                 $treni = $tabella->find('h3');
                 $dettaglioTreni = $tabella->find('div');
                 foreach($treni as $id => $treno) {

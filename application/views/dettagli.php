@@ -1,5 +1,4 @@
 <?php 
-
 function nl2li($str) {
     $str = "<ul style=\"list-style:none\"><li>" . $str ."</li></ul>"; 
     $str = str_replace("\n","</li>\n<li>",$str);
@@ -30,7 +29,7 @@ function nl2li($str) {
         </tr>
     </tbody>
 </table>
-<p>Partenza da <strong><?php echo $quotazione["id_origine"]; ?></strong> alle <strong><?php echo substr($quotazione["partenza"], 0, -3); ?></strong>
+<p>Partenza da <strong><?php echo $quotazione["id_origine"]; ?></strong> <?php echo htmlentities(strftime("%A %d %B %Y", strtotime($quotazione['data']))); ?> alle <strong><?php echo substr($quotazione["partenza"], 0, -3); ?></strong>
     e arrivo a <strong><?php echo $quotazione["id_destinazione"]; ?></strong> alle <strong><?php echo substr($quotazione["arrivo"], 0, -3); ?></strong>. 
     Durata totale del viaggio <strong><?php echo substr($quotazione["durata"], 0, -3); ?></strong></p>
 <?php if($quotazione["descrizione_offerta"]) { ?>

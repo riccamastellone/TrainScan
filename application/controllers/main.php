@@ -13,6 +13,7 @@ class Main extends CI_Controller {
             $this->load->model('scanner');
             $this->load->library('session');
             date_default_timezone_set('Europe/Rome');
+            setlocale(LC_ALL, 'it_IT');
         }
         
 	public function index()

@@ -110,3 +110,27 @@ ERROR - 2012-09-16 23:06:19 --> Severity: Notice  --> Undefined index: outputInf
 ERROR - 2012-09-16 23:06:19 --> Severity: Warning  --> Invalid argument supplied for foreach() E:\wamp\www\trainscan\application\models\trenitalia.php 28
 ERROR - 2012-09-16 23:06:41 --> Severity: Notice  --> Undefined index: outputInfoSolutionsMobile E:\wamp\www\trainscan\application\models\trenitalia.php 222
 ERROR - 2012-09-16 23:06:42 --> Severity: Notice  --> Undefined index: outputInfoSolutionsMobile E:\wamp\www\trainscan\application\models\trenitalia.php 222
+ERROR - 2012-09-16 23:08:54 --> Severity: Notice  --> Undefined index: outputInfoSolutionsMobile E:\wamp\www\trainscan\application\models\trenitalia.php 220
+ERROR - 2012-09-16 23:08:56 --> Severity: Notice  --> Undefined index: outputInfoSolutionsMobile E:\wamp\www\trainscan\application\models\trenitalia.php 220
+ERROR - 2012-09-16 23:10:16 --> Severity: Notice  --> Undefined index: outputInfoSolutionsMobile E:\wamp\www\trainscan\application\models\trenitalia.php 220
+ERROR - 2012-09-16 23:10:17 --> Severity: Notice  --> Undefined index: outputInfoSolutionsMobile E:\wamp\www\trainscan\application\models\trenitalia.php 220
+ERROR - 2012-09-16 23:10:28 --> Severity: Notice  --> Undefined index: outputInfoSolutionsMobile E:\wamp\www\trainscan\application\models\trenitalia.php 220
+ERROR - 2012-09-16 23:10:51 --> Severity: Notice  --> Undefined index: outputInfoSolutionsMobile E:\wamp\www\trainscan\application\models\trenitalia.php 220
+ERROR - 2012-09-16 23:12:03 --> Severity: Notice  --> Undefined index: outputInfoSolutionsMobile E:\wamp\www\trainscan\application\models\trenitalia.php 222
+ERROR - 2012-09-16 23:13:11 --> Severity: Notice  --> Undefined index: outputInfoSolutionsMobile E:\wamp\www\trainscan\application\models\trenitalia.php 222
+ERROR - 2012-09-16 23:13:19 --> Severity: Notice  --> Undefined index: outputInfoSolutionsMobile E:\wamp\www\trainscan\application\models\trenitalia.php 222
+ERROR - 2012-09-16 23:17:24 --> Severity: Warning  --> Invalid CRT parameters detected E:\wamp\www\trainscan\application\views\dettagli.php 33
+ERROR - 2012-09-16 23:17:24 --> Severity: Warning  --> Invalid CRT parameters detected E:\wamp\www\trainscan\application\views\dettagli.php 33
+ERROR - 2012-09-16 23:17:24 --> Severity: Warning  --> Invalid CRT parameters detected E:\wamp\www\trainscan\application\views\dettagli.php 33
+ERROR - 2012-09-16 23:17:24 --> Severity: Warning  --> Invalid CRT parameters detected E:\wamp\www\trainscan\application\views\dettagli.php 33
+ERROR - 2012-09-16 23:17:24 --> Severity: Warning  --> Invalid CRT parameters detected E:\wamp\www\trainscan\application\views\dettagli.php 33
+ERROR - 2012-09-16 23:17:34 --> Severity: Warning  --> Invalid CRT parameters detected E:\wamp\www\trainscan\application\views\dettagli.php 33
+ERROR - 2012-09-16 23:17:34 --> Severity: Warning  --> Invalid CRT parameters detected E:\wamp\www\trainscan\application\views\dettagli.php 33
+ERROR - 2012-09-16 23:17:34 --> Severity: Warning  --> Invalid CRT parameters detected E:\wamp\www\trainscan\application\views\dettagli.php 33
+ERROR - 2012-09-16 23:17:34 --> Severity: Warning  --> Invalid CRT parameters detected E:\wamp\www\trainscan\application\views\dettagli.php 33
+ERROR - 2012-09-16 23:17:34 --> Severity: Warning  --> Invalid CRT parameters detected E:\wamp\www\trainscan\application\views\dettagli.php 33
+ERROR - 2012-09-16 23:18:55 --> Severity: Warning  --> Invalid CRT parameters detected E:\wamp\www\trainscan\application\views\dettagli.php 33
+ERROR - 2012-09-16 23:18:55 --> Severity: Warning  --> Invalid CRT parameters detected E:\wamp\www\trainscan\application\views\dettagli.php 33
+ERROR - 2012-09-16 23:18:55 --> Severity: Warning  --> Invalid CRT parameters detected E:\wamp\www\trainscan\application\views\dettagli.php 33
+ERROR - 2012-09-16 23:18:55 --> Severity: Warning  --> Invalid CRT parameters detected E:\wamp\www\trainscan\application\views\dettagli.php 33
+ERROR - 2012-09-16 23:18:55 --> Severity: Warning  --> Invalid CRT parameters detected E:\wamp\www\trainscan\application\views\dettagli.php 33

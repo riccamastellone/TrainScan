@@ -24,6 +24,8 @@ class Trenitalia extends Scanner {
         public function getQuotazioniRaw($idPreventivo) {
             
             $quotazioniArray = $this->postParametri($this->generateXml());
+            if(!is_array($quotazioniArray))
+                return null;
             
             foreach($quotazioniArray as $quotazione)  {
                 
@@ -220,7 +222,7 @@ class Trenitalia extends Scanner {
             $arrayQuotazioni = @$arrayQuotazioni['s:Envelope']['s:Body']['OutputSolutionsMobile']['pOutput']['MobileSolutions']['outputInfoSolutionsMobile'];
             
             if(empty($arrayQuotazioni))
-                die();
+                return null;
             
             return $arrayQuotazioni;
         }

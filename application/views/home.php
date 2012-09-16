@@ -91,7 +91,7 @@
           </div>
           <div class="modal-footer">
             <a href="#" data-dismiss="modal" class="btn">Chiudi</a>
-            <a href="javascript:alert('ciao minga')" class="btn btn-primary">Acquista</a>
+            <a href="javascript:alert('ciao minga')" class="btn btn-inverse">Acquista</a>
           </div>
         </div>
 

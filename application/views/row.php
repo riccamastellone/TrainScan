@@ -11,6 +11,13 @@
                 <div id="slider"></div>
             </div>
 </div>   -->
+
+<?php
+        if(empty($quotazioni)) { ?>
+        <div class="alert alert-block" >
+            Nessuna quotazione disponibile con i parametri da te inseriti
+        </div>
+<?php } else { ?>
 <table class="table table-striped" id="resultsTable">
     <thead>
         <tr>
@@ -24,7 +31,8 @@
         </tr>
     </thead>
     <tbody>
-        <?php foreach($quotazioni as $quotazione) { ?>
+        <?php 
+        foreach($quotazioni as $quotazione) { ?>
             <tr partenza="<?php echo substr($quotazione["partenza"], 0, -3); ?>" arrivo="<?php echo substr($quotazione["arrivo"], 0, -3); ?>" costo="<?php echo $quotazione["prezzo"]; ?>">
                 <td><img src="<?php echo base_url().$quotazione["path_logo"]; ?>" title="<?php echo $quotazione["nome_operatore"]; ?>"></td>
                 <td><?php echo $quotazione["codice_treno"]; ?></td>
@@ -39,7 +47,7 @@
        <?php } ?>
     </tbody>
 </table>
-<?php 
+<?php }
     if($pagination) { 
         echo '<div class="pagination pagination-centered"><ul>';
         for($i=1;$i<$pages;$i++) {
