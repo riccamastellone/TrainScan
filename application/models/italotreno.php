@@ -30,7 +30,7 @@ class ItaloTreno extends Scanner {
         public $_stazioneOrigine = '';
         public $_stazioneDestinazione = '';
         public $_dataPartenza = '';
-        
+        public $_resultUrl = 'https://biglietti.italotreno.it/Booking_Acquisto_SelezioneTreno_A.aspx';
         
         function __construct() {
             
@@ -41,6 +41,8 @@ class ItaloTreno extends Scanner {
             foreach($this->_classi as $classe){
                 $this->setClasse($classe);
                 $this->setSessionId();
+                echo $this->getItaloResult();
+                exit;
                     foreach($this->_fascePrezzo[$this->getTratta()][$classe] as $prezzo) {
                         $this->setPrezzo($prezzo);
                         $json = json_decode($this->getJsonItalo(),true);
@@ -101,6 +103,9 @@ class ItaloTreno extends Scanner {
             // set temp cookie file
             $this->ckfile = tempnam ("/tmp", "CURLCOOKIE");
             
+            
+            // todo: toglierelo
+            $this->_classe = '';
             $this->curl->create($this->_italoUrl);
             $this->curl->option(CURLOPT_COOKIEJAR, $this->ckfile); 
             $this->curl->option(CURLOPT_SSL_VERIFYPEER, false);
@@ -138,6 +143,28 @@ class ItaloTreno extends Scanner {
                 $this->curl->option(CURLOPT_SSL_VERIFYPEER, false);
                 $curl = $this->curl->execute();
                 $this->_debug['curl_info2'][] = $this->curl->info;
+                return $curl;
+                
+	}
+        
+        public function getItaloResult()
+	{       
+            
+            /* La genialità di NTV ci obbliga a mandare una finta richiesta alla pagina stessa per ottenre
+             * il cookie con ASP Session Id per poi fare una get su un'altra pagina per ricevere il JSON interessato
+             * 
+             * Non so se questo sia il modo migliore per ottenere le quotazioni ma l'unico che funziona per ora
+             */
+                
+                
+                $this->_debug['curl'][] = $this->curl->info;
+                $this->curl->create($this->_resultUrl);
+                $this->curl->option(CURLOPT_COOKIEFILE,$this->ckfile); 
+                $this->curl->option(CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:15.0) Gecko/20100101 Firefox/15.0');
+                $this->curl->option(CURLOPT_RETURNTRANSFER, true);
+                $this->curl->option(CURLOPT_SSL_VERIFYPEER, false);
+                $curl = $this->curl->execute();
+                $this->_debug['curl'][] = $this->curl->info;
                 return $curl;
                 
 	}

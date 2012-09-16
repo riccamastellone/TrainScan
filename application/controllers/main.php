@@ -42,13 +42,26 @@ class Main extends CI_Controller {
             }
             $this->_renderPage($data);
         }
+        
+        // Debug diretto trenitalia
         public function _trenitalia() {
             $this->trenitalia->setData('2012-09-25');
             $this->scanner->setData('2012-09-25');
             $this->trenitalia->setStazioni('Milano','Firenze');
             $this->scanner->setStazioni('Milano','Firenze');
-            $data['idPreventivo'] = (int)$this->scanner->checkPreventivo();
+            $data['idPreventivo'] = (int)$this->scanner->checkPreventivo(1);
             print_r($this->trenitalia->getQuotazioni($data['idPreventivo']));
+        }
+        
+        // Debug diretto italo
+        public function italotreno() {
+            $this->italotreno->setPersone();
+            $this->italotreno->setData('2012-09-25');
+            $this->scanner->setData('2012-09-25');
+            $this->italotreno->setStazioni('Milano','Firenze');
+            $this->scanner->setStazioni('Milano','Firenze');
+            $data['idPreventivo'] = (int)$this->scanner->checkPreventivo(0);
+            print_r($this->italotreno->getQuotazioni($data['idPreventivo']));
         }
         
         public function dettagliPreventivo() {
