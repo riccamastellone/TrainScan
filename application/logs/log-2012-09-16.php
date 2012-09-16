@@ -91,3 +91,9 @@ ERROR - 2012-09-16 17:44:49 --> Severity: Notice  --> Use of undefined constant 
 ERROR - 2012-09-16 17:44:49 --> Severity: Notice  --> Undefined property: stdClass::$1 E:\wamp\www\trainscan\application\models\scanner.php 113
 ERROR - 2012-09-16 17:44:53 --> Severity: Notice  --> Use of undefined constant count - assumed 'count' E:\wamp\www\trainscan\application\models\scanner.php 113
 ERROR - 2012-09-16 17:44:53 --> Severity: Notice  --> Undefined property: stdClass::$count E:\wamp\www\trainscan\application\models\scanner.php 113
+ERROR - 2012-09-16 18:15:47 --> Query error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-15, 0' at line 2
+ERROR - 2012-09-16 18:15:59 --> Query error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-15, 0' at line 2
+ERROR - 2012-09-16 18:17:06 --> Query error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-15, 0' at line 2
+ERROR - 2012-09-16 18:17:44 --> Query error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-15, 0' at line 2
+ERROR - 2012-09-16 18:17:47 --> Query error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-15, 0' at line 2
+ERROR - 2012-09-16 18:22:01 --> Severity: Notice  --> Undefined variable: offest E:\wamp\www\trainscan\application\models\scanner.php 88

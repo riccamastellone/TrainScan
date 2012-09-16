@@ -101,8 +101,16 @@ class Main extends CI_Controller {
                 $this->scanner->setStazioni($stazionePartenza,$stazioneArrivo);
                 $this->scanner->setData($dataPartenza);
                 $data['idPreventivo'] = $this->scanner->getBothQuotazioni($cache);
-                $data['quotazioni'] = $this->scanner->getPreventivoResult($data['idPreventivo']);
+                $data['quotazioni'] = $this->scanner->getPreventivoResult($data['idPreventivo'],$page);
                 $data['risultati'] = $this->scanner->countPreventivoResult($data['idPreventivo']);
+                
+                if($data['risultati'] > $this->scanner->_quotesPerPage) {
+                    $data['pagination'] = true;
+                    $data['page'] = $page;
+                    $data['pages'] = ceil(($data['risultati'])/$this->scanner->_quotesPerPage);
+                    
+                } else $data['pagination'] = false;
+                
                 $data['lastUpdate'] = $this->scanner->_ago($this->scanner->getTimePreventivo($data['idPreventivo']));
                 $data['quotazioni'] = $this->renderClassi($data['quotazioni']);
             } else die('Nessun parametro passato');

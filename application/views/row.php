@@ -4,12 +4,13 @@
    <span id="newLoader" class="hidden"><img src="<?php echo base_url(); ?>assets/img/loader2.gif"><span>
                
 </div>
+<!-- 
 <div class="well">
             <div class="">
                 <div id="amount"></div>
                 <div id="slider"></div>
             </div>
-</div>   
+</div>   -->
 <table class="table table-striped" id="resultsTable">
     <thead>
         <tr>
@@ -38,6 +39,19 @@
        <?php } ?>
     </tbody>
 </table>
+<?php 
+    if($pagination) { 
+        echo '<div class="pagination pagination-centered"><ul>';
+        for($i=1;$i<$pages;$i++) {
+            if($i == $page) {
+                echo '<li class="active"><a href="javascript:void(0)">'.$i.'</a></li>';
+            } else {
+                echo '<li><a href="javascript:getQuotazioni(0,'.$i.');">'.$i.'</a></li>';
+            }
+        }
+        echo '</ul></div>';
+        
+    }?>
 <div class="alert alert-block hidden" id="noresults" >
   Nessuna quotazione disponibile con i parametri da te inseriti
 </div>

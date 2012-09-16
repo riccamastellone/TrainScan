@@ -73,7 +73,7 @@ function checkData() {
     }
     
 }
-function getQuotazioni(deleteCache) {
+function getQuotazioni(deleteCache, page) {
     blockRisultati();
     if(deleteCache == '1') {
         $('input[name=cache]').val(0);
@@ -90,9 +90,14 @@ function getQuotazioni(deleteCache) {
     if(checkData() == false)
         error == 1;
     
+    if((page) != undefined) {
+        var url = '/main/ajaxQuotazioni/' + parseInt(page);
+    } else {
+        var url = '/main/ajaxQuotazioni/';
+    }
     
     if(error == 0)
-    $.post("/main/ajaxQuotazioni", $('#formPost').serialize() ,
+    $.post(url, $('#formPost').serialize() ,
         function(data){
             $('#results').html(data);
             
@@ -113,7 +118,7 @@ function getQuotazioni(deleteCache) {
     
 }
 function updateSlider(val1,val2) {
-    $( "#amount" ).html( "â‚¬" + val1 + " - â‚¬" + val2 );
+    $( "#amount" ).html( "&euro;" + val1 + " - &euro;" + val2 );
     $('#results tr').each(function(){
         if($(this).attr('costo') > val2 || $(this).attr('costo') < val1) {
             $(this).hide();
@@ -138,8 +143,8 @@ function triggerSliders() {
 				updateSlider(ui.values[ 0 ],ui.values[ 1 ]);
 			}
 		});
-    $( "#amount" ).html( "â‚¬" + $( "#slider" ).slider( "values", 0 ) +
-                     " - â‚¬" + $( "#slider" ).slider( "values", 1 ) );
+    $( "#amount" ).html( "&euro;" + $( "#slider" ).slider( "values", 0 ) +
+                     " &euro;" + $( "#slider" ).slider( "values", 1 ) );
     updateSlider(valore1,valore2);
 }
 function showDettagli(idPreventivo) {
