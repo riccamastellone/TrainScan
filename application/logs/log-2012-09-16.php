@@ -68,3 +68,10 @@ ERROR - 2012-09-16 15:20:14 --> 404 Page Not Found --> main/images
 ERROR - 2012-09-16 15:20:14 --> 404 Page Not Found --> main/images
 ERROR - 2012-09-16 15:27:14 --> 404 Page Not Found --> main/images
 ERROR - 2012-09-16 15:59:17 --> Severity: Notice  --> Undefined offset: 0 E:\wamp\www\trainscan\application\models\italotreno.php 63
+ERROR - 2012-09-16 16:44:54 --> Severity: Notice  --> Undefined index: Smart E:\wamp\www\trainscan\application\models\italotreno.php 72
+ERROR - 2012-09-16 16:44:54 --> Severity: Notice  --> Undefined index: Smart E:\wamp\www\trainscan\application\models\italotreno.php 72
+ERROR - 2012-09-16 16:44:54 --> Severity: Notice  --> Undefined index: Smart E:\wamp\www\trainscan\application\models\italotreno.php 72
+ERROR - 2012-09-16 16:44:54 --> Severity: Notice  --> Undefined index: Smart E:\wamp\www\trainscan\application\models\italotreno.php 72
+ERROR - 2012-09-16 16:48:57 --> Severity: Notice  --> Undefined index: Smart E:\wamp\www\trainscan\application\models\italotreno.php 76
+ERROR - 2012-09-16 16:48:57 --> Severity: Notice  --> Undefined index: Smart E:\wamp\www\trainscan\application\models\italotreno.php 76
+ERROR - 2012-09-16 16:48:57 --> Severity: Notice  --> Undefined index: Smart E:\wamp\www\trainscan\application\models\italotreno.php 76

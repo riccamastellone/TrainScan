@@ -38,9 +38,7 @@ class ItaloTreno extends Scanner {
         
         public function getQuotazioniRaw($idPreventivo) {
             
-            foreach($this->_classi as $classe){
-                $this->output->set_header('charset: utf-8');
-                $this->setClasse($classe);
+                $this->setClasse('');
                 $this->setSessionId();
                 $html = utf8_decode($this->getItaloResult());
                 $this->load->library("html_dom");
@@ -61,6 +59,11 @@ class ItaloTreno extends Scanner {
                     
                     
                     $tariffe = $dettaglioTreni[$id]->find('div.riga_tariffa');
+                    
+                    $tariffaMigliore['Smart']['valore'] = 9999;
+                    $tariffaMigliore['Prima']['valore'] = 9999;
+                    $tariffaMigliore['Club']['valore'] = 9999;
+                    
                     foreach($tariffe as $id => $tariffa) {
                         $tariffaArray[$id]['nome'] = strip_tags($tariffa->find('.c_riga_tariffa',0)->find('div',0)->getInnerText());
                         
@@ -70,43 +73,73 @@ class ItaloTreno extends Scanner {
                         $tariffaArray[$id]['P'] = (int)strip_tags($costo[1]->getInnerText()); // Prima
                         $tariffaArray[$id]['C'] = (int)strip_tags($costo[2]->getInnerText()); // Club
                         
+                        // Ci interessa solo quella piu' conveniente
+                        if($tariffaArray[$id]['S'] < $tariffaMigliore['Smart']['valore'] && $tariffaArray[$id]['S'] != 0) {
+                            $tariffaMigliore['Smart']['valore'] =  $tariffaArray[$id]['S'];
+                            $tariffaMigliore['Smart']['id_tariffa'] = $this->tariffeHelper($tariffaArray[$id]['nome']);
+                        }
+                        if($tariffaArray[$id]['S'] < $tariffaMigliore['Prima']['valore'] && $tariffaArray[$id]['P'] != 0) {
+                            $tariffaMigliore['Prima']['valore'] =  $tariffaArray[$id]['P'];
+                            $tariffaMigliore['Prima']['id_tariffa'] = $this->tariffeHelper($tariffaArray[$id]['nome']);
+                        }
+                        if($tariffaArray[$id]['S'] < $tariffaMigliore['Club']['valore'] && $tariffaArray[$id]['C'] != 0) {
+                            $tariffaMigliore['Club']['valore'] =  $tariffaArray[$id]['C'];
+                            $tariffaMigliore['Club']['id_tariffa'] = $this->tariffeHelper($tariffaArray[$id]['nome']);
+                        }
                     }
                     $trenoArray['tariffe'] = $tariffaArray;
-                    var_dump($trenoArray);
+                    $trenoArray['tariffaMigliore'] = $tariffaMigliore;
+                    
+                    if($trenoArray['tariffaMigliore']['Smart']['valore'] != 9999) { // Esiste la Smart
+                    $sql = array(
+                        'id_preventivo' => $idPreventivo,
+                        'codice_treno' => $trenoArray['numero'],
+                        'partenza' => date('H:i:s', strtotime($trenoArray['orario']['partenza'])),
+                        'arrivo' => date('H:i:s', strtotime($trenoArray['orario']['arrivo'])),
+                        'durata' => $trenoArray['durata'],
+                        'id_classe' => 'S',
+                        'prezzo' => $trenoArray['tariffaMigliore']['Smart']['valore'],
+                        'fermate' => $trenoArray['fermate'],
+                        'id_operatore' => 'I',
+                        'id_offerta' => $trenoArray['tariffaMigliore']['Smart']['id_tariffa']
+                        );
+                    $this->db->insert('preventivi_result', $sql); 
+                    }
+                    
+                    if($trenoArray['tariffaMigliore']['Prima']['valore'] != 9999) { // Esiste la Prima
+                    $sql = array(
+                        'id_preventivo' => $idPreventivo,
+                        'codice_treno' => $trenoArray['numero'],
+                        'partenza' => date('H:i:s', strtotime($trenoArray['orario']['partenza'])),
+                        'arrivo' => date('H:i:s', strtotime($trenoArray['orario']['arrivo'])),
+                        'durata' => $trenoArray['durata'],
+                        'id_classe' => 'P',
+                        'prezzo' => $trenoArray['tariffaMigliore']['Prima']['valore'],
+                        'fermate' => $trenoArray['fermate'],
+                        'id_operatore' => 'I',
+                        'id_offerta' => $trenoArray['tariffaMigliore']['Prima']['id_tariffa']
+                        );
+                    $this->db->insert('preventivi_result', $sql); 
+                    }
+                    
+                    if($trenoArray['tariffaMigliore']['Club']['valore'] != 9999) { // Esiste la Club
+                    $sql = array(
+                        'id_preventivo' => $idPreventivo,
+                        'codice_treno' => $trenoArray['numero'],
+                        'partenza' => date('H:i:s', strtotime($trenoArray['orario']['partenza'])),
+                        'arrivo' => date('H:i:s', strtotime($trenoArray['orario']['arrivo'])),
+                        'durata' => $trenoArray['durata'],
+                        'id_classe' => 'C',
+                        'prezzo' => $trenoArray['tariffaMigliore']['Club']['valore'],
+                        'fermate' => $trenoArray['fermate'],
+                        'id_operatore' => 'I',
+                        'id_offerta' => $trenoArray['tariffaMigliore']['Club']['id_tariffa']
+                        );
+                    $this->db->insert('preventivi_result', $sql); 
+                    }
+                    
+                    
                 }
-                exit;
-                    foreach($this->_fascePrezzo[$this->getTratta()][$classe] as $prezzo) {
-                        $this->setPrezzo($prezzo);
-                        $json = json_decode($this->getJsonItalo(),true);
-                        $json = $json['extendedJourneys'];
-                        if(!empty($json))
-                            foreach($json as $quotazione)  {
-                                $dati = array(
-                                    'id_preventivo' => $idPreventivo,
-                                    'codice_treno' => $quotazione['trainNumber'],
-                                    'id_classe' => $classe
-                                );  
-                                $check = $this->db->get_where('preventivi_result',$dati)->num_rows();
-                                if(!$check) {
-                                    // dio solo sa perchè torni sempre un ora in più
-                                    $durata  = strtotime($quotazione['arrivalTime']) - strtotime($quotazione['departureTime']);
-                                    $durata = date('H:i:s', strtotime('-1 hour',$durata));
-                                    $sql = array(
-                                        'id_preventivo' => $idPreventivo,
-                                        'codice_treno' => $quotazione['trainNumber'],
-                                        'partenza' => date('H:i:s', strtotime($quotazione['departureTime'])),
-                                        'arrivo' => date('H:i:s', strtotime($quotazione['arrivalTime'])),
-                                        'durata' => $durata,
-                                        'id_classe' => $classe,
-                                        'prezzo' => $prezzo,
-                                        'id_operatore' => 'I'
-                                        );
-                                    $this->db->insert('preventivi_result', $sql); 
-                                
-                                }
-                            }
-                }
-            }
             
         }
         public function getPreventivoResultItaloTreno($idPreventivo) {
