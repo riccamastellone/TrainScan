@@ -75,3 +75,14 @@ ERROR - 2012-09-16 16:44:54 --> Severity: Notice  --> Undefined index: Smart E:\
 ERROR - 2012-09-16 16:48:57 --> Severity: Notice  --> Undefined index: Smart E:\wamp\www\trainscan\application\models\italotreno.php 76
 ERROR - 2012-09-16 16:48:57 --> Severity: Notice  --> Undefined index: Smart E:\wamp\www\trainscan\application\models\italotreno.php 76
 ERROR - 2012-09-16 16:48:57 --> Severity: Notice  --> Undefined index: Smart E:\wamp\www\trainscan\application\models\italotreno.php 76
+ERROR - 2012-09-16 16:59:34 --> Query error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE a.id_operatore = b.id AND a.id = 2238 AND a.id_classe = c.codice_classe 
+ ' at line 3
+ERROR - 2012-09-16 16:59:40 --> Query error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE a.id_operatore = b.id AND a.id = 2238 AND a.id_classe = c.codice_classe 
+ ' at line 3
+ERROR - 2012-09-16 17:00:05 --> Query error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE a.id_operatore = b.id AND a.id = 2238 AND a.id_classe = c.codice_classe 
+ ' at line 3
+ERROR - 2012-09-16 17:05:16 --> Query error: Unknown column 'f.codice_offeta' in 'where clause'
+ERROR - 2012-09-16 17:05:34 --> Severity: Notice  --> Undefined index: descrizione_offerta E:\wamp\www\trainscan\application\views\dettagli.php 42
+ERROR - 2012-09-16 17:09:45 --> Severity: Notice  --> Undefined index: MobileSolutions E:\wamp\www\trainscan\application\models\trenitalia.php 215
+ERROR - 2012-09-16 17:10:00 --> Severity: Notice  --> Undefined index: FareSolutionsMobile E:\wamp\www\trainscan\application\models\trenitalia.php 35
+ERROR - 2012-09-16 17:10:00 --> Severity: Warning  --> Invalid argument supplied for foreach() E:\wamp\www\trainscan\application\models\trenitalia.php 35

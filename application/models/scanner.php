@@ -101,8 +101,9 @@ class Scanner extends CI_Model {
             $operatore = $query[0]->id_operatore;
             if($operatore == 'I') $tabella = 'italo'; else $tabella = 'trenitalia';
             $query = $this->db->query("SELECT * FROM preventivi_result AS a, operatori AS b,
-                {$tabella}_classi AS c, preventivi AS d
-                WHERE a.id_operatore = b.id AND a.id = {$idResult} AND a.id_classe = c.codice_classe AND a.id_preventivo = d.id LIMIT 1");
+                {$tabella}_classi AS c, preventivi AS d, {$tabella}_tariffe AS f
+                WHERE a.id_operatore = b.id AND a.id = {$idResult} AND a.id_classe = c.codice_classe 
+                    AND a.id_preventivo = d.id AND a.id_offerta = f.codice_offerta LIMIT 1");
             $result = $query->result_array();
             return $result[0];
             
