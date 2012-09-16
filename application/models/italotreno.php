@@ -16,7 +16,6 @@ class ItaloTreno extends Scanner {
         
         public function getQuotazioniRaw($idPreventivo) {
             
-                $this->setClasse('');
                 $this->setSessionId();
                 $html = utf8_decode($this->getItaloResult());
                 $this->load->library("html_dom");

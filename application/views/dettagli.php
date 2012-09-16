@@ -1,7 +1,7 @@
 <?php 
 
 function nl2li($str) {
-    $str = "<ul><li>" . $str ."</li></ul>"; 
+    $str = "<ul style=\"list-style:none\"><li>" . $str ."</li></ul>"; 
     $str = str_replace("\n","</li>\n<li>",$str);
     return $str;
 }
