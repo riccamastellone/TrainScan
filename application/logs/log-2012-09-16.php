@@ -86,3 +86,8 @@ ERROR - 2012-09-16 17:05:34 --> Severity: Notice  --> Undefined index: descrizio
 ERROR - 2012-09-16 17:09:45 --> Severity: Notice  --> Undefined index: MobileSolutions E:\wamp\www\trainscan\application\models\trenitalia.php 215
 ERROR - 2012-09-16 17:10:00 --> Severity: Notice  --> Undefined index: FareSolutionsMobile E:\wamp\www\trainscan\application\models\trenitalia.php 35
 ERROR - 2012-09-16 17:10:00 --> Severity: Warning  --> Invalid argument supplied for foreach() E:\wamp\www\trainscan\application\models\trenitalia.php 35
+ERROR - 2012-09-16 17:43:28 --> Severity: Notice  --> Undefined property: stdClass::$count E:\wamp\www\trainscan\application\models\scanner.php 113
+ERROR - 2012-09-16 17:44:49 --> Severity: Notice  --> Use of undefined constant id - assumed 'id' E:\wamp\www\trainscan\application\models\scanner.php 113
+ERROR - 2012-09-16 17:44:49 --> Severity: Notice  --> Undefined property: stdClass::$1 E:\wamp\www\trainscan\application\models\scanner.php 113
+ERROR - 2012-09-16 17:44:53 --> Severity: Notice  --> Use of undefined constant count - assumed 'count' E:\wamp\www\trainscan\application\models\scanner.php 113
+ERROR - 2012-09-16 17:44:53 --> Severity: Notice  --> Undefined property: stdClass::$count E:\wamp\www\trainscan\application\models\scanner.php 113

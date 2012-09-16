@@ -54,7 +54,7 @@ class Main extends CI_Controller {
         }
         
         // Debug diretto italo
-        public function italotreno() {
+        public function _italotreno() {
             $this->italotreno->setPersone();
             $this->italotreno->setData('2012-09-25');
             $this->scanner->setData('2012-09-25');
@@ -81,7 +81,7 @@ class Main extends CI_Controller {
             $this->load->view('dettagli', $data);
             
         }
-        public function ajaxQuotazioni() {
+        public function ajaxQuotazioni($page = 1) {
             
             
             $post = $this->input->post();
@@ -102,7 +102,7 @@ class Main extends CI_Controller {
                 $this->scanner->setData($dataPartenza);
                 $data['idPreventivo'] = $this->scanner->getBothQuotazioni($cache);
                 $data['quotazioni'] = $this->scanner->getPreventivoResult($data['idPreventivo']);
-                $data['risultati'] = count($data['quotazioni']);
+                $data['risultati'] = $this->scanner->countPreventivoResult($data['idPreventivo']);
                 $data['lastUpdate'] = $this->scanner->_ago($this->scanner->getTimePreventivo($data['idPreventivo']));
                 $data['quotazioni'] = $this->renderClassi($data['quotazioni']);
             } else die('Nessun parametro passato');

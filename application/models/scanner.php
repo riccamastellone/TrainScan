@@ -108,7 +108,12 @@ class Scanner extends CI_Model {
             return $result[0];
             
         }
-        
+        public function countPreventivoResult($idPreventivo) {
+            $query = $this->db->query("SELECT count(id) FROM preventivi_result WHERE id_preventivo = {$idPreventivo}")->result_array();
+            return (int)$query[0]['count(id)'];
+            
+            
+        }
         public function dataHelper($case) {
             switch ($case) {
                 case 'day':
