@@ -26,8 +26,7 @@ class Trenitalia extends Scanner {
             $quotazioniArray = $this->postParametri($this->generateXml());
             
             foreach($quotazioniArray as $quotazione)  {
-                var_dump($quotazione);
-            exit();
+                
                 if($quotazione['SolutionTrainMaxCategory'] == 'FR FRECCIAROSSA') {
                     $prima = array();
                     $seconda = array();
@@ -215,11 +214,14 @@ class Trenitalia extends Scanner {
                                                  'connection_timeout' => $this->_timeout ) );
             $response = ($client->__doRequest($xml,'https://stargate.iphone.trenitalia.com:443/servicemobilesolution.svc','http://tempuri.org/ISGMOBILEService/InfoSolutionsMobile','1.2'));
             $arrayQuotazioni = $this->xml2array(preg_replace('/a:/', '', $response));
-            $arrayQuotazioni = @$arrayQuotazioni['s:Envelope']['s:Body']['OutputSolutionsMobile']['pOutput']['MobileSolutions']['outputInfoSolutionsMobile'];
-            
             if(!is_array($arrayQuotazioni)) {
                 die('<p style="text-align:center;padding-top:20px;font-weight:bold">Server Trenitalia Down</p>');
             }
+            $arrayQuotazioni = @$arrayQuotazioni['s:Envelope']['s:Body']['OutputSolutionsMobile']['pOutput']['MobileSolutions']['outputInfoSolutionsMobile'];
+            
+            if(empty($arrayQuotazioni))
+                die();
+            
             return $arrayQuotazioni;
         }
 	public function updateStazioni()
@@ -270,6 +272,13 @@ class Trenitalia extends Scanner {
         }
         
         public function generateXml() {
+            // Se è oggi evitiamo problemi dandogli l'ora attuale come ora di inizio
+            if(date("d/m/Y",$this->_dataPartenza) == date("d/m/Y")) {
+                    $ora = date('H:i:00');
+            }
+            else { // Altrimenti le solite 5:00
+                $ora = '05:00:00';
+            }
             
             $xml = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/" xmlns:tsf="http://schemas.datacontract.org/2004/07/TSF.TI.NSV.Common.WCF.ServiceContracts">
                     <soapenv:Header>
@@ -297,7 +306,7 @@ class Trenitalia extends Scanner {
                              <!--Optional:-->
                              <tsf:ArrivalStationCode>'.$this->stazioneHelper($this->_stazioneDestinazione).'</tsf:ArrivalStationCode>
                              <!--Optional:-->
-                             <tsf:DepartureDateTime>'.date("d/m/Y",$this->_dataPartenza).'-05:00:00</tsf:DepartureDateTime>
+                             <tsf:DepartureDateTime>'.date("d/m/Y",$this->_dataPartenza).'-'.$ora.'</tsf:DepartureDateTime>
                           </tem:pInput>
                        </tem:InputSolutionsMobile>
                     </soapenv:Body>

@@ -98,3 +98,15 @@ ERROR - 2012-09-16 18:17:44 --> Query error: You have an error in your SQL synta
 ERROR - 2012-09-16 18:17:47 --> Query error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-15, 0' at line 2
 ERROR - 2012-09-16 18:22:01 --> Severity: Notice  --> Undefined variable: offest E:\wamp\www\trainscan\application\models\scanner.php 88
 ERROR - 2012-09-16 22:45:04 --> Severity: Notice  --> Undefined index: MobileSolutions E:\wamp\www\trainscan\application\models\trenitalia.php 215
+ERROR - 2012-09-16 23:02:33 --> Severity: Notice  --> Undefined index: outputInfoSolutionsMobile E:\wamp\www\trainscan\application\models\trenitalia.php 219
+ERROR - 2012-09-16 23:02:35 --> Severity: Notice  --> Undefined index: outputInfoSolutionsMobile E:\wamp\www\trainscan\application\models\trenitalia.php 219
+ERROR - 2012-09-16 23:02:37 --> Severity: Notice  --> Undefined index: outputInfoSolutionsMobile E:\wamp\www\trainscan\application\models\trenitalia.php 219
+ERROR - 2012-09-16 23:02:38 --> Severity: Notice  --> Undefined index: outputInfoSolutionsMobile E:\wamp\www\trainscan\application\models\trenitalia.php 219
+ERROR - 2012-09-16 23:03:50 --> Severity: Notice  --> Undefined index: outputInfoSolutionsMobile E:\wamp\www\trainscan\application\models\trenitalia.php 219
+ERROR - 2012-09-16 23:04:19 --> Severity: Notice  --> Undefined index: SolutionTrainMaxCategory E:\wamp\www\trainscan\application\models\trenitalia.php 30
+ERROR - 2012-09-16 23:04:19 --> Severity: Notice  --> Undefined index: SolutionTrainMaxCategory E:\wamp\www\trainscan\application\models\trenitalia.php 30
+ERROR - 2012-09-16 23:05:27 --> Severity: Notice  --> Undefined index: outputInfoSolutionsMobile E:\wamp\www\trainscan\application\models\trenitalia.php 219
+ERROR - 2012-09-16 23:06:19 --> Severity: Notice  --> Undefined index: outputInfoSolutionsMobile E:\wamp\www\trainscan\application\models\trenitalia.php 222
+ERROR - 2012-09-16 23:06:19 --> Severity: Warning  --> Invalid argument supplied for foreach() E:\wamp\www\trainscan\application\models\trenitalia.php 28
+ERROR - 2012-09-16 23:06:41 --> Severity: Notice  --> Undefined index: outputInfoSolutionsMobile E:\wamp\www\trainscan\application\models\trenitalia.php 222
+ERROR - 2012-09-16 23:06:42 --> Severity: Notice  --> Undefined index: outputInfoSolutionsMobile E:\wamp\www\trainscan\application\models\trenitalia.php 222
