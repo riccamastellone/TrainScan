@@ -1,6 +1,6 @@
 ![TrainScan](docs/trainscan.png)
 
-[Read the presentation (Italian)](docs/Presentazione_TrainScan.pdf)
+[Read the presentation (Italian)](http://raw.github.com/riccamastellone/TrainScan/master/docs/Presentazione_TrainScan.pdf)
 
 Italy's hi-speed train fares comparator
 
@@ -24,8 +24,8 @@ To avoid useless requests, it has a caching system (similar to SkyScanner), even
 
 It does also have a neat front-end based on Bootstrap
 
-![alt tag](docs/screen1.png)
+![TrainScan Screenshot](docs/screen1.png)
 
-![alt tag](docs/screen2.png)
+![TrainScan Screetshot](docs/screen2.png)
 
-![alt tag](docs/screen3.png)
+![TrainScan Screenshot](docs/screen3.png)
