@@ -12,9 +12,9 @@ It worked flawlessly at the time, but it has not been updated since then.
 To get Trenitalia timetable and fares, the iPhone app was reverse engineered (MITM).
 It uses a (sort-of-broken) SAOP protocol (might have been fixed by now).
 
-To get Italo timetable and fares it simulates user requests and parses HTML response.
+To get Italo timetable and fares it simulates user requests and parses the HTML responses.
 
-Because of the rush, not al possible solutions to implement this logic have been considered: had I to do it today from scratch, I'd go for a CasperJS/PhantomJS way for Italo. 
+Because of the rush, not all possible solutions to implement this logic have been considered: had I to do it today from scratch, I'd go for a CasperJS/PhantomJS way for Italo. 
 
 It also handles 'unclear' stations (some cities, like Milan, have multiple stations), repeating the requests to show all the possibilities.
 
@@ -22,7 +22,7 @@ An attempt to start a multi-thread version using pcntl of this appication to inc
 
 To avoid useless requests, it has a caching system (similar to SkyScanner), even if the user can still force the application to refresh its results
 
-It does also have a neat front-end based on Bootstrap
+It does also have a neat responsive front-end based on Bootstrap
 
 ![TrainScan Screenshot](docs/screen1.png)
 
