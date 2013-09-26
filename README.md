@@ -1,5 +1,7 @@
-TrainScan
-=========
+![TrainScan](docs/trainscan.png)
+
+[Read the presentation (Italian)](docs/Presentazione_TrainScan.pdf)
+
 Italy's hi-speed train fares comparator
 
 The idea of this project was to make it easier to choose between the two italian hi-speed train companies, Trenitalia (www.trenitalia.com) and Italo (www.italotreno.it)
@@ -21,3 +23,9 @@ An attempt to start a multi-thread version using pcntl of this appication to inc
 To avoid useless requests, it has a caching system (similar to SkyScanner), even if the user can still force the application to refresh its results
 
 It does also have a neat front-end based on Bootstrap
+
+![alt tag](docs/screen1.png)
+
+![alt tag](docs/screen2.png)
+
+![alt tag](docs/screen3.png)
