@@ -3,10 +3,10 @@
 class Scanner extends CI_Model {
     
         // Stazioni valide
-	public $_stazioni = array("Milano", "Firenze", "Bologna", "Napoli", "Roma", "Salerno");        
-        public $_debug = array();
-        public $_interval = '4 HOUR'; // validità del preventivo
-        public $_quotesPerPage = 15; // quotazioni per pagina da visualizzare
+	protected $_stazioni = array("Milano", "Firenze", "Bologna", "Napoli", "Roma", "Salerno");        
+        protected $_debug = array();
+        protected $_interval = '4 HOUR'; // validità del preventivo
+        protected $_quotesPerPage = 15; // quotazioni per pagina da visualizzare
         
         function __construct() {
             

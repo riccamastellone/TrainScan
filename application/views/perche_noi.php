@@ -1,6 +1,6 @@
 <div>
     <div class="span3 well">
-        <p class="lead">Ad oggi più di XXXX persone utilizzano regolarmente il nostro serivizio.</p>
+        <p class="lead">Ad oggi più di XXXX persone utilizzano regolarmente il nostro servizio.</p>
     </div>
     <img src="<?php echo base_url(); ?>assets/img/train.png" class="pull-right">
     <div class="offset3">

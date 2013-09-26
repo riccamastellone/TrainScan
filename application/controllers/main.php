@@ -5,9 +5,6 @@ class Main extends CI_Controller {
         
         function __construct() {
             parent::__construct();
-            if($_SERVER['HTTP_HOST'] == 'testing.trainscan.it') {
-                $this->config->set_item('glasgow', true);
-            }
             $this->load->helper('url');
             $this->load->library('assets');
             $this->load->model('scanner');
