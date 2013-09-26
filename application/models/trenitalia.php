@@ -2,13 +2,13 @@
 
 class Trenitalia extends Scanner {
     
-        public $_trenitaliaUrl = "https://stargate.iphone.trenitalia.com/serviceMOBILESOLUTION.svc";
-        public $_trenitaliaSoap = "https://stargate.iphone.trenitalia.com/serviceMOBILESOLUTION.wsdl";
-        public $_stazioni = array("Milano", "Bologna", "Firenze", "Roma", "Napoli", "Salerno");
-        public $_stazioneOrigine = '';
-        public $_stazioneDestinazione = '';
-        public $_dataPartenza = '';
-        public $_timeout = '15';
+        protected $_trenitaliaUrl = "https://stargate.iphone.trenitalia.com/serviceMOBILESOLUTION.svc";
+        protected $_trenitaliaSoap = "https://stargate.iphone.trenitalia.com/serviceMOBILESOLUTION.wsdl";
+        protected $_stazioni = array("Milano", "Bologna", "Firenze", "Roma", "Napoli", "Salerno");
+        protected $_stazioneOrigine = '';
+        protected $_stazioneDestinazione = '';
+        protected $_dataPartenza = '';
+        protected $_timeout = '15';
         
         function __construct() {
              

@@ -1,3 +1,4 @@
+# Let's remote the /index.php/ from CodeIgniter
 RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

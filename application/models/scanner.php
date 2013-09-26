@@ -138,10 +138,14 @@ class Scanner extends CI_Model {
                     break;
             }
         }
+        
+        /**
+         * Ritorna il relativo
+         * @param type $tm
+         * @return type
+         */
         public function _ago($tm) {
-            if($this->config->item('glasgow')) {
-                $cur_tm = time()-3600*6; 
-            } else $cur_tm = time(); 
+            $cur_tm = time(); 
             $tm = strtotime($tm);
             $dif = ($cur_tm-$tm);
             $pds = array('secondo','minuto','ora','giorno','settimana','mese','anno','decade');
@@ -159,9 +163,7 @@ class Scanner extends CI_Model {
             $x=sprintf("%d %s fa",$no,$tempo);
             return $x;
         }   
-}// IF(a.id_operatore = 'I', b.codice_classe, c.codice_classe ) = a.id_classe AND
-/*
- * 
- */
+}
+
 /* End of file scanner.php */
 /* Location: ./application/models/scanner.php */

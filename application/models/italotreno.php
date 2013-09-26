@@ -2,13 +2,13 @@
 
 class ItaloTreno extends Scanner {
     
-        public $_italoUrl = "https://biglietti.italotreno.it/Booking_Acquisto_Ricerca.aspx";
+        protected $_italoUrl = "https://biglietti.italotreno.it/Booking_Acquisto_Ricerca.aspx";
         
-        public $_classi = array("S","P","C"); // Smart, Prima, Prima
-        public $_stazioneOrigine = '';
-        public $_stazioneDestinazione = '';
-        public $_dataPartenza = '';
-        public $_resultUrl = 'https://biglietti.italotreno.it/Booking_Acquisto_SelezioneTreno_A.aspx';
+        protected $_classi = array("S","P","C"); // Smart, Prima, Prima
+        protected $_stazioneOrigine = '';
+        protected $_stazioneDestinazione = '';
+        protected $_dataPartenza = '';
+        protected $_resultUrl = 'https://biglietti.italotreno.it/Booking_Acquisto_SelezioneTreno_A.aspx';
         
         function __construct() {
             
